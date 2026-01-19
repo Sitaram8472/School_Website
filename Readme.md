@@ -1,101 +1,104 @@
-# 📚 CampusNotes – College Resource Hub
+# 🎓 EduStream Academy - Modern School Management System
 
-CampusNotes is a **React + Tailwind CSS** web application designed to help students access **exam resources** from any college in India — including **notes, previous year question papers, syllabus, and PDFs** — in one centralized hub.
+EduStream Academy is a fully responsive, modern educational platform built with **React.js** and **Tailwind CSS**. It features a dynamic notice board, academic program listings, an automated admissions timeline, and an **AI-powered inquiry assistant** integrated with Google Gemini.
 
-The app follows a **structured hierarchy** for easy navigation and scalability:  
-**College → Department → Subject → Resources**
+
 
 ---
 
 ## 🚀 Features
 
-- 🏫 **Multi-College Support** – Add and browse resources from any college  
-- 🏬 **Department-wise Navigation** – IT, CSE, ECE, Mechanical, Civil, etc.  
-- 📚 **Subject Organization** – Semester and year-based categorization  
-- 📂 **Exam Resources** – Notes, Previous Year Papers, Assignments, Syllabus (all PDFs)  
-- 🔍 **Search & Filter** – Find resources across colleges, departments, or subjects  
-- 🌙 **Dark Mode** – Sleek, modern interface with theme toggle  
-- 📖 **PDF Preview & Download** – Open or download resources instantly  
-- ⚡ **Frontend-Only Architecture** – Runs on any free static hosting like Netlify or Vercel  
+- **🏠 Home Page**: Showcases school statistics, featured faculty, and a real-time notice board.
+- **📖 Academic Programs**: Detailed curriculum paths for STEM, Arts, Business, and Humanities.
+- **📅 Admissions Portal**: A visual step-by-step enrollment timeline and academic calendar.
+- **🤖 AI Assistant**: A built-in "Fast Inquiry" chatbot powered by Google Gemini AI to answer student questions instantly.
+- **📱 Fully Responsive**: Optimized for mobile, tablet, and desktop using Tailwind's mobile-first grid system.
+- **🗺️ Smooth Routing**: Client-side navigation powered by `react-router-dom` with automatic scroll-to-top logic.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React.js, Tailwind CSS  
-- **Icons:** Lucide React  
-- **Routing:** React Router (planned for navigation)  
-- **Optional Future Backend:** Node.js, Express.js, MongoDB (for dynamic content)  
+- **Frontend**: React.js (v18+)
+- **Styling**: Tailwind CSS
+- **Routing**: React Router (HashRouter for stable deployment)
+- **AI Integration**: Google Generative AI (Gemini API)
+- **Animations**: Tailwind CSS Animate / Framer Motion logic
 
 ---
 
-## 🎯 Example User Flow
+## 💻 Installation & Setup
 
-1. **Select College** → e.g. *JIS College of Engineering*  
-2. **Choose Department** → e.g. *IT Department*  
-3. **Pick Subject/Semester** → e.g. *Data Structures – Semester 3*  
-4. **Access Resources** → *Notes, Question Papers, PDFs*  
+Follow these steps to run the project locally on your machine.
 
----
+### 1. Prerequisites
+Ensure you have [Node.js](https://nodejs.org/) installed (v16 or higher recommended).
 
-## 🏆 Resume Highlights
+### 2. Clone the Repository
+```bash
+git clone [https://github.com/your-username/edustream-academy.git](https://github.com/your-username/edustream-academy.git)
+cd edustream-academy
 
-- Built a **scalable frontend architecture** for multi-level navigation  
-- Implemented **dark mode, search, and PDF preview** features  
-- Designed a **pan-India college resource hub** focused on **exam preparation**  
-- Structured for **open-source collaboration** — easy to add new colleges and resources  
+3. Install Dependencies
+Bash
+npm install
+4. Set Up Environment Variables
+Create a .env file in the root directory and add your Gemini API key:
 
----
+Code snippet
+REACT_APP_GEMINI_API_KEY=your_google_gemini_api_key_here
+5. Run the Application
+Bash
+npm start
+The app will be available at http://localhost:3000.
 
-## 📸 Project Preview
-![CampusNotes Preview](./src/assets/ProjectImg.png)
+📂 Project Structure
+Plaintext
+src/
+├── components/       # Reusable UI (Navbar, Footer, Card, Hero)
+├── pages/            # Page-level components (Home, About, etc.)
+├── services/         # API logic (Gemini AI Service)
+├── data/             # Static JSON-style data (Teachers, Notices)
+├── App.js            # Main Routing Logic
+└── index.js          # Entry Point
+🤝 Contributing
+We love contributions! Whether it's fixing a bug or adding a new feature, please follow these steps:
 
----
+Fork the project.
 
-## 🚀 Local Setup for Developers
+Create your Feature Branch (git checkout -b feature/AmazingFeature).
 
-### Prerequisites
+Commit your changes (git commit -m 'Add some AmazingFeature').
 
-- [Node.js](https://nodejs.org/) installed
-- Package manager (e.g., `npm`)
+Push to the Branch (git push origin feature/AmazingFeature).
 
-### Installation
+Open a Pull Request.
 
-Follow these steps to set up and run CampusNotes locally:
+🏆 GSSOC Contributors
+This project is part of the GirlScript Summer of Code.
 
- 1. **Clone the Repository**
-    ```bash
-    git clone https://github.com/your-username/CampusNotes.git
-    cd CampusNotes
-    ```
- 2. **Install dependencies**
+Level 1: 3 Points (Typo fixes, Documentation)
 
-    We recommend using Command Prompt on Windows (instead of VS Code PowerShell if you face issues) and Terminal on macOS/Linux.
+Level 2: 7 Points (UI improvements, New Sections)
 
-  
-      - Open Command Prompt (cmd):
-     
-          • Press Win + R, type cmd, press **Enter**.
-     
-      - Navigate to the project folder:
-         ```bash
-             cd <path\to\Campus_Notes>
-         ```
-  
-      - Install dependencies:
-         ```bash
-             npm install
-         ```
-
-4. **Start the development server**:
-    ```bash
-    npm run dev
-    ```
-
-5. Open [http://localhost:5173](http://localhost:5173) in your browser to see Campus_Notes in action.
-
----
+Level 3: 10 Points (New features, AI logic optimization)
 
 📄 License
+Distributed under the MIT License. See LICENSE for more information.
 
-This project is open-source and available under the MIT License.
+📞 Contact
+EduStream Academy Office 📧 Email: office@edustream.edu
+
+🌐 Website: www.edustream-academy.com
+
+"Developing tomorrow's leaders through integrity and innovation."
+
+
+---
+
+### How to use this:
+1. Create a new file in your project's root folder called `README.md`.
+2. Copy the code above and paste it into that file.
+3. Replace the placeholder links (like `your-username`) with your actual GitHub details.
+
+**Would you like me to help you write a `package.json` file to make sure all the depen
