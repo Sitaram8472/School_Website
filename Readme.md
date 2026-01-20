@@ -31,15 +31,6 @@
 
 ---
 
-## 🏆 Resume Highlights
-
-- Built a **scalable frontend architecture** for multi-level navigation  
-- Implemented **dark mode, search, and PDF preview** features  
-- Designed a **pan-India college resource hub** focused on **exam preparation**  
-- Structured for **open-source collaboration** — easy to add new colleges and resources  
-
----
-
 - # 📂 Project Structure
 
 SCHOOL_WEBSITE/
