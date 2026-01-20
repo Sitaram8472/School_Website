@@ -1,7 +1,7 @@
 import React from "react";
 import Hero from "../components/Hero";
 import Card from "../components/Card";
-import { notices } from "../data/Notices";
+import Notices, { notices } from "../data/Notices";
 import { teachers } from "../data/Teacher";
 import {
   Users,
@@ -14,26 +14,17 @@ import {
 } from "lucide-react";
 
 // Import images from your assets folder
-// Replace these with your actual file names
 import img1 from "../assets/campus/campus1.jpg";
 import img2 from "../assets/campus/campus2.jpg";
 import img3 from "../assets/campus/campus3.jpg";
 import img4 from "../assets/campus/campus4.jpg";
 import img5 from "../assets/campus/campus5.jpg";
+import img6 from "../assets/campus/campus6.jpg";
+import img7 from "../assets/campus/campus7.jpg";
+import img8 from "../assets/campus/campus8.jpg";
 
 const Home = () => {
-  const galleryImages = [
-    img1,
-    img2,
-    img3,
-    img4,
-    img5,
-    img1,
-    img2,
-    img3,
-    img4,
-    img5,
-  ];
+  const galleryImages = [img1, img2, img3, img4, img5, img6, img7, img8];
 
   return (
     <div className="animate-in fade-in duration-700 bg-white">
