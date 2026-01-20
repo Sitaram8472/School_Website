@@ -1,106 +1,102 @@
-# 🎓 EduStream Academy - Modern School Management System
-
-EduStream Academy is a fully responsive, modern educational platform built with **React.js** and **Tailwind CSS**. It features a dynamic notice board, academic program listings, an automated admissions timeline, and an **AI-powered inquiry assistant** integrated with Google Gemini.
-
-
+# 🎓 EduStream Academy Portal
+* EduStream is a comprehensive Full-Stack Academic Management Portal designed to bridge the gap between students, faculty, and administration. Built with the MERN stack (MySQL, Express, React, Node.js), it features real-time notice boards, academic resource sharing, and an AI-integrated support system for student inquiries.
 
 ---
 
 ## 🚀 Features
 
-- **🏠 Home Page**: Showcases school statistics, featured faculty, and a real-time notice board.
-- **📖 Academic Programs**: Detailed curriculum paths for STEM, Arts, Business, and Humanities.
-- **📅 Admissions Portal**: A visual step-by-step enrollment timeline and academic calendar.
-- **🤖 AI Assistant**: A built-in "Fast Inquiry" chatbot powered by Google Gemini AI to answer student questions instantly.
-- **📱 Fully Responsive**: Optimized for mobile, tablet, and desktop using Tailwind's mobile-first grid system.
-- **🗺️ Smooth Routing**: Client-side navigation powered by `react-router-dom` with automatic scroll-to-top logic.
+- **Real-time Notice Board:** -  Dynamic announcements fetched from a MySQL database.
+- **Academic Resource Hub:** Centralized repository for course materials and STEM excellence programs.  
+- **AI Support Integration:** Powered by the Gemini API to handle admission and academic queries instantly.
+- **Infinite Campus Gallery:** A high-performance, CSS-animated marquee showcasing campus life.
+- **Professional UI:** Fully responsive design built with Tailwind CSS and Lucide-React icons.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React.js (v18+)
-- **Styling**: Tailwind CSS
-- **Routing**: React Router (HashRouter for stable deployment)
-- **AI Integration**: Google Generative AI (Gemini API)
-- **Animations**: Tailwind CSS Animate / Framer Motion logic
+- **Frontend:** React.js, Vite, Tailwind CSS, Axios.
+- **Backend:** Node.js, Express.js.
+- **Database:** MySQL (Relational data management).
+- **AI:** Gemini AI Service integration.
 
 ---
 
-## 💻 Installation & Setup
+## 🎯 Example User Flow
 
-Follow these steps to run the project locally on your machine.
-
-### 1. Prerequisites
-Ensure you have [Node.js](https://nodejs.org/) installed (v16 or higher recommended).
-
-### 2. Clone the Repository
-```bash
-git clone [https://github.com/your-username/edustream-academy.git](https://github.com/your-username/edustream-academy.git)
-cd edustream-academy
-
-3. Install Dependencies
-Bash
-npm install
-4. Set Up Environment Variables
-Create a .env file in the root directory and add your Gemini API key:
-
-Code snippet
-REACT_APP_GEMINI_API_KEY=your_google_gemini_api_key_here
-5. Run the Application
-Bash
-npm start
-The app will be available at http://localhost:3000.
-
-📂 Project Structure
-Plaintext
-src/
-├── components/       # Reusable UI (Navbar, Footer, Card, Hero)
-├── pages/            # Page-level components (Home, About, etc.)
-├── services/         # API logic (Gemini AI Service)
-├── data/             # Static JSON-style data (Teachers, Notices)
-├── App.js            # Main Routing Logic
-└── index.js          # Entry Point
-🤝 Contributing
-We love contributions! Whether it's fixing a bug or adding a new feature, please follow these steps:
-
-Fork the project.
-
-Create your Feature Branch (git checkout -b feature/AmazingFeature).
-
-Commit your changes (git commit -m 'Add some AmazingFeature').
-
-Push to the Branch (git push origin feature/AmazingFeature).
-
-Open a Pull Request.
-
-🏆 GSSOC Contributors
-This project is part of the GirlScript Summer of Code.
-
-Level 1: 3 Points (Typo fixes, Documentation)
-
-Level 2: 7 Points (UI improvements, New Sections)
-
-Level 3: 10 Points (New features, AI logic optimization)
-
-📄 License
-Distributed under the MIT License. See LICENSE for more information.
-
-📞 Contact
-EduStream Academy Office 📧 Email: office@edustream.edu
-
-🌐 Website: www.edustream-academy.com
-
-"Developing tomorrow's leaders through integrity and innovation."
-
+1. **Select College** → e.g. *JIS College of Engineering*  
+2. **Choose Department** → e.g. *IT Department*  
+3. **Pick Subject/Semester** → e.g. *Data Structures – Semester 3*  
+4. **Access Resources** → *Notes, Question Papers, PDFs*  
 
 ---
 
-### How to use this:
-1. Create a new file in your project's root folder called `README.md`.
-2. Copy the code above and paste it into that file.
-3. Replace the placeholder links (like `your-username`) with your actual GitHub details.
+## 🏆 Resume Highlights
 
-**Would you like me to help you write a `package.json` file to make sure all the depen
+- Built a **scalable frontend architecture** for multi-level navigation  
+- Implemented **dark mode, search, and PDF preview** features  
+- Designed a **pan-India college resource hub** focused on **exam preparation**  
+- Structured for **open-source collaboration** — easy to add new colleges and resources  
 
-```
+---
+
+- # 📂 Project Structure
+
+SCHOOL_WEBSITE/
+├── backend/              # Node.js & Express server
+│   ├── config/           # SQL Database connection logic
+│   ├── controllers/      # Business logic & SQL Queries
+│   ├── routes/           # API Endpoints
+│   └── server.js         # Entry point
+├── frontend/             # React & Vite application
+│   ├── src/
+│   │   ├── api/          # Axios configurations
+│   │   ├── components/   # Reusable UI components
+│   │   └── data/         # Static data & State management
+└── .env                  # Environment variables (DB credentials)
+---
+
+## ⚙️ Setup & Installation
+
+### Prerequisites
+
+- Node.js (v18+)
+- MySQL Server
+- npm (Node Package Manager)
+
+### Installation
+
+Follow these steps to set up and run CampusNotes locally:
+
+ 1. **Clone the Repository**
+    ```bash
+    git clone https://github.com/Sitaram8472/School_Website
+    cd School_Website
+    ```
+
+ 2. **Backend Setup**
+
+    - Navigate to the backend folder: cd backend.
+    - Install dependencies: npm install.
+    - Create a .env file in the backend folder and add your credentials:
+
+    DB_HOST=localhost
+    DB_USER=root
+    DB_PASSWORD=your_password
+    DB_NAME=school_db
+    PORT=5000
+    
+    - Start the server: npm run dev.
+
+ 3. **Frontend Setup**
+    - Navigate to the frontend folder: cd ../frontend.
+    - Install dependencies: npm install.
+    - Start the React app: npm run dev.
+
+4. **🤝 Contribution Guide**
+    - We welcome contributions from the community! To start contributing:
+    - Fork the project.
+    - Create your Feature Branch: git checkout -b feature/AmazingFeature.
+    - Commit your Changes: git commit -m 'Add some AmazingFeature'.
+    - Push to the Branch: git push origin feature/AmazingFeature.
+    - Open a Pull Request.
