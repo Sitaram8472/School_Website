@@ -22,29 +22,20 @@
 
 ---
 
-## 🎯 Example User Flow
-
-1. **Select College** → e.g. *JIS College of Engineering*  
-2. **Choose Department** → e.g. *IT Department*  
-3. **Pick Subject/Semester** → e.g. *Data Structures – Semester 3*  
-4. **Access Resources** → *Notes, Question Papers, PDFs*  
-
----
-
 - # 📂 Project Structure
 
-SCHOOL_WEBSITE/
-├── backend/              # Node.js & Express server
-│   ├── config/           # SQL Database connection logic
-│   ├── controllers/      # Business logic & SQL Queries
-│   ├── routes/           # API Endpoints
-│   └── server.js         # Entry point
-├── frontend/             # React & Vite application
-│   ├── src/
-│   │   ├── api/          # Axios configurations
-│   │   ├── components/   # Reusable UI components
-│   │   └── data/         # Static data & State management
-└── .env                  # Environment variables (DB credentials)
+- SCHOOL_WEBSITE/
+- ├── backend/              # Node.js & Express server
+- │   ├── config/           # SQL Database connection logic
+- │   ├── controllers/      # Business logic & SQL Queries
+- │   ├── routes/           # API Endpoints
+- │   └── server.js         # Entry point
+- ├── frontend/             # React & Vite application
+- │   ├── src/
+- │   │   ├── api/          # Axios configurations
+- │   │   ├── components/   # Reusable UI components
+- │   │   └── data/         # Static data & State management
+- └── .env                  # Environment variables (DB credentials)
 ---
 
 ## ⚙️ Setup & Installation
