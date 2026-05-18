@@ -2,7 +2,7 @@ import React from "react";
 import Hero from "../components/Hero";
 import Card from "../components/Card";
 import Notices, { notices } from "../data/Notices";
-import { teachers } from "../data/Teacher";
+import { teachers } from "../data/Teachers";
 import {
   Users,
   GraduationCap,
@@ -131,35 +131,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Faculty */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold text-slate-900 mb-6">
-              World-Class Educators
-            </h2>
-            <div className="w-24 h-1.5 bg-blue-600 mx-auto rounded-full mb-6"></div>
-            <p className="text-slate-500 max-w-2xl mx-auto text-lg">
-              Our faculty members bring a wealth of practical experience and
-              academic rigor to the classroom.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            {teachers.map((teacher) => (
-              <Card
-                key={teacher.id}
-                variant="teacher"
-                title={teacher.name}
-                subtitle={teacher.role}
-                content={teacher.bio}
-                image={teacher.image}
-                badge={teacher.department}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section - Professional Gradient */}
       <section className="py-24 px-4">
