@@ -8,6 +8,7 @@ const Register = () => {
     email: "",
     password: "",
   });
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -21,11 +22,17 @@ const Register = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       await register(formData.name, formData.email, formData.password);
       navigate("/login");
     } catch (err) {
-      setError(err);
+      console.error("Register Error:", err);
+
+      setError(
+        err?.message ||
+          (typeof err === "string" ? err : "Registration failed")
+      );
     } finally {
       setLoading(false);
     }
@@ -34,17 +41,21 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
           Create Account
         </h2>
 
+        {/* Error */}
         {error && (
-          <div className="mb-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 text-sm">
+          <div className="mb-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 text-sm rounded">
             {error}
           </div>
         )}
 
         <form onSubmit={onSubmit} className="space-y-6">
+
+          {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Full Name
@@ -52,13 +63,15 @@ const Register = () => {
             <input
               type="text"
               name="name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
-              placeholder="John Doe"
+              value={formData.name}
               onChange={onChange}
               required
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+              placeholder="John Doe"
             />
           </div>
 
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email Address
@@ -66,13 +79,15 @@ const Register = () => {
             <input
               type="email"
               name="email"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
-              placeholder="name@company.com"
+              value={formData.email}
               onChange={onChange}
               required
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+              placeholder="name@company.com"
             />
           </div>
 
+          {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Password
@@ -80,22 +95,25 @@ const Register = () => {
             <input
               type="password"
               name="password"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
-              placeholder="••••••••"
+              value={formData.password}
               onChange={onChange}
               required
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+              placeholder="••••••••"
             />
           </div>
 
+          {/* Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex justify-center py-3 px-4 rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Processing..." : "Register"}
           </button>
         </form>
 
+        {/* Login Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Already have an account?{" "}

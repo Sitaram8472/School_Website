@@ -1,14 +1,20 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 export const getAIResponse = async (userPrompt) => {
   if (!API_KEY) {
+    console.warn("Gemini API key is missing in environment variables");
     return "I'm currently offline. Please contact the administration office for assistance.";
+  }
+
+  if (!userPrompt || !userPrompt.trim()) {
+    return "Please enter a valid question.";
   }
 
   try {
     const genAI = new GoogleGenerativeAI(API_KEY);
+
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
       systemInstruction:
@@ -16,11 +22,16 @@ export const getAIResponse = async (userPrompt) => {
     });
 
     const result = await model.generateContent(userPrompt);
-    const response = await result.response;
 
-    return response.text() || "I'm sorry, I couldn't process that request.";
+    const responseText =
+      result?.response?.text?.() ||
+      "I'm sorry, I couldn't process that request.";
+
+    return responseText;
   } catch (error) {
     console.error("Gemini API Error:", error);
+
+    // Better fallback message
     return "I'm having trouble connecting right now. Please try again later.";
   }
 };
