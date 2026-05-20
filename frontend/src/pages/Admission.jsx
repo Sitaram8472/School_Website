@@ -10,7 +10,11 @@ import {
   GraduationCap,
   ShieldCheck,
 } from "lucide-react";
-import { Link } from 'react-router-dom';
+
+import { Link } from "react-router-dom";
+
+import prospectusPdf from "../assets/prospectus/prospectus.pdf";
+import prospectusCover from "../assets/prospectus/prospectus-cover.jpg";
 
 const Admissions = () => {
   const [openFaq, setOpenFaq] = useState(null);
@@ -64,25 +68,56 @@ const Admissions = () => {
             className="w-full h-full object-cover"
           />
         </div>
+
         <div className="relative z-10 text-center">
           <span className="text-blue-400 font-bold tracking-widest uppercase text-sm">
             Admissions 2026-27
           </span>
+
           <h1 className="text-4xl md:text-6xl font-bold text-white mt-4 mb-6">
             Secure Your Future at EduStream
           </h1>
-          <p className="text-slate-300 max-w-2xl mx-auto text-lg leading-relaxed">
+
+          <p className="text-slate-300 max-w-2xl mx-auto text-lg leading-relaxed mb-10">
             We are looking for the next generation of thinkers, creators, and
             leaders. Applications are now open for the upcoming academic
             session.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 text-white px-8 py-4 rounded-lg font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
+
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <button className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-xl">
               Apply Online Now
             </button>
-            <button className="bg-white/10 text-white backdrop-blur-md border border-white/20 px-8 py-4 rounded-lg font-bold hover:bg-white/20 transition-all flex items-center justify-center gap-2">
-              <Download size={20} /> Download Prospectus
-            </button>
+
+            {/* Prospectus Card */}
+            <a
+              href={prospectusPdf}
+              download
+              className="group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/20 transition-all duration-300 max-w-md"
+            >
+              <img
+                src={prospectusCover}
+                alt="Prospectus Cover"
+                className="w-20 h-28 object-cover rounded-lg shadow-lg"
+              />
+
+              <div className="text-left">
+                <h3 className="text-white font-bold text-lg mb-1">
+                  Download Prospectus
+                </h3>
+
+                <p className="text-slate-300 text-sm mb-3">
+                  Explore academics, facilities, admission process, and campus
+                  life.
+                </p>
+
+                <div className="inline-flex items-center gap-2 bg-blue-600 px-4 py-2 rounded-lg text-white font-semibold group-hover:bg-blue-700 transition">
+                  <Download size={18} />
+                  Download PDF
+                </div>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -94,6 +129,7 @@ const Admissions = () => {
             <h2 className="text-3xl font-bold text-slate-900 mb-8">
               Eligibility & Requirements
             </h2>
+
             <div className="space-y-6">
               {[
                 "Last 2 years' academic transcripts/report cards.",
@@ -107,19 +143,26 @@ const Admissions = () => {
                     className="text-green-500 shrink-0"
                     size={24}
                   />
+
                   <span className="text-lg">{item}</span>
                 </div>
               ))}
             </div>
           </div>
+
           <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200">
             <GraduationCap size={48} className="text-blue-600 mb-6" />
-            <h3 className="text-2xl font-bold mb-4">Scholarship Programs</h3>
+
+            <h3 className="text-2xl font-bold mb-4">
+              Scholarship Programs
+            </h3>
+
             <p className="text-slate-600 mb-6">
               We offer Merit-based Scholarships to exceptional students.
               Students scoring above 95% in their entrance assessment are
-              eligible for a<strong> 50% Tuition Fee Waiver</strong>.
+              eligible for a <strong>50% Tuition Fee Waiver</strong>.
             </p>
+
             <Link
               to="/admissions/scholarship"
               className="text-blue-600 font-bold hover:underline flex items-center gap-2"
@@ -129,11 +172,12 @@ const Admissions = () => {
           </div>
         </div>
 
-        {/* The Enrollment Process Timeline */}
+        {/* Enrollment Process */}
         <div className="mb-32">
           <h2 className="text-3xl font-bold text-center mb-16 text-slate-900">
             The 4-Step Enrollment Journey
           </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {steps.map((step, i) => (
               <div key={i} className="relative group">
@@ -141,13 +185,16 @@ const Admissions = () => {
                   <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                     {step.icon}
                   </div>
+
                   <h3 className="text-xl font-bold mb-3 text-slate-900">
                     {step.title}
                   </h3>
+
                   <p className="text-slate-600 leading-relaxed text-sm">
                     {step.desc}
                   </p>
                 </div>
+
                 {i < 3 && (
                   <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 text-slate-300">
                     <ChevronDown className="-rotate-90" size={32} />
@@ -164,10 +211,12 @@ const Admissions = () => {
             <h3 className="text-3xl font-bold mb-4">
               Admissions Calendar 2026
             </h3>
+
             <p className="text-slate-400">
               Mark these important dates for the upcoming session.
             </p>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
@@ -193,17 +242,20 @@ const Admissions = () => {
                 <span className="text-xs uppercase tracking-widest opacity-80 font-bold">
                   {date.label}
                 </span>
+
                 <div className="text-2xl font-bold mt-2">{date.date}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* FAQ Section */}
+        {/* FAQ */}
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12 flex items-center justify-center gap-3">
-            <HelpCircle className="text-blue-600" /> Frequently Asked Questions
+            <HelpCircle className="text-blue-600" />
+            Frequently Asked Questions
           </h2>
+
           <div className="space-y-4">
             {faqs.map((faq, i) => (
               <div
@@ -214,12 +266,18 @@ const Admissions = () => {
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full p-5 text-left bg-white hover:bg-slate-50 flex justify-between items-center transition-colors"
                 >
-                  <span className="font-bold text-slate-800">{faq.q}</span>
+                  <span className="font-bold text-slate-800">
+                    {faq.q}
+                  </span>
+
                   <ChevronDown
-                    className={`transition-transform ${openFaq === i ? "rotate-180" : ""}`}
+                    className={`transition-transform ${
+                      openFaq === i ? "rotate-180" : ""
+                    }`}
                     size={20}
                   />
                 </button>
+
                 {openFaq === i && (
                   <div className="p-5 bg-slate-50 border-t border-slate-200 text-slate-600">
                     {faq.a}
