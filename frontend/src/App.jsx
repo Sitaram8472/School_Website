@@ -21,6 +21,9 @@ import NotFound from "./pages/Notfound";
 import EventCalendar from "./pages/EventCalendar";
 import Scholarship from "./pages/Scholarship";
 import Gallery from "./pages/Gallery";
+import Student from "./pages/Student.jsx";
+import TeacherDashboard from "./pages/TeacherDashboard.jsx";
+import StaffDashboard from "./pages/StaffDashboard.jsx";
 /**
  * ScrollToTop ensures that every time a user navigates to a new page,
  * the window scrolls back to the top automatically.
@@ -57,7 +60,10 @@ const App = () => {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/calendar" element={<EventCalendar />} />
-            <Route path="/admissions/scholarship" element={<Scholarship />} /> 
+            <Route path="/admissions/scholarship" element={<Scholarship />} />
+            <Route path="/student" element={<Student />} />
+            <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+            <Route path="/staff-dashboard" element={<StaffDashboard />} />     
             
             {/* Catch-all route for 404 Page Not Found */}
             <Route path="*" element={<NotFound />} />
