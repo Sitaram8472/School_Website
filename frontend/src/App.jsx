@@ -60,10 +60,10 @@ const App = () => {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/calendar" element={<EventCalendar />} />
-            <Route path="/admissions/scholarship" element={<Scholarship />} />
-            <Route path="/student" element={<Student />} />
-            <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
-            <Route path="/staff-dashboard" element={<StaffDashboard />} />     
+<Route path="/admissions/scholarship" element={<Scholarship />} />
+<Route path="/student" element={<Student />} />
+<Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+<Route path="/staff-dashboard" element={<StaffDashboard />} />
             
             {/* Catch-all route for 404 Page Not Found */}
             <Route path="*" element={<NotFound />} />

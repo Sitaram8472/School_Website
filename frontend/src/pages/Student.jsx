@@ -56,7 +56,7 @@ const Student = () => {
 
           <div>
             <h1 className="text-4xl font-bold">
-              Welcome Back, Students 👋
+Welcome Back, Student👋
             </h1>
 
             <p className="text-blue-100 mt-2 text-lg">
