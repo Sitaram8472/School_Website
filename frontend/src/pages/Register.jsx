@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 
 const Register = () => {
+  const { role } = useParams();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,8 +25,8 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await register(formData.name, formData.email, formData.password);
-      navigate("/login");
+      await register(formData.name, formData.email, formData.password, role || "student");
+      navigate(role ? `/login/${role}` : "/login");
     } catch (err) {
       console.error("Register Error:", err);
 
@@ -42,8 +43,8 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
 
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-          Create Account
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 capitalize">
+          {role ? `Register as ${role}` : "Create Account"}
         </h2>
 
         {/* Error */}

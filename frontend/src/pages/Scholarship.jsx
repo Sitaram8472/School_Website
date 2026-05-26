@@ -74,7 +74,7 @@ function Scholarship() {
 
           <div className="mt-10 flex flex-col sm:flex-row justify-center gap-5">
             <Link
-              to="/admission"
+              to="/admissions"
               className="bg-blue-600 hover:bg-blue-700 transition-all px-8 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg"
             >
               Apply for Scholarships
@@ -176,7 +176,7 @@ function Scholarship() {
               </p>
 
               <Link
-                to="/admission"
+                to="/admissions"
                 className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 transition-all px-7 py-4 rounded-xl font-semibold"
               >
                 Apply Now

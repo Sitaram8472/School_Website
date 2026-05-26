@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   BookOpen,
   Cpu,
@@ -198,9 +199,12 @@ const Academics = () => {
                   </div>
                 ))}
               </div>
-              <button className="mt-12 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors">
+              <Link
+                to="/gallery"
+                className="mt-12 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors"
+              >
                 Explore Our Campus <ArrowRight size={20} />
-              </button>
+              </Link>
             </div>
             <div className="lg:w-1/2 h-[400px] lg:h-auto">
               <img

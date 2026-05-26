@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 
 const Login = () => {
+  const { role } = useParams();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,8 +20,14 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(formData.email, formData.password);
-      navigate("/dashboard");
+      const data = await login(formData.email, formData.password);
+      const userRole = data?.user?.role || "student";
+      
+      if (userRole === "teacher") {
+        navigate("/teacher");
+      } else {
+        navigate("/student");
+      }
     } catch (err) {
       console.error("Login Error:", err);
 
@@ -37,8 +44,8 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
         
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-          Welcome Back
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 capitalize">
+          {role ? `Sign In as ${role}` : "Welcome Back"}
         </h2>
 
         {/* Error Message */}

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Hero from "../components/Hero";
 import Card from "../components/Card";
 import Notices, { notices } from "../data/Notices";
@@ -92,17 +93,7 @@ const Home = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {notices.map((notice) => (
-              <Card
-                key={notice.id}
-                title={notice.title}
-                badge={notice.category}
-                content={notice.content}
-                footer={`Posted on ${new Date(notice.date).toLocaleDateString()}`}
-              />
-            ))}
-          </div>
+          <Notices />
         </div>
       </section>
 
@@ -149,12 +140,18 @@ const Home = () => {
             are now open. Secure your spot in our vibrant learning community.
           </p>
           <div className="relative z-10 flex flex-col sm:flex-row gap-6 justify-center">
-            <button className="flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/30 transition-all active:scale-95">
+            <Link
+              to="/admissions"
+              className="flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/30 transition-all active:scale-95"
+            >
               Start Application <ArrowRightCircle size={20} />
-            </button>
-            <button className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-xl font-bold hover:bg-white/20 transition-all active:scale-95">
+            </Link>
+            <Link
+              to="/contact"
+              className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-xl font-bold hover:bg-white/20 transition-all active:scale-95 flex items-center justify-center"
+            >
               Inquire Now
-            </button>
+            </Link>
           </div>
         </div>
       </section>

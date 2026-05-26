@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import {
   BookOpen,
   ClipboardCheck,
@@ -12,6 +13,9 @@ import chemistryLab from "../assets/prospectus/chemistry-lab.pdf";
 import mathFormulas from "../assets/prospectus/math-formulas.pdf";
 
 const Student = () => {
+  const { user } = useContext(AuthContext);
+  const displayName = user?.user?.name || user?.name || "Deepali";
+
   const assignments = [
     {
       id: 1,
@@ -56,7 +60,7 @@ const Student = () => {
 
           <div>
             <h1 className="text-4xl font-bold">
-              Welcome Back, Deepali 👋
+              Welcome Back, {displayName} 👋
             </h1>
 
             <p className="text-blue-100 mt-2 text-lg">

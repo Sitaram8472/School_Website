@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
 
@@ -67,12 +69,13 @@ const Navbar = () => {
               ))}
 
               {/* Animated Dropdown Button */}
-              <div className="relative group">
-                <div className="button-bg rounded-full p-0.5 hover:scale-105 transition duration-300 active:scale-95 cursor-pointer shadow-lg">
-                  <button className="px-5 py-2 text-white rounded-full font-semibold bg-slate-900 flex items-center gap-2 text-sm">
-                    Get Started
+              {user ? (
+                <div className="relative group">
+                  <div className="bg-slate-900 border border-slate-800 rounded-full px-5 py-2.5 hover:scale-105 transition duration-300 active:scale-95 cursor-pointer shadow-lg text-white text-sm font-semibold flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-400 inline-block animate-pulse"></span>
+                    Hi, {user.user?.name || user.name || "User"}
                     <svg
-                      className="w-4 h-4"
+                      className="w-4 h-4 opacity-75"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -84,46 +87,83 @@ const Navbar = () => {
                         d="M19 9l-7 7-7-7"
                       />
                     </svg>
-                  </button>
-                </div>
-
-                {/* Dropdown Menu (Stays White for readability) */}
-                <div className="absolute right-0 mt-3 w-52 bg-white border border-slate-100 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
-                  <div className="relative group/sub">
-                    <div className="px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer flex justify-between items-center font-medium">
-                      Sign In <span className="text-[10px] opacity-50">▶</span>
-                    </div>
-                    <div className="absolute left-full top-0 ml-1 w-44 bg-white border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
-                      {roles.map((role) => (
-                        <Link
-                          key={`in-${role.name}`}
-                          to={`/login${role.path}`}
-                          className="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600"
-                        >
-                          As {role.name}
-                        </Link>
-                      ))}
-                    </div>
                   </div>
 
-                  <div className="relative group/sub">
-                    <div className="px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer flex justify-between items-center font-medium border-t border-slate-50">
-                      Sign Up <span className="text-[10px] opacity-50">▶</span>
+                  <div className="absolute right-0 mt-3 w-52 bg-white border border-slate-100 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
+                    <Link
+                      to={user.user?.role === "teacher" || user.role === "teacher" ? "/teacher" : "/student"}
+                      className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-600 font-medium"
+                    >
+                      My Dashboard
+                    </Link>
+                    <button
+                      onClick={logout}
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-semibold border-t border-slate-50"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* Animated Dropdown Button */
+                <div className="relative group">
+                  <div className="button-bg rounded-full p-0.5 hover:scale-105 transition duration-300 active:scale-95 cursor-pointer shadow-lg">
+                    <button className="px-5 py-2 text-white rounded-full font-semibold bg-slate-900 flex items-center gap-2 text-sm">
+                      Get Started
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Dropdown Menu (Stays White for readability) */}
+                  <div className="absolute right-0 mt-3 w-52 bg-white border border-slate-100 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
+                    <div className="relative group/sub">
+                      <div className="px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer flex justify-between items-center font-medium">
+                        Sign In <span className="text-[10px] opacity-50">▶</span>
+                      </div>
+                      <div className="absolute left-full top-0 ml-1 w-44 bg-white border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
+                        {roles.map((role) => (
+                          <Link
+                            key={`in-${role.name}`}
+                            to={`/login${role.path}`}
+                            className="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600"
+                          >
+                            As {role.name}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                    <div className="absolute left-full top-0 ml-1 w-44 bg-white border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
-                      {roles.map((role) => (
-                        <Link
-                          key={`up-${role.name}`}
-                          to={`/register${role.path}`}
-                          className="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600"
-                        >
-                          Register as {role.name}
-                        </Link>
-                      ))}
+
+                    <div className="relative group/sub">
+                      <div className="px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer flex justify-between items-center font-medium border-t border-slate-50">
+                        Sign Up <span className="text-[10px] opacity-50">▶</span>
+                      </div>
+                      <div className="absolute left-full top-0 ml-1 w-44 bg-white border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
+                        {roles.map((role) => (
+                          <Link
+                            key={`up-${role.name}`}
+                            to={`/register${role.path}`}
+                            className="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600"
+                          >
+                            Register as {role.name}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Mobile Menu Button - Changed to white */}
@@ -173,51 +213,75 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <div className="pt-4 mt-2 border-t border-blue-500">
-              <button
-                onClick={() =>
-                  setActiveDropdown(
-                    activeDropdown === "signin" ? null : "signin",
-                  )
-                }
-                className="w-full text-left px-3 py-2 text-base font-bold text-white flex justify-between items-center"
-              >
-                SIGN IN <span>{activeDropdown === "signin" ? "−" : "+"}</span>
-              </button>
-              {activeDropdown === "signin" &&
-                roles.map((role) => (
-                  <Link
-                    key={`m-in-${role.name}`}
-                    to={`/login${role.path}`}
-                    onClick={() => setIsOpen(false)}
-                    className="block pl-8 py-2 text-blue-100 text-sm hover:text-white"
-                  >
-                    Login as {role.name}
-                  </Link>
-                ))}
+            {user ? (
+              <div className="pt-4 mt-2 border-t border-blue-500 space-y-2">
+                <div className="px-3 py-2 text-blue-100 text-sm font-semibold">
+                  Logged in as: <span className="text-white font-bold">{user.user?.name || user.name}</span>
+                </div>
+                <Link
+                  to={user.user?.role === "teacher" || user.role === "teacher" ? "/teacher" : "/student"}
+                  onClick={() => setIsOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-blue-50 hover:bg-blue-600"
+                >
+                  My Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-300 hover:bg-red-600 hover:text-white"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div className="pt-4 mt-2 border-t border-blue-500">
+                <button
+                  onClick={() =>
+                    setActiveDropdown(
+                      activeDropdown === "signin" ? null : "signin",
+                    )
+                  }
+                  className="w-full text-left px-3 py-2 text-base font-bold text-white flex justify-between items-center"
+                >
+                  SIGN IN <span>{activeDropdown === "signin" ? "−" : "+"}</span>
+                </button>
+                {activeDropdown === "signin" &&
+                  roles.map((role) => (
+                    <Link
+                      key={`m-in-${role.name}`}
+                      to={`/login${role.path}`}
+                      onClick={() => setIsOpen(false)}
+                      className="block pl-8 py-2 text-blue-100 text-sm hover:text-white"
+                    >
+                      Login as {role.name}
+                    </Link>
+                  ))}
 
-              <button
-                onClick={() =>
-                  setActiveDropdown(
-                    activeDropdown === "signup" ? null : "signup",
-                  )
-                }
-                className="w-full text-left px-3 py-2 text-base font-bold text-white flex justify-between items-center mt-2"
-              >
-                SIGN UP <span>{activeDropdown === "signup" ? "−" : "+"}</span>
-              </button>
-              {activeDropdown === "signup" &&
-                roles.map((role) => (
-                  <Link
-                    key={`m-up-${role.name}`}
-                    to={`/register${role.path}`}
-                    onClick={() => setIsOpen(false)}
-                    className="block pl-8 py-2 text-blue-100 text-sm hover:text-white"
-                  >
-                    Register as {role.name}
-                  </Link>
-                ))}
-            </div>
+                <button
+                  onClick={() =>
+                    setActiveDropdown(
+                      activeDropdown === "signup" ? null : "signup",
+                    )
+                  }
+                  className="w-full text-left px-3 py-2 text-base font-bold text-white flex justify-between items-center mt-2"
+                >
+                  SIGN UP <span>{activeDropdown === "signup" ? "−" : "+"}</span>
+                </button>
+                {activeDropdown === "signup" &&
+                  roles.map((role) => (
+                    <Link
+                      key={`m-up-${role.name}`}
+                      to={`/register${role.path}`}
+                      onClick={() => setIsOpen(false)}
+                      className="block pl-8 py-2 text-blue-100 text-sm hover:text-white"
+                    >
+                      Register as {role.name}
+                    </Link>
+                  ))}
+              </div>
+            )}
           </div>
         )}
       </nav>

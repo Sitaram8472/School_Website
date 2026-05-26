@@ -9,6 +9,7 @@ import {
 // Import Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Chatbot from "./components/Chatbot";
 
 // Import Pages
 import Home from "./pages/Home";
@@ -22,6 +23,8 @@ import EventCalendar from "./pages/EventCalendar";
 import Scholarship from "./pages/Scholarship";
 import Gallery from "./pages/Gallery";
 import Student from "./pages/Student";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 /**
  * ScrollToTop ensures that every time a user navigates to a new page,
@@ -61,6 +64,10 @@ const App = () => {
             <Route path="/calendar" element={<EventCalendar />} />
             <Route path="/admissions/scholarship" element={<Scholarship />} /> 
             <Route path="/student" element={<Student />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/login/:role" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/register/:role" element={<Register />} />
             
             {/* Catch-all route for 404 Page Not Found */}
             <Route path="*" element={<NotFound />} />
@@ -70,6 +77,9 @@ const App = () => {
 
         {/* Site Footer */}
         <Footer />
+
+        {/* Floating AI Support Assistant */}
+        <Chatbot />
       </div>
     </Router>
   );
