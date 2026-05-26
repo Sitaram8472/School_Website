@@ -31,7 +31,7 @@ const About = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             {
-              url: "https://images.unsplash.com/photo-1523050335392-93851179ae22?auto=format&fit=crop&w=800&q=80",
+              url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80",
               title: "Graduation Day",
               size: "col-span-2 row-span-2",
             },
@@ -41,7 +41,7 @@ const About = () => {
               size: "col-span-1",
             },
             {
-              url: "https://images.unsplash.com/photo-1577894779850-f4ca9201f9d7?auto=format&fit=crop&w=800&q=80",
+              url: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80",
               title: "Science Lab",
               size: "col-span-1",
             },
@@ -56,9 +56,19 @@ const About = () => {
               size: "col-span-1 row-span-1",
             },
             {
-              url: "https://images.unsplash.com/photo-1511629091441-ee461463a2cd?auto=format&fit=crop&w=800&q=80",
+              url: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
               title: "Annual Fest",
               size: "col-span-2",
+            },
+            {
+              url: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=800&q=80",
+              title: "Art Class",
+              size: "col-span-1",
+            },
+            {
+              url: "https://images.unsplash.com/photo-1774437890680-ae73abe607bf?q=80&w=687&auto=format&fit=crop",
+              title: "Cultural Event",
+              size: "col-span-1",
             },
           ].map((img, i) => (
             <div
