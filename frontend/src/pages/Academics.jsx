@@ -198,9 +198,12 @@ const Academics = () => {
                   </div>
                 ))}
               </div>
-              <button className="mt-12 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors">
+              <a className="mt-8 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors" href="#/about">
                 Explore Our Campus <ArrowRight size={20} />
-              </button>
+              </a>
+              <a className="mt-6 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors" href="#/prospectus">
+                Download Prospectus <ArrowRight size={20} />
+              </a>
             </div>
             <div className="lg:w-1/2 h-[400px] lg:h-auto">
               <img
