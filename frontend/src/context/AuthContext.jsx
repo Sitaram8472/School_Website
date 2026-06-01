@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
       console.error("Failed to load user from localStorage:", error);
 
       localStorage.removeItem("userInfo");
-      localStorage.removeItem("token");
     } finally {
       setLoading(false);
     }
@@ -33,10 +32,9 @@ export const AuthProvider = ({ children }) => {
         password,
       });
 
-      setUser(data);
+      setUser(data.user);
 
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("userInfo", JSON.stringify(data.user));
 
       return data;
     } catch (error) {
@@ -76,12 +74,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Logout Function
-  const logout = () => {
+  const logout = async () => {
     try {
+      await api.post("/auth/logout");
       setUser(null);
 
       localStorage.removeItem("userInfo");
-      localStorage.removeItem("token");
     } catch (error) {
       console.error("Logout Error:", error);
     }
