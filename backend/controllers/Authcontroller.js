@@ -57,6 +57,13 @@ exports.login = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 
+    if (!user.isVerified) {
+      return res.status(403).json({ 
+        message: "Please verify your email to log in", 
+        needsVerification: true 
+      });
+    }
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
