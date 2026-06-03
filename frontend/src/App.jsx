@@ -25,6 +25,7 @@ import Gallery from "./pages/Gallery";
 import Student from "./pages/Student";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import DownloadProspectus from "./pages/DownloadProspectus";
 
 /**
  * ScrollToTop ensures that every time a user navigates to a new page,
@@ -52,7 +53,7 @@ const App = () => {
         <Navbar />
 
         {/* Page Content: This section grows to fill space, pushing Footer down */}
-        <main className=" flex-grow: 1">
+        <main className="grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -62,7 +63,8 @@ const App = () => {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/calendar" element={<EventCalendar />} />
-            <Route path="/admissions/scholarship" element={<Scholarship />} /> 
+            <Route path="/admissions/scholarship" element={<Scholarship />} />
+            <Route path="/prospectus" element={<DownloadProspectus />} /> 
             <Route path="/student" element={<Student />} />
             <Route path="/login" element={<Login />} />
             <Route path="/login/:role" element={<Login />} />

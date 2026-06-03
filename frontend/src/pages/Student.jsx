@@ -30,6 +30,32 @@ const Student = () => {
       due: "28 May 2026",
     },
   ];
+  const notifications = [
+    {
+      id: 1,
+      title: "New Notice Released",
+      message: "School annual function scheduled for June 15.",
+      type: "notice",
+    },
+    {
+      id: 2,
+      title: "Assignment Reminder",
+      message: "Math assignment due tomorrow.",
+      type: "assignment",
+    },
+    {
+      id: 3,
+      title: "Event Alert",
+      message: "Science exhibition registration is open.",
+      type: "event",
+    },
+    {
+      id: 4,
+      title: "Parent Meeting Reminder",
+      message: "Parent-teacher meeting will be held on June 20.",
+      type: "parent",
+    },
+  ];
 
   const resources = [
     {
@@ -50,7 +76,7 @@ const Student = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:p-6 overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white rounded-3xl p-8 shadow-2xl mb-10">
         <div className="flex items-center gap-4">
@@ -59,7 +85,7 @@ const Student = () => {
           </div>
 
           <div>
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-2xl sm:text-4xl font-bold">
               Welcome Back, {displayName} 👋
             </h1>
 
@@ -105,7 +131,7 @@ const Student = () => {
             </div>
 
             <div>
-              <h2 className="text-3xl font-bold">4</h2>
+              <h2 className="text-3xl font-bold">{notifications.length}</h2>
               <p className="text-gray-500">Notifications</p>
             </div>
           </div>
@@ -140,6 +166,32 @@ const Student = () => {
         </div>
       </div>
 
+      {/* Notification Center */}
+      <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
+        <h2 className="text-3xl font-bold text-blue-700 mb-6">
+          Notification Center
+        </h2>
+
+        <div className="space-y-4">
+          {notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className="border rounded-2xl p-5 bg-gradient-to-r from-white to-blue-50 hover:shadow-xl transition duration-300"
+            >
+              <h3 className="text-xl font-bold text-gray-800">
+                {notification.title}
+              </h3>
+
+              <p className="text-gray-600 mt-2">{notification.message}</p>
+
+              <span className="text-sm text-blue-600 font-medium">
+                {notification.type}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Study Materials */}
       <div className="bg-white rounded-3xl shadow-2xl p-8">
         <h2 className="text-3xl font-bold text-blue-700 mb-6">
@@ -150,7 +202,7 @@ const Student = () => {
           {resources.map((resource) => (
             <div
               key={resource.id}
-              className="flex items-center justify-between border rounded-2xl p-5 hover:shadow-2xl hover:-translate-y-1 transition duration-300 bg-gradient-to-r from-white to-blue-50"
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border rounded-2xl p-5 hover:shadow-2xl hover:-translate-y-1 transition duration-300 bg-gradient-to-r from-white to-blue-50"
             >
               <p className="font-semibold text-gray-700 text-lg">
                 {resource.name}

@@ -129,7 +129,7 @@ const Academics = () => {
             {departments.map((dept, i) => (
               <div
                 key={i}
-                className="group bg-white p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300"
+                className="group bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300"
               >
                 <div className="flex justify-between items-start mb-8">
                   <div className="p-4 bg-slate-50 rounded-2xl text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
@@ -167,9 +167,9 @@ const Academics = () => {
         </div>
 
         {/* Facilities Section */}
-        <div className="bg-slate-900 rounded-[3rem] overflow-hidden">
+        <div className="bg-slate-900 rounded-2xl sm:rounded-[3rem] overflow-hidden">
           <div className="flex flex-col lg:flex-row">
-            <div className="p-12 lg:p-20 lg:w-1/2">
+            <div className="p-6 sm:p-12 lg:p-20 lg:w-1/2">
               <h2 className="text-3xl font-bold text-white mb-8">
                 World-Class Learning Infrastructure
               </h2>
@@ -205,6 +205,12 @@ const Academics = () => {
               >
                 Explore Our Campus <ArrowRight size={20} />
               </Link>
+              <Link
+                to="/prospectus"
+                className="mt-6 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors"
+              >
+                Download Prospectus <ArrowRight size={20} />
+              </Link>
             </div>
             <div className="lg:w-1/2 h-[400px] lg:h-auto">
               <img
@@ -217,7 +223,7 @@ const Academics = () => {
         </div>
 
         {/* Academic Outcome Section */}
-        <div className="mt-32 text-center bg-blue-50 p-12 rounded-3xl border border-blue-100">
+        <div className="mt-32 text-center bg-blue-50 p-6 sm:p-12 rounded-3xl border border-blue-100">
           <BookOpen className="mx-auto text-blue-600 mb-6" size={48} />
           <h2 className="text-3xl font-bold text-slate-900 mb-4">
             Academic Excellence Guaranteed
@@ -227,7 +233,7 @@ const Academics = () => {
             leading institutions worldwide. We don't just teach for exams; we
             teach for life.
           </p>
-          <div className="flex justify-center gap-8">
+          <div className="flex justify-center gap-4 sm:gap-8">
             <div>
               <div className="text-3xl font-bold text-blue-600">100%</div>
               <div className="text-sm text-slate-500 font-medium">
