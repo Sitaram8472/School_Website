@@ -23,7 +23,7 @@ import Scholarship from "./pages/Scholarship";
 import Gallery from "./pages/Gallery";
 import Student from "./pages/Student";
 import DownloadProspectus from "./pages/DownloadProspectus";
-
+import FAQ from "./pages/FAQ";
 
 /**
  * ScrollToTop ensures that every time a user navigates to a new page,
@@ -62,7 +62,7 @@ const App = () => {
             <Route path="/student" element={<Student />} />
 
             {/* ADD THIS */}
-            
+            <Route path="/faq" element={<FAQ />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
