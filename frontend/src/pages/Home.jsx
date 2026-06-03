@@ -158,6 +158,53 @@ const Home = () => {
           </div>
         </div>
       </section>
+      {/* FAQ'S Section*/}
+      {/* FAQ SECTION */}
+<section className="py-20 px-4 max-w-5xl mx-auto">
+  <h2 className="text-3xl font-bold text-center mb-10">
+    Frequently Asked Questions
+  </h2>
+
+  <div className="space-y-4">
+
+    <details className="bg-slate-50 p-4 rounded-lg shadow-sm">
+      <summary className="cursor-pointer font-semibold">
+        How does the school support academic excellence?
+      </summary>
+      <p className="mt-2 text-slate-600">
+        We provide structured learning, digital classrooms, and continuous assessments to improve student performance.
+      </p>
+    </details>
+
+    <details className="bg-slate-50 p-4 rounded-lg shadow-sm">
+      <summary className="cursor-pointer font-semibold">
+        Are extracurricular activities available?
+      </summary>
+      <p className="mt-2 text-slate-600">
+        Yes, we offer sports, arts, music, coding clubs, and cultural programs.
+      </p>
+    </details>
+
+    <details className="bg-slate-50 p-4 rounded-lg shadow-sm">
+      <summary className="cursor-pointer font-semibold">
+        What facilities are available on campus?
+      </summary>
+      <p className="mt-2 text-slate-600">
+        Smart classrooms, science labs, library, sports grounds, and computer labs are available.
+      </p>
+    </details>
+
+    <details className="bg-slate-50 p-4 rounded-lg shadow-sm">
+      <summary className="cursor-pointer font-semibold">
+        How can parents track student progress?
+      </summary>
+      <p className="mt-2 text-slate-600">
+        Parents can track progress through regular PTMs and digital progress reports.
+      </p>
+    </details>
+
+  </div>
+</section>
     </div>
   );
 };
