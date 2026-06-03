@@ -178,7 +178,7 @@ const Admissions = () => {
             The 4-Step Enrollment Journey
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             {steps.map((step, i) => (
               <div key={i} className="relative group">
                 <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all h-full">
@@ -206,7 +206,7 @@ const Admissions = () => {
         </div>
 
         {/* Admissions Calendar */}
-        <div className="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-white mb-32">
+        <div className="bg-slate-900 rounded-2xl sm:rounded-[3rem] p-6 sm:p-8 md:p-16 text-white mb-32">
           <div className="text-center mb-12">
             <h3 className="text-3xl font-bold mb-4">
               Admissions Calendar 2026
@@ -251,7 +251,7 @@ const Admissions = () => {
 
         {/* FAQ */}
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 flex items-center justify-center gap-3">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12 flex items-center justify-center gap-3">
             <HelpCircle className="text-blue-600" />
             Frequently Asked Questions
           </h2>

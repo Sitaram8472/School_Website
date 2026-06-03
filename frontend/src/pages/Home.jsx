@@ -79,7 +79,7 @@ const Home = () => {
                   Updates
                 </span>
               </div>
-              <h2 className="text-4xl font-bold text-slate-900">
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
                 Notice Board
               </h2>
             </div>
@@ -134,7 +134,7 @@ const Home = () => {
 
       {/* CTA Section - Professional Gradient */}
       <section className="py-24 px-4">
-        <div className="max-w-6xl mx-auto bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl">
+        <div className="max-w-6xl mx-auto bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 rounded-2xl sm:rounded-[3rem] p-8 sm:p-12 md:p-20 text-center relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl"></div>
 

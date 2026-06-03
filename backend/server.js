@@ -4,8 +4,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/Auth");
-const inquiryRoutes = require("./routes/inquiryRoutes");
-
+const inquiryRoutes = require('./routes/inquiryRoutes.js');
+const inquiryRoutes  = require ("./routes/inquiryRoutes.js");
 dotenv.config();
 const app = express();
 app.use(cors());

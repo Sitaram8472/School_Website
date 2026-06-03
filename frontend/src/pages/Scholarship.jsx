@@ -61,7 +61,7 @@ function Scholarship() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight max-w-4xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight max-w-4xl mx-auto">
             Empowering Dreams Through{" "}
             <span className="text-blue-400">Quality Education</span>
           </h1>
@@ -95,7 +95,7 @@ function Scholarship() {
             Key Features
           </span>
 
-          <h2 className="text-4xl font-bold text-slate-900 mt-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mt-4">
             Scholarship Opportunities
           </h2>
 
@@ -135,7 +135,7 @@ function Scholarship() {
               Application Process
             </span>
 
-            <h2 className="text-4xl font-bold text-slate-900 mt-4 mb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mt-4 mb-6">
               Simple & Transparent Process
             </h2>
 

@@ -22,6 +22,7 @@ import EventCalendar from "./pages/EventCalendar";
 import Scholarship from "./pages/Scholarship";
 import Gallery from "./pages/Gallery";
 import Student from "./pages/Student";
+import DownloadProspectus from "./pages/DownloadProspectus";
 
 /**
  * ScrollToTop ensures that every time a user navigates to a new page,
@@ -49,7 +50,7 @@ const App = () => {
         <Navbar />
 
         {/* Page Content: This section grows to fill space, pushing Footer down */}
-        <main className=" flex-grow: 1">
+        <main className="grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -59,7 +60,8 @@ const App = () => {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/calendar" element={<EventCalendar />} />
-            <Route path="/admissions/scholarship" element={<Scholarship />} /> 
+            <Route path="/admissions/scholarship" element={<Scholarship />} />
+            <Route path="/prospectus" element={<DownloadProspectus />} /> 
             <Route path="/student" element={<Student />} />
             
             {/* Catch-all route for 404 Page Not Found */}

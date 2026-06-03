@@ -18,7 +18,7 @@ const EventCalendar = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-6 py-10">
       
       {/* Heading */}
-      <h1 className="text-5xl font-bold text-center text-blue-700 mb-4">
+      <h1 className="text-3xl sm:text-5xl font-bold text-center text-blue-700 mb-4">
         Event Calendar
       </h1>
 
@@ -44,8 +44,8 @@ const EventCalendar = () => {
       </div>
 
       {/* Calendar Section */}
-      <div className="flex justify-center mb-32 mt-6">
-        <div className="bg-white p-8 rounded-3xl shadow-2xl border border-blue-100 scale-125">
+      <div className="flex justify-center mb-16 sm:mb-32 mt-6">
+        <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-2xl border border-blue-100 sm:scale-125">
           <Calendar onChange={setDate} value={date} />
         </div>
       </div>
@@ -58,7 +58,7 @@ const EventCalendar = () => {
             className="bg-white rounded-3xl shadow-xl p-6 hover:scale-105 transition-all duration-300 border border-gray-100"
           >
             {/* Card Header */}
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
               <h2 className="text-2xl font-bold text-gray-800">
                 {event.title}
               </h2>
