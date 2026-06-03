@@ -23,7 +23,14 @@ import Scholarship from "./pages/Scholarship";
 import Gallery from "./pages/Gallery";
 import Student from "./pages/Student";
 import DownloadProspectus from "./pages/DownloadProspectus";
+
 import FAQ from "./pages/FAQ";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+
 
 /**
  * ScrollToTop ensures that every time a user navigates to a new page,
@@ -44,10 +51,23 @@ const App = () => {
     <Router>
       <ScrollToTop />
 
+
       <div className="flex flex-col min-h-screen">
         <Navbar />
 
         <main className="grow">
+
+      {/* Main Layout Wrapper */}
+      <div
+        className="flex flex-col min-h-screen"
+      >
+
+        {/* Navigation Bar */}
+        <Navbar />
+
+        {/* Page Content: This section grows to fill space, pushing Footer down */}
+        <main className="grow pt-16">
+
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -61,8 +81,19 @@ const App = () => {
             <Route path="/prospectus" element={<DownloadProspectus />} />
             <Route path="/student" element={<Student />} />
 
+
             {/* ADD THIS */}
             <Route path="/faq" element={<FAQ />} />
+
+
+            <Route path="/login" element={<Login />} />
+            <Route path="/login/:role" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/register/:role" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+
+            {/* Catch-all route for 404 Page Not Found */}
 
             <Route path="*" element={<NotFound />} />
           </Routes>
