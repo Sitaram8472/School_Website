@@ -66,11 +66,18 @@ const Student = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:p-6 overflow-hidden">
+    <div
+    className="min-h-screen p-4 sm:p-6 overflow-hidden"
+    style={{
+      background: "var(--bg-primary)",
+      color: "var(--text-primary)",
+    }}
+  >
+
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white rounded-3xl p-8 shadow-2xl mb-10">
         <div className="flex items-center gap-4">
-          <div className="bg-white text-blue-700 p-4 rounded-full shadow-lg">
+          <div className="bg-[var(--card-bg)] text-blue-700 p-4 rounded-full shadow-lg">
             <User size={32} />
           </div>
 
@@ -88,7 +95,7 @@ const Student = () => {
 
       {/* Stats Cards */}
       <div className="grid md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
+        <div className="bg-[var(--card-bg)] rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
           <div className="flex items-center gap-4">
             <div className="bg-blue-100 p-3 rounded-full text-blue-700">
               <BookOpen />
@@ -101,7 +108,7 @@ const Student = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
+        <div className="bg-[var(--card-bg)] rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
           <div className="flex items-center gap-4">
             <div className="bg-green-100 p-3 rounded-full text-green-700">
               <ClipboardCheck />
@@ -114,7 +121,7 @@ const Student = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
+        <div className="bg-[var(--card-bg)] rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
           <div className="flex items-center gap-4">
             <div className="bg-yellow-100 p-3 rounded-full text-yellow-700">
               <Bell />
@@ -129,7 +136,7 @@ const Student = () => {
       </div>
 
       {/* Assignments */}
-      <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
+      <div className="bg-[var(--card-bg)] rounded-3xl shadow-2xl p-8 mb-10">
         <h2 className="text-3xl font-bold text-blue-700 mb-6">
           Upcoming Assignments
         </h2>
@@ -183,7 +190,7 @@ const Student = () => {
       </div>
 
       {/* Study Materials */}
-      <div className="bg-white rounded-3xl shadow-2xl p-8">
+      <div className="bg-[var(--card-bg)] rounded-3xl shadow-2xl p-8">
         <h2 className="text-3xl font-bold text-blue-700 mb-6">
           Study Materials
         </h2>

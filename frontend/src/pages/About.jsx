@@ -3,28 +3,26 @@ import { Users, BookOpen, Trophy, Globe, Award, Calendar } from "lucide-react";
 
 const About = () => {
   return (
-    <div className="animate-in fade-in duration-500 bg-slate-50">
+    <div className="animate-in fade-in duration-500 bg-[var(--bg-secondary)]">
       {/* Hero Section */}
-      <div className="bg-slate-900 py-24 px-4 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+      <div className="bg-[var(--bg-primary)] py-24 px-4 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-6">
           About EduStream Academy
         </h1>
-        <p className="text-slate-400 max-w-3xl mx-auto text-lg">
-          A legacy of academic excellence since 1985, committed to holistic
-          development and global impact. We don't just teach; we inspire the
-          leaders of tomorrow.
+
+        <p className="text-[var(--text-secondary)] max-w-3xl mx-auto text-lg">
+          A legacy of academic excellence since 1985...
         </p>
       </div>
 
       {/* School Memories Section */}
       <div className="mt-32">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-4">
             Life at EduStream: Captured Moments
           </h2>
-          <p className="text-slate-500 max-w-2xl mx-auto">
-            From the classroom to the field, take a look at the experiences that
-            shape our students' journey.
+          <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
+            From the classroom to the field...
           </p>
         </div>
 
@@ -91,7 +89,7 @@ const About = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:px-8">
         {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-32">
+        <div className="text-center p-6 bg-[var(--card-bg)] rounded-2xl shadow-sm border border-[var(--border-color)]">
           {[
             {
               label: "Students",
@@ -116,12 +114,12 @@ const About = () => {
           ].map((stat, i) => (
             <div
               key={i}
-              className="text-center p-6 bg-white rounded-2xl shadow-sm border border-slate-100"
+              className="text-center p-6 bg-[var(--card-bg)] rounded-2xl shadow-sm border border-slate-100"
             >
               <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-50 text-blue-600 rounded-lg mb-4">
                 {stat.icon}
               </div>
-              <div className="text-3xl font-bold text-slate-900">
+              <div className="text-3xl font-bold text-[var(--text-primary)]">
                 {stat.value}
               </div>
               <div className="text-slate-500 font-medium">{stat.label}</div>
@@ -132,10 +130,10 @@ const About = () => {
         {/* Mission Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-32">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2">
               <Award className="text-blue-600" /> Our Mission
             </h2>
-            <p className="text-slate-600 mb-6 leading-relaxed">
+            <p className="text-[var(--text-secondary)] mb-6 leading-relaxed">
               At EduStream, we believe that education is more than just academic
               achievement. It's about fostering curiosity, critical thinking,
               and character. Our mission is to provide an inclusive environment
@@ -164,7 +162,7 @@ const About = () => {
 
         {/* Leadership Team */}
         <div className="mb-32">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-12">
+          <h2 className="text-3xl font-bold text-[var(--text-primary)] text-center mb-12">
             Our Leadership
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -187,14 +185,14 @@ const About = () => {
             ].map((leader, i) => (
               <div
                 key={i}
-                className="bg-white p-6 rounded-2xl text-center shadow-sm hover:shadow-md transition-shadow"
+                className="bg-[var(--card-bg)] p-6 rounded-2xl text-center shadow-sm hover:shadow-md transition-shadow"
               >
                 <img
                   src={leader.img}
                   alt={leader.name}
                   className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-blue-50"
                 />
-                <h3 className="text-xl font-bold text-slate-900">
+                <h3 className="text-xl font-bold text-[var(--text-primary)]">
                   {leader.name}
                 </h3>
                 <p className="text-blue-600 font-medium">{leader.role}</p>
@@ -205,7 +203,7 @@ const About = () => {
 
         {/* History Timeline */}
         <div className="mb-32">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-12 flex justify-center items-center gap-2">
+          <h2 className="text-3xl font-bold text-[var(--text-primary)] text-center mb-12 flex justify-center items-center gap-2">
             <Calendar className="text-blue-600" /> Our Journey
           </h2>
           <div className="space-y-8">
@@ -244,7 +242,7 @@ const About = () => {
 
         {/* Core Values */}
         <div>
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-12">
+          <h2 className="text-3xl font-bold text-[var(--text-primary)] text-center mb-12">
             Our Core Values
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -264,7 +262,7 @@ const About = () => {
             ].map((v, i) => (
               <div
                 key={i}
-                className="bg-white p-8 rounded-xl border border-slate-200 text-center hover:border-blue-300 transition-colors"
+                className="bg-[var(--card-bg)] p-8 rounded-xl border border-[var(--border-color)] text-center hover:border-blue-400 transition-colors"
               >
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl mx-auto mb-6">
                   {i + 1}

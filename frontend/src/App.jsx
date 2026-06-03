@@ -45,12 +45,15 @@ const App = () => {
       <ScrollToTop />
 
       {/* Main Layout Wrapper */}
-      <div className="flex flex-col min-h-screen">
+      <div
+        className="flex flex-col min-h-screen"
+      >
+
         {/* Navigation Bar */}
         <Navbar />
 
         {/* Page Content: This section grows to fill space, pushing Footer down */}
-        <main className="grow">
+        <main className="grow pt-16">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

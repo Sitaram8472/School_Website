@@ -35,7 +35,7 @@ const EventCalendar = () => {
             className={`px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 cursor-pointer ${
               currentRole === role
                 ? "bg-blue-600 text-white shadow-xl scale-105"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-blue-50"
+                : "bg-[var(--card-bg)] text-gray-700 border border-gray-300 hover:bg-blue-50"
             }`}
           >
             {role.charAt(0).toUpperCase() + role.slice(1)}
@@ -45,7 +45,7 @@ const EventCalendar = () => {
 
       {/* Calendar Section */}
       <div className="flex justify-center mb-16 sm:mb-32 mt-6">
-        <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-2xl border border-blue-100 sm:scale-125">
+        <div className="bg-[var(--card-bg)] p-4 sm:p-8 rounded-3xl shadow-2xl border border-blue-100 sm:scale-125">
           <Calendar onChange={setDate} value={date} />
         </div>
       </div>
@@ -55,7 +55,7 @@ const EventCalendar = () => {
         {filteredEvents.map((event) => (
           <div
             key={event.id}
-            className="bg-white rounded-3xl shadow-xl p-6 hover:scale-105 transition-all duration-300 border border-gray-100"
+            className="bg-[var(--card-bg)] rounded-3xl shadow-xl p-6 hover:scale-105 transition-all duration-300 border border-gray-100"
           >
             {/* Card Header */}
             <div className="flex flex-wrap justify-between items-start gap-2 mb-4">

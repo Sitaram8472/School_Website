@@ -49,10 +49,9 @@ const DownloadProspectus = () => {
   ];
 
   return (
-    <div className="bg-white animate-in fade-in duration-700">
+    <div className="bg-[var(--bg-primary)] animate-in fade-in duration-700">
       {/* Hero Section */}
       <div className="relative bg-slate-900 py-28 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-blue-600/10 mix-blend-overlay"></div>
         <div className="relative z-10 text-center">
           <span className="text-blue-400 font-bold tracking-widest uppercase text-sm">
             Get to Know Us
@@ -88,7 +87,7 @@ const DownloadProspectus = () => {
 
           {/* Right — Info & Download */}
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">
+            <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-6">
               Your Complete Guide to EduStream Academy
             </h2>
             <p className="text-slate-600 leading-relaxed mb-8">
@@ -130,7 +129,7 @@ const DownloadProspectus = () => {
         {/* What's Inside — Highlights Grid */}
         <section className="mb-32">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+            <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-4">
               What's Inside the Prospectus
             </h2>
             <p className="text-slate-500 max-w-2xl mx-auto">
@@ -143,12 +142,12 @@ const DownloadProspectus = () => {
             {highlights.map((item, i) => (
               <div
                 key={i}
-                className="group bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300 text-center"
+                className="group bg-[var(--card-bg)] p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300 text-center"
               >
                 <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
                   {item.icon}
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">
+                <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3">
                   {item.title}
                 </h3>
                 <p className="text-slate-600 leading-relaxed text-sm">
@@ -206,7 +205,7 @@ const DownloadProspectus = () => {
         {/* Bottom CTA */}
         <section className="text-center bg-blue-50 p-6 sm:p-12 rounded-3xl border border-blue-100">
           <BookOpen className="mx-auto text-blue-600 mb-6" size={48} />
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-4">
             Have Questions About Admissions?
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto mb-8">
@@ -222,7 +221,7 @@ const DownloadProspectus = () => {
             </a>
             <a
               href="#/admissions"
-              className="inline-flex items-center justify-center gap-2 bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 transition-all active:scale-95"
+              className="inline-flex items-center justify-center gap-2 bg-[var(--card-bg)] text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-bold hover:bg-[var(--bg-secondary)] transition-all active:scale-95"
             >
               View Admission Process
             </a>

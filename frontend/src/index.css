@@ -1,12 +1,89 @@
 @import "tailwindcss";
 
-html, body {
-  overflow-x: hidden;
+/* =========================
+   Light Theme Variables
+========================= */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --card-bg: #ffffff;
+
+  --text-primary: #111827;
+  --text-secondary: #64748b;
+
+  --border-color: #e2e8f0;
+
+  --button-bg: #2563eb;
+  --button-text: #ffffff;
 }
 
+/* =========================
+   Dark Theme Variables
+========================= */
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --card-bg: #1e293b;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+
+  --border-color: #334155;
+
+  --button-bg: #3b82f6;
+  --button-text: #ffffff;
+}
+
+/* =========================
+   Global Styles
+========================= */
+html,
+body {
+  overflow-x: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease,
+              color 0.3s ease;
+}
+
+/* Optional Card Support */
+.card,
+.teacher-card,
+.prospectus-card {
+  background: var(--card-bg);
+  color: var(--text-primary);
+}
+
+/* =========================
+   Theme Toggle Button
+========================= */
+.theme-toggle {
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-size: 1.5rem; /* icon size */
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+/* =========================
+   Marquee Animation
+========================= */
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-marquee {
@@ -17,4 +94,90 @@ html, body {
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+/* =========================
+   Global Dark Mode Overrides
+   (For Existing Tailwind Classes)
+========================= */
+
+[data-theme="dark"] .bg-white {
+  background-color: var(--card-bg) !important;
+}
+
+[data-theme="dark"] .bg-gray-50,
+[data-theme="dark"] .bg-slate-50,
+[data-theme="dark"] .bg-blue-50 {
+  background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .text-black,
+[data-theme="dark"] .text-gray-900,
+[data-theme="dark"] .text-slate-900,
+[data-theme="dark"] .text-gray-800,
+[data-theme="dark"] .text-slate-800,
+[data-theme="dark"] .text-gray-700,
+[data-theme="dark"] .text-slate-700 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-gray-600,
+[data-theme="dark"] .text-gray-500,
+[data-theme="dark"] .text-slate-600,
+[data-theme="dark"] .text-slate-500,
+[data-theme="dark"] .text-slate-400 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .border-gray-100,
+[data-theme="dark"] .border-gray-200,
+[data-theme="dark"] .border-slate-100,
+[data-theme="dark"] .border-slate-200 {
+  border-color: var(--border-color) !important;
+}
+
+/* Smooth Theme Transition */
+* {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+
+.react-calendar {
+  width: 100%;
+  border: none !important;
+  background: transparent !important;
+  font-family: inherit;
+}
+
+.react-calendar__tile {
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.react-calendar__tile:hover {
+  background: #2563eb !important;
+  color: white !important;
+}
+
+.react-calendar__tile--active {
+  background: #2563eb !important;
+  color: white !important;
+}
+
+.react-calendar__navigation button {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+[data-theme="dark"] .from-white,
+[data-theme="dark"] .to-white,
+[data-theme="dark"] .from-blue-50,
+[data-theme="dark"] .to-blue-50,
+[data-theme="dark"] .from-indigo-100,
+[data-theme="dark"] .to-indigo-100 {
+  --tw-gradient-from: #1e293b !important;
+  --tw-gradient-to: #334155 !important;
 }
