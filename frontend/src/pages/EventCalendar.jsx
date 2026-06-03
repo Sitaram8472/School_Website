@@ -10,13 +10,15 @@ const EventCalendar = () => {
   const [date, setDate] = useState(new Date());
   const [currentRole, setCurrentRole] = useState("student");
 
-  const filteredEvents = events.filter(
-    (event) => event.role === currentRole
+  const filteredEvents = events.filter((event) => event.role === currentRole);
+  const selectedDate = date.toISOString().split("T")[0];
+
+  const selectedDateEvents = filteredEvents.filter(
+    (event) => event.date === selectedDate,
   );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-6 py-10">
-      
       {/* Heading */}
       <h1 className="text-3xl sm:text-5xl font-bold text-center text-blue-700 mb-4">
         Event Calendar
@@ -46,39 +48,56 @@ const EventCalendar = () => {
       {/* Calendar Section */}
       <div className="flex justify-center mb-16 sm:mb-32 mt-6">
         <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-2xl border border-blue-100 sm:scale-125">
-          <Calendar onChange={setDate} value={date} />
+          <Calendar
+            onChange={setDate}
+            value={date}
+            tileClassName={({ date }) => {
+              const eventDate = date.toISOString().split("T")[0];
+
+              return filteredEvents.some((event) => event.date === eventDate)
+                ? "bg-blue-500 text-white rounded-full"
+                : null;
+            }}
+          />
         </div>
       </div>
 
+      <h2 className="text-2xl font-semibold mb-6 text-gray-700">
+        Events on {selectedDate}
+      </h2>
       {/* Event Cards */}
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {filteredEvents.map((event) => (
-          <div
-            key={event.id}
-            className="bg-white rounded-3xl shadow-xl p-6 hover:scale-105 transition-all duration-300 border border-gray-100"
-          >
-            {/* Card Header */}
-            <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {event.title}
-              </h2>
+        {selectedDateEvents.length > 0 ? (
+          selectedDateEvents.map((event) => (
+            <div
+              key={event.id}
+              className="bg-white rounded-3xl shadow-xl p-6 hover:scale-105 transition-all duration-300 border border-gray-100"
+            >
+              {/* Card Header */}
+              <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {event.title}
+                </h2>
 
-              <span className="bg-blue-100 text-blue-700 text-sm px-4 py-1 rounded-full capitalize">
-                {event.role}
-              </span>
+                <span className="bg-blue-100 text-blue-700 text-sm px-4 py-1 rounded-full capitalize">
+                  {event.role}
+                </span>
+              </div>
+
+              <p className="text-gray-500 mb-3 text-lg">📅 {event.date}</p>
+
+              <p className="text-gray-700 leading-relaxed">
+                {event.description}
+              </p>
             </div>
-
-            {/* Date */}
-            <p className="text-gray-500 mb-3 text-lg">
-              📅 {event.date}
-            </p>
-
-            {/* Description */}
-            <p className="text-gray-700 leading-relaxed">
-              {event.description}
+          ))
+        ) : (
+          <div className="col-span-full text-center py-10">
+            <p className="text-gray-500 text-lg">
+              No events scheduled for this date.
             </p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
