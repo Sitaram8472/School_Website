@@ -208,5 +208,42 @@ const Home = () => {
     </div>
   );
 };
+{/* FAQ SECTION */}
+<section className="py-12 px-4 max-w-4xl mx-auto">
+  <h2 className="text-3xl font-bold text-center mb-8">
+    Frequently Asked Questions
+  </h2>
+
+  <div className="space-y-4">
+
+    <details className="bg-white shadow-md p-4 rounded-lg">
+      <summary className="cursor-pointer font-semibold">
+        How can I apply for admission?
+      </summary>
+      <p className="mt-2 text-gray-600">
+        You can apply online through the admissions page or visit the school office directly.
+      </p>
+    </details>
+
+    <details className="bg-white shadow-md p-4 rounded-lg">
+      <summary className="cursor-pointer font-semibold">
+        Does the school provide transport facilities?
+      </summary>
+      <p className="mt-2 text-gray-600">
+        Yes, safe transport is available for students across main routes.
+      </p>
+    </details>
+
+    <details className="bg-white shadow-md p-4 rounded-lg">
+      <summary className="cursor-pointer font-semibold">
+        What are school timings?
+      </summary>
+      <p className="mt-2 text-gray-600">
+        School timings are generally 9:00 AM to 3:30 PM.
+      </p>
+    </details>
+
+  </div>
+</section>
 
 export default Home;
