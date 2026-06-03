@@ -6,13 +6,17 @@ import img4 from "../assets/campus/campus4.jpg";
 import img5 from "../assets/campus/campus5.jpg";
 import img6 from "../assets/campus/campus6.jpg";
 
-
-
 const images = [img1, img2, img3, img4, img5, img6];
 
 const Gallery = () => {
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-6">
+    <div
+      className="min-h-screen py-10 px-6 transition-colors duration-300"
+      style={{
+        background: "var(--bg-primary)",
+        color: "var(--text-primary)",
+      }}
+    >
       <h1 className="text-4xl font-bold text-center mb-10 text-blue-600">
         Campus Gallery
       </h1>
@@ -21,7 +25,11 @@ const Gallery = () => {
         {images.map((image, index) => (
           <div
             key={index}
-            className="overflow-hidden rounded-2xl shadow-lg bg-white"
+            className="overflow-hidden rounded-2xl shadow-lg"
+            style={{
+              background: "var(--card-bg)",
+              border: "1px solid var(--border-color)",
+            }}
           >
             <img
               src={image}

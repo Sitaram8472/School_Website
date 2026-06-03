@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
+import { Moon, Sun } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-
+  const { theme, toggleTheme } = useTheme();
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -38,13 +40,13 @@ const Navbar = () => {
       `}</style>
 
       {/* Changed bg-white to bg-blue-600 and updated border */}
-      <nav className="bg-blue-600 border-b border-blue-500 sticky top-0 z-50 shadow-md">
+      <nav className="bg-blue-600 border-b border-blue-500 fixed top-0 left-0 w-full z-50 shadow-none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             {/* Logo Section */}
             <div className="flex items-center">
               <Link to="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-[var(--bg-primary)] rounded-lg flex items-center justify-center">
                   <span className="text-blue-600 font-bold text-xl">E</span>
                 </div>
                 {/* Logo text changed to white for contrast */}
@@ -65,11 +67,10 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-
               {/* Animated Dropdown Button */}
               <div className="relative group">
                 <div className="button-bg rounded-full p-0.5 hover:scale-105 transition duration-300 active:scale-95 cursor-pointer shadow-lg">
-                  <button className="px-5 py-2 text-white rounded-full font-semibold bg-slate-900 flex items-center gap-2 text-sm">
+                  <button className="px-5 py-2 rounded-full font-semibold text-[var(--text-primary)] bg-[var(--card-bg)] flex items-center gap-2 text-sm border border-[var(--border-color)]">
                     Get Started
                     <svg
                       className="w-4 h-4"
@@ -88,12 +89,12 @@ const Navbar = () => {
                 </div>
 
                 {/* Dropdown Menu (Stays White for readability) */}
-                <div className="absolute right-0 mt-3 w-52 bg-white border border-slate-100 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
+                <div className="absolute right-0 mt-3 w-52 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
                   <div className="relative group/sub">
                     <div className="px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer flex justify-between items-center font-medium">
                       Sign In <span className="text-[10px] opacity-50">▶</span>
                     </div>
-                    <div className="absolute left-full top-0 ml-1 w-44 bg-white border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
+                    <div className="absolute left-full top-0 ml-1 w-44 bg-[var(--bg-primary)] border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
                       {roles.map((role) => (
                         <Link
                           key={`in-${role.name}`}
@@ -110,7 +111,7 @@ const Navbar = () => {
                     <div className="px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer flex justify-between items-center font-medium border-t border-slate-50">
                       Sign Up <span className="text-[10px] opacity-50">▶</span>
                     </div>
-                    <div className="absolute left-full top-0 ml-1 w-44 bg-white border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
+                    <div className="absolute left-full top-0 ml-1 w-44 bg-[var(--bg-primary)] border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
                       {roles.map((role) => (
                         <Link
                           key={`up-${role.name}`}
@@ -125,6 +126,19 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
+            
+
+            <button
+              className="theme-toggle ml-2 flex items-center justify-center"
+              onClick={toggleTheme}
+              aria-label="Toggle Theme"
+            >
+              {theme === "light" ? (
+                <Moon size={24} />
+              ) : (
+                <Sun size={24} />
+              )}
+          </button>
 
             {/* Mobile Menu Button - Changed to white */}
             <div className="md:hidden flex items-center">
@@ -173,6 +187,14 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+
+            <button
+              className="theme-toggle ml-3 text-2xl flex items-center justify-center"
+              onClick={toggleTheme}
+              aria-label="Toggle Theme"
+            >
+              {theme === "light" ? "🌙" : "☀️"}
+            </button>
             <div className="pt-4 mt-2 border-t border-blue-500">
               <button
                 onClick={() =>
