@@ -36,7 +36,8 @@ const Hero = () => {
                 <div className="rounded-md shadow">
                   <Link
                     to="/admissions"
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
+                    aria-label="Start admission process"
+                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 md:py-4 md:text-lg md:px-10"
                   >
                     Start Admission
                   </Link>
@@ -44,7 +45,8 @@ const Hero = () => {
                 <div className="mt-3 sm:mt-0 sm:ml-3">
                   <Link
                     to="/academics"
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10"
+                    aria-label="View academic programs"
+                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 md:py-4 md:text-lg md:px-10"
                   >
                     View Programs
                   </Link>

@@ -8,7 +8,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: 'Teacher', path: '/teacher' },
+    { name: "Teacher", path: "/teacher" },
     { name: "Academics", path: "/academics" },
     { name: "Contact", path: "/contact" },
     { name: "Calendar", path: "/calendar" },
@@ -69,7 +69,10 @@ const Navbar = () => {
               {/* Animated Dropdown Button */}
               <div className="relative group">
                 <div className="button-bg rounded-full p-0.5 hover:scale-105 transition duration-300 active:scale-95 cursor-pointer shadow-lg">
-                  <button className="px-5 py-2 text-white rounded-full font-semibold bg-slate-900 flex items-center gap-2 text-sm">
+                  <button
+                    aria-label="Open Get Started menu"
+                    className="px-5 py-2 text-white rounded-full font-semibold bg-slate-900 flex items-center gap-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  >
                     Get Started
                     <svg
                       className="w-4 h-4"
@@ -130,7 +133,12 @@ const Navbar = () => {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-white focus:outline-none"
+                aria-label={
+                  isOpen ? "Close navigation menu" : "Open navigation menu"
+                }
+                aria-expanded={isOpen}
+                aria-controls="mobile-menu"
+                className="text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
               >
                 <svg
                   className="h-7 w-7"
@@ -157,12 +165,14 @@ const Navbar = () => {
               </button>
             </div>
           </div>
-          
         </div>
 
         {/* Mobile Menu Dropdown - Matching Blue Theme */}
         {isOpen && (
-          <div className="md:hidden bg-blue-700 border-t border-blue-500 py-4 px-4 space-y-1">
+          <div
+            id="mobile-menu"
+            className="md:hidden bg-blue-700 border-t border-blue-500 py-4 px-4 space-y-1"
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.name}
