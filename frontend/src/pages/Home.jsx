@@ -3,6 +3,7 @@ import Hero from "../components/Hero";
 import Card from "../components/Card";
 import Notices, { notices } from "../data/Notices";
 import { teachers } from "../data/Teachers";
+import { useNavigate } from "react-router-dom";
 import {
   Users,
   GraduationCap,
@@ -25,7 +26,7 @@ import img8 from "../assets/campus/campus8.jpg";
 
 const Home = () => {
   const galleryImages = [img1, img2, img3, img4, img5, img6, img7, img8];
-
+  const navigate = useNavigate();
   return (
     <div className="animate-in fade-in duration-700 bg-[var(--bg-primary)]">
       <Hero />
@@ -149,7 +150,7 @@ const Home = () => {
             are now open. Secure your spot in our vibrant learning community.
           </p>
           <div className="relative z-10 flex flex-col sm:flex-row gap-6 justify-center">
-            <button className="flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/30 transition-all active:scale-95">
+            <button onClick={() => navigate("/apply")} className="flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/30 transition-all active:scale-95">
               Start Application <ArrowRightCircle size={20} />
             </button>
             <button className="bg-[var(--card-bg)]/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-xl font-bold hover:bg-[var(--card-bg)]/20 transition-all active:scale-95">

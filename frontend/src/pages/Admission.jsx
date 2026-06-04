@@ -9,16 +9,17 @@ import {
   ChevronDown,
   GraduationCap,
   ShieldCheck,
+  
 } from "lucide-react";
 
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 import prospectusPdf from "../assets/prospectus/prospectus.pdf";
 import prospectusCover from "../assets/prospectus/prospectus-cover.jpg";
 
 const Admissions = () => {
   const [openFaq, setOpenFaq] = useState(null);
-
+  const navigate = useNavigate();
   const steps = [
     {
       title: "Online Registration",
@@ -86,7 +87,7 @@ const Admissions = () => {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-xl">
+            <button onClick={() => navigate("/apply")} className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-xl">
               Apply Online Now
             </button>
 
