@@ -16,6 +16,7 @@ const Navbar = () => {
     { name: "Calendar", path: "/calendar" },
     { name: "Gallery", path: "/gallery" },
     { name: "Student", path: "/student" },
+    { name: "FAQ", path: "/faq" },
   ];
 
   const roles = [
