@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const JWT_SECRET =
+  process.env.JWT_SECRET || "fallback_development_secret_key";
 
 exports.register = async (req, res) => {
   try {
@@ -33,9 +35,9 @@ exports.register = async (req, res) => {
     });
 
     // Generate Token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, {
+  expiresIn: "1h",
+});
 
     // FIX: Send a response
     res.status(201).json({
@@ -59,9 +61,9 @@ exports.login = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, {
+  expiresIn: "1h",
+});
 
     res.status(200).json({
       message: "Login successful",
