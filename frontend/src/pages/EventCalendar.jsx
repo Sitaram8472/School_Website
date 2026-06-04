@@ -10,13 +10,15 @@ const EventCalendar = () => {
   const [date, setDate] = useState(new Date());
   const [currentRole, setCurrentRole] = useState("student");
 
-  const filteredEvents = events.filter(
-    (event) => event.role === currentRole
+  const filteredEvents = events.filter((event) => event.role === currentRole);
+  const selectedDate = date.toISOString().split("T")[0];
+
+  const selectedDateEvents = filteredEvents.filter(
+    (event) => event.date === selectedDate,
   );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-6 py-10">
-      
       {/* Heading */}
       <h1 className="text-3xl sm:text-5xl font-bold text-center text-blue-700 mb-4">
         Event Calendar
@@ -50,6 +52,9 @@ const EventCalendar = () => {
         </div>
       </div>
 
+      <h2 className="text-2xl font-semibold mb-6 text-gray-700">
+        Events on {selectedDate}
+      </h2>
       {/* Event Cards */}
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {filteredEvents.map((event) => (
@@ -63,22 +68,25 @@ const EventCalendar = () => {
                 {event.title}
               </h2>
 
-              <span className="bg-blue-100 text-blue-700 text-sm px-4 py-1 rounded-full capitalize">
-                {event.role}
-              </span>
+                <span className="bg-blue-100 text-blue-700 text-sm px-4 py-1 rounded-full capitalize">
+                  {event.role}
+                </span>
+              </div>
+
+              <p className="text-gray-500 mb-3 text-lg">📅 {event.date}</p>
+
+              <p className="text-gray-700 leading-relaxed">
+                {event.description}
+              </p>
             </div>
-
-            {/* Date */}
-            <p className="text-gray-500 mb-3 text-lg">
-              📅 {event.date}
-            </p>
-
-            {/* Description */}
-            <p className="text-gray-700 leading-relaxed">
-              {event.description}
+          ))
+        ) : (
+          <div className="col-span-full text-center py-10">
+            <p className="text-gray-500 text-lg">
+              No events scheduled for this date.
             </p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

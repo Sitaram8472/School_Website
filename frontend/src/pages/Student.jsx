@@ -4,8 +4,30 @@ import { BookOpen, ClipboardCheck, Download, Bell, User } from "lucide-react";
 import physicsNotes from "../assets/prospectus/physics-notes.pdf";
 import chemistryLab from "../assets/prospectus/chemistry-lab.pdf";
 import mathFormulas from "../assets/prospectus/math-formulas.pdf";
+import attendanceData from "../data/attendance";
 
 const Student = () => {
+  const savedAttendance = JSON.parse(localStorage.getItem("attendanceRecords"));
+
+  const presentClasses = savedAttendance
+    ? Object.values(savedAttendance).filter((status) => status === "Present")
+        .length
+    : presentClasses;
+
+  const totalClasses = savedAttendance
+    ? Object.keys(savedAttendance).length
+    : totalClasses;
+  const attendancePercentage = (
+    (presentClasses / totalClasses) *
+    100
+  ).toFixed(0);
+  const absentClasses =
+    totalClasses - presentClasses;
+  const monthlyAttendancePercentage = (
+    (attendanceData.monthlyReport.presentClasses /
+      attendanceData.monthlyReport.totalClasses) *
+    100
+  ).toFixed(0);
   const assignments = [
     {
       id: 1,
@@ -115,7 +137,8 @@ const Student = () => {
             </div>
 
             <div>
-              <h2 className="text-3xl font-bold">92%</h2>
+              <h2 className="text-3xl font-bold">{attendancePercentage}%</h2>
+
               <p className="text-gray-500">Attendance</p>
             </div>
           </div>
@@ -131,6 +154,86 @@ const Student = () => {
               <h2 className="text-3xl font-bold">{notifications.length}</h2>
               <p className="text-gray-500">Notifications</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
+        <h2 className="text-3xl font-bold text-blue-700 mb-6">
+          Attendance Summary
+        </h2>
+
+        <div className="grid md:grid-cols-5 gap-6">
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">
+              Total Classes
+            </h3>
+
+            <p className="text-3xl font-bold">{totalClasses}</p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Present</h3>
+
+            <p className="text-3xl font-bold text-green-600">
+              {presentClasses}
+            </p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Absent</h3>
+
+            <p className="text-3xl font-bold text-red-600">{absentClasses}</p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">
+              Attendance %
+            </h3>
+
+            <p className="text-3xl font-bold text-blue-600">
+              {attendancePercentage}%
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
+        <h2 className="text-3xl font-bold text-blue-700 mb-6">
+          Monthly Attendance Report
+        </h2>
+
+        <div className="grid md:grid-cols-5 gap-6">
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Month</h3>
+
+            <p className="text-2xl font-bold">
+              {attendanceData.monthlyReport.month}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Present</h3>
+
+            <p className="text-2xl font-bold text-green-600">
+              {attendanceData.monthlyReport.presentClasses}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">
+              Total Classes
+            </h3>
+
+            <p className="text-2xl font-bold">
+              {attendanceData.monthlyReport.totalClasses}
+            </p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Percentage</h3>
+
+            <p className="text-2xl font-bold text-blue-600">
+              {monthlyAttendancePercentage}%
+            </p>
           </div>
         </div>
       </div>
