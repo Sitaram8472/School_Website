@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { AuthContext } from "../context/AuthContext";
 import { Moon, Sun } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const { theme, toggleTheme } = useTheme();
+  const { user } = useContext(AuthContext);
+  const isTeacher = user?.user?.role === 'teacher';
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -69,6 +72,14 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
+              {isTeacher && (
+                <Link
+                  to="/teacher/dashboard"
+                  className="text-blue-50 hover:text-white transition-colors font-medium bg-white/10 px-3 py-1 rounded-lg"
+                >
+                  My Dashboard
+                </Link>
+              )}
               {/* Animated Dropdown Button */}
               <div className="relative group">
                 <div className="button-bg rounded-full p-0.5 hover:scale-105 transition duration-300 active:scale-95 cursor-pointer shadow-lg">
