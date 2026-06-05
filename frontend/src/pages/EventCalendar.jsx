@@ -25,6 +25,8 @@ const EventCalendar = () => {
     (event) => event.date === selectedDate,
   );
 
+  const upcomingEvent = filteredEvents.find((event) => getDaysLeft(event.date) >= 0);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-6 py-10">
       {/* Heading */}
@@ -92,38 +94,36 @@ const EventCalendar = () => {
         Events on {selectedDate}
       </h2>
       {/* Event Cards */}
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {filteredEvents.map((event) => (
-          <div
-            key={event.id}
-            className="bg-[var(--card-bg)] rounded-3xl shadow-xl p-6 hover:scale-105 transition-all duration-300 border border-gray-100"
-          >
-            {/* Card Header */}
-            <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {event.title}
-              </h2>
-
+      {selectedDateEvents.length > 0 ? (
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {selectedDateEvents.map((event) => (
+            <div
+              key={event.id}
+              className="bg-[var(--card-bg)] rounded-3xl shadow-xl p-6 hover:scale-105 transition-all duration-300 border border-gray-100"
+            >
+              {/* Card Header */}
+              <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {event.title}
+                </h2>
                 <span className="bg-blue-100 text-blue-700 text-sm px-4 py-1 rounded-full capitalize">
                   {event.role}
                 </span>
               </div>
-
               <p className="text-gray-500 mb-3 text-lg">📅 {event.date}</p>
-
               <p className="text-gray-700 leading-relaxed">
                 {event.description}
               </p>
             </div>
-          ))
-        ) : (
-          <div className="col-span-full text-center py-10">
-            <p className="text-gray-500 text-lg">
-              No events scheduled for this date.
-            </p>
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-10">
+          <p className="text-gray-500 text-lg">
+            No events scheduled for this date.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
