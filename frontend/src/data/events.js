@@ -41,6 +41,20 @@ const events = [
     role: "staff",
     description: "Infrastructure and maintenance review",
   },
+  {
+    id: 7,
+    title: "Summer Vacation",
+    date: "2026-06-10",
+    role: "student",
+    description: "School closed for summer holidays",
+  },
+  {
+    id: 8,
+    title: "Scholarship Application Deadline",
+    date: "2026-06-15",
+    role: "student",
+    description: "Last date to submit scholarship applications",
+  },
 ];
 
 export default events;

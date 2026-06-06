@@ -1,14 +1,14 @@
 import { teachers } from "../data/Teachers";
+import AttendanceManager from "../components/AttendanceManager";
 import TeacherCard from "../components/TeacherCard";
 
 export default function Teacher() {
   return (
-    <div className="bg-white py-24">
+    <div className="bg-[var(--card-bg)] py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Header */}
         <div className="text-center mb-20">
-          <h2 className="text-4xl font-bold text-slate-900 mb-6">
+          <h2 className="text-4xl font-bold text-[var(--text-primary)] mb-6">
             World-Class Educators
           </h2>
           <div className="w-24 h-1.5 bg-blue-600 mx-auto rounded-full mb-6"></div>
@@ -23,6 +23,7 @@ export default function Teacher() {
             <TeacherCard key={teacher.id} teacher={teacher} />
           ))}
         </div>
+        <AttendanceManager />
       </div>
     </div>
   );

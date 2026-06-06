@@ -1,84 +1,188 @@
 # 🎓 EduStream Academy Portal
-* EduStream is a comprehensive Full-Stack Academic Management Portal designed to bridge the gap between students, faculty, and administration. Built with the MERN stack (MySQL, Express, React, Node.js), it features real-time notice boards, academic resource sharing, and an AI-integrated support system for student inquiries.
+
+EduStream is a comprehensive Full-Stack Academic Management Portal designed to bridge the gap between students, faculty, and administration.Built with the MERN stack (MongoDB, Express, React, Node.js), it features real-time notice boards, academic resource sharing, and an AI-integrated support system for student inquiries.
 
 ---
 
 ## 🚀 Features
 
-- **Real-time Notice Board:** -  Dynamic announcements fetched from a MySQL database.
-- **Academic Resource Hub:** Centralized repository for course materials and STEM excellence programs.  
-- **AI Support Integration:** Powered by the Gemini API to handle admission and academic queries instantly.
-- **Infinite Campus Gallery:** A high-performance, CSS-animated marquee showcasing campus life.
-- **Professional UI:** Fully responsive design built with Tailwind CSS and Lucide-React icons.
+### 📢 Real-Time Notice Board
+
+* Dynamic announcements fetched from the MongoDB database.
+* Instant updates for students and faculty.
+
+### 📚 Academic Resource Hub
+
+* Centralized repository for course materials and STEM excellence programs.
+* Easy access to academic resources.
+
+### 🤖 AI Support Integration
+
+* Powered by the Gemini API.
+* Handles admission and academic queries instantly.
+
+### 🏫 Infinite Campus Gallery
+
+* High-performance CSS-animated marquee.
+* Showcases campus life and activities.
+
+### 🎨 Professional UI
+
+* Fully responsive design.
+* Built with Tailwind CSS and Lucide React Icons.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React.js, Vite, Tailwind CSS, Axios.
-- **Backend:** Node.js, Express.js.
-- **Database:** MySQL (Relational data management).
-- **AI:** Gemini AI Service integration.
+### Frontend
+
+* React.js
+* Vite
+* Tailwind CSS
+* Axios
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Database
+
+* MongoDB
+
+### AI Integration
+
+* Gemini API
 
 ---
 
-- # 📂 Project Structure
+## 📂 Project Structure
 
-- SCHOOL_WEBSITE/
-- ├── backend/              # Node.js & Express server
-- │   ├── config/           # SQL Database connection logic
-- │   ├── controllers/      # Business logic & SQL Queries
-- │   ├── routes/           # API Endpoints
-- │   └── server.js         # Entry point
-- ├── frontend/             # React & Vite application
-- │   ├── src/
-- │   │   ├── api/          # Axios configurations
-- │   │   ├── components/   # Reusable UI components
-- │   │   └── data/         # Static data & State management
-- └── .env                  # Environment variables (DB credentials)
+```bash
+SCHOOL_WEBSITE/
+│
+├── backend/                 # Node.js & Express Server
+│   ├── config/              # MongoDB Connection Logic
+│   ├── controllers/         # Business Logic
+│   ├── routes/              # API Endpoints
+│   └── server.js            # Entry Point
+│
+├── frontend/                # React & Vite Application
+│   ├── src/
+│   │   ├── api/             # Axios Configurations
+│   │   ├── components/      # Reusable UI Components
+│   │   └── data/            # Static Data & State Management
+│
+└── .env                     # Environment Variables
+```
+
 ---
 
 ## ⚙️ Setup & Installation
 
 ### Prerequisites
 
-- Node.js (v18+)
-- MySQL Server
-- npm (Node Package Manager)
+Make sure you have the following installed:
 
-### Installation
+* Node.js (v18+)
+* MongoDB
+* npm (Node Package Manager)
 
-Follow these steps to set up and run CampusNotes locally:
+---
 
- 1. **Clone the Repository**
-    ```bash
-    git clone https://github.com/Sitaram8472/School_Website
-    cd School_Website
-    ```
+### 1️⃣ Clone the Repository
 
- 2. **Backend Setup**
+```bash
+git clone https://github.com/Sitaram8472/School_Website.git
+cd School_Website
+```
 
-    - Navigate to the backend folder: cd backend.
-    - Install dependencies: npm install.
-    - Create a .env file in the backend folder and add your credentials:
+---
 
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASSWORD=your_password
-    DB_NAME=school_db
-    PORT=5000
-    
-    - Start the server: npm run dev.
+### 2️⃣ Backend Setup
 
- 3. **Frontend Setup**
-    - Navigate to the frontend folder: cd ../frontend.
-    - Install dependencies: npm install.
-    - Start the React app: npm run dev.
+Navigate to the backend folder:
 
-4. **🤝 Contribution Guide**
-    - We welcome contributions from the community! To start contributing:
-    - Fork the project.
-    - Create your Feature Branch: git checkout -b feature/AmazingFeature.
-    - Commit your Changes: git commit -m 'Add some AmazingFeature'.
-    - Push to the Branch: git push origin feature/AmazingFeature.
-    - Open a Pull Request.
+```bash
+cd backend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create a `.env` file inside the backend directory and add the required environment variables:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+PORT=5000
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+Start the backend server:
+
+```bash
+npm run dev
+```
+
+---
+
+### 3️⃣ Frontend Setup
+
+Navigate to the frontend folder:
+
+```bash
+cd ../frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the React application:
+
+```bash
+npm run dev
+```
+
+---
+
+## 🤝 Contribution Guide
+
+We welcome contributions from the community!
+
+### Steps to Contribute
+
+1. Fork the repository.
+2. Create a feature branch:
+
+```bash
+git checkout -b feature/AmazingFeature
+```
+
+3. Commit your changes:
+
+```bash
+git commit -m "Add AmazingFeature"
+```
+
+4. Push to your branch:
+
+```bash
+git push origin feature/AmazingFeature
+```
+
+5. Open a Pull Request.
+
+---
+
+## 🌟 Support
+
+If you find this project useful, don't forget to give it a ⭐ on GitHub.
+
+Happy Coding! 🚀
