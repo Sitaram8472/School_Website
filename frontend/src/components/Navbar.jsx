@@ -8,7 +8,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: 'Teacher', path: '/teacher' },
+    { name: "Teacher", path: "/teacher" },
     { name: "Academics", path: "/academics" },
     { name: "Contact", path: "/contact" },
     { name: "Calendar", path: "/calendar" },
@@ -80,7 +80,12 @@ const Navbar = () => {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-white focus:outline-none"
+                aria-label={
+                  isOpen ? "Close navigation menu" : "Open navigation menu"
+                }
+                aria-expanded={isOpen}
+                aria-controls="mobile-menu"
+                className="text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
               >
                 <svg
                   className="h-7 w-7"
@@ -111,7 +116,10 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden bg-blue-700 border-t border-blue-500 py-4 px-4 space-y-1">
+          <div
+            id="mobile-menu"
+            className="md:hidden bg-blue-700 border-t border-blue-500 py-4 px-4 space-y-1"
+          >
             {navLinks.map((link) => (
               <NavLink
                 key={link.name}
