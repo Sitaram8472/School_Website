@@ -74,6 +74,65 @@ const Navbar = () => {
                   )}
                 </NavLink>
               ))}
+
+              {/* Animated Dropdown Button - Get Started */}
+              <div className="relative group">
+                <div className="button-bg rounded-full p-0.5 hover:scale-105 transition duration-300 active:scale-95 cursor-pointer shadow-lg">
+                  <button className="px-5 py-2 text-white rounded-full font-semibold bg-slate-900 flex items-center gap-2 text-sm">
+                    Get Started
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Dropdown Menu */}
+                <div className="absolute right-0 mt-3 w-52 bg-white border border-slate-100 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
+                  <div className="relative group/sub">
+                    <div className="px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer flex justify-between items-center font-medium">
+                      Sign In <span className="text-[10px] opacity-50">▶</span>
+                    </div>
+                    <div className="absolute left-full top-0 ml-1 w-44 bg-white border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
+                      {roles.map((role) => (
+                        <NavLink
+                          key={`in-${role.name}`}
+                          to={`/login${role.path}`}
+                          className="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600"
+                        >
+                          As {role.name}
+                        </NavLink>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="relative group/sub">
+                    <div className="px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer flex justify-between items-center font-medium border-t border-slate-50">
+                      Sign Up <span className="text-[10px] opacity-50">▶</span>
+                    </div>
+                    <div className="absolute left-full top-0 ml-1 w-44 bg-white border border-slate-100 rounded-xl shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all py-2">
+                      {roles.map((role) => (
+                        <NavLink
+                          key={`up-${role.name}`}
+                          to={`/register${role.path}`}
+                          className="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600"
+                        >
+                          Register as {role.name}
+                        </NavLink>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Mobile Menu Button */}
@@ -109,7 +168,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Dropdown */}
         {isOpen && (
           <div className="md:hidden bg-blue-700 border-t border-blue-500 py-4 px-4 space-y-1">
             {navLinks.map((link) => (
@@ -128,6 +187,52 @@ const Navbar = () => {
                 {link.name}
               </NavLink>
             ))}
+            
+            <div className="pt-4 mt-2 border-t border-blue-500">
+              <button
+                onClick={() =>
+                  setActiveDropdown(
+                    activeDropdown === "signin" ? null : "signin",
+                  )
+                }
+                className="w-full text-left px-3 py-2 text-base font-bold text-white flex justify-between items-center"
+              >
+                SIGN IN <span>{activeDropdown === "signin" ? "−" : "+"}</span>
+              </button>
+              {activeDropdown === "signin" &&
+                roles.map((role) => (
+                  <NavLink
+                    key={`m-in-${role.name}`}
+                    to={`/login${role.path}`}
+                    onClick={() => setIsOpen(false)}
+                    className="block pl-8 py-2 text-blue-100 text-sm hover:text-white"
+                  >
+                    Login as {role.name}
+                  </NavLink>
+                ))}
+
+              <button
+                onClick={() =>
+                  setActiveDropdown(
+                    activeDropdown === "signup" ? null : "signup",
+                  )
+                }
+                className="w-full text-left px-3 py-2 text-base font-bold text-white flex justify-between items-center mt-2"
+              >
+                SIGN UP <span>{activeDropdown === "signup" ? "−" : "+"}</span>
+              </button>
+              {activeDropdown === "signup" &&
+                roles.map((role) => (
+                  <NavLink
+                    key={`m-up-${role.name}`}
+                    to={`/register${role.path}`}
+                    onClick={() => setIsOpen(false)}
+                    className="block pl-8 py-2 text-blue-100 text-sm hover:text-white"
+                  >
+                    Register as {role.name}
+                  </NavLink>
+                ))}
+            </div>
           </div>
         )}
       </nav>
