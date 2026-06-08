@@ -54,8 +54,8 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Register Function
-  const register = async (name, email, password, role) => {
+  // Register Function - Supports both with and without role
+  const register = async (name, email, password, role = "student") => {
     try {
       const { data } = await api.post("/auth/register", {
         name,
@@ -63,6 +63,13 @@ export const AuthProvider = ({ children }) => {
         password,
         role,
       });
+
+      // Save token and user after registration
+      if (data.token) {
+        setUser(data);
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        localStorage.setItem("token", data.token);
+      }
 
       return data;
     } catch (error) {
