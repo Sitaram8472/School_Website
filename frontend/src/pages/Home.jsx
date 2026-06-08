@@ -1,8 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Hero from "../components/Hero";
 import Card from "../components/Card";
 import Notices, { notices } from "../data/Notices";
 import { teachers } from "../data/Teachers";
+import { useNavigate } from "react-router-dom";
 import {
   Users,
   GraduationCap,
@@ -25,14 +27,14 @@ import img8 from "../assets/campus/campus8.jpg";
 
 const Home = () => {
   const galleryImages = [img1, img2, img3, img4, img5, img6, img7, img8];
-
+  const navigate = useNavigate();
   return (
-    <div className="animate-in fade-in duration-700 bg-white">
+    <div className="animate-in fade-in duration-700 bg-[var(--bg-primary)]">
       <Hero />
 
       {/* Statistics Section - Enhanced with Icons */}
       <section className="relative -mt-12 z-20 max-w-6xl mx-auto px-4">
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="bg-[var(--card-bg)] rounded-2xl shadow-xl border border-slate-100 p-8 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
             {
               label: "Students",
@@ -57,7 +59,7 @@ const Home = () => {
           ].map((stat, i) => (
             <div key={i} className="text-center space-y-2">
               <div className="flex justify-center">{stat.icon}</div>
-              <div className="text-3xl font-bold text-slate-900">
+              <div className="text-3xl font-bold text-[var(--text-primary)]">
                 {stat.value}
               </div>
               <div className="text-slate-500 text-sm font-semibold uppercase tracking-wider">
@@ -69,7 +71,7 @@ const Home = () => {
       </section>
 
       {/* Latest Notices */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-24 bg-[var(--bg-secondary)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
             <div className="text-center md:text-left">
@@ -79,11 +81,11 @@ const Home = () => {
                   Updates
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
+              <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)]">
                 Notice Board
               </h2>
             </div>
-            <button className="group flex items-center gap-2 bg-white border border-slate-200 px-6 py-3 rounded-full text-slate-700 font-semibold hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+            <button className="group flex items-center gap-2 bg-[var(--card-bg)] border border-slate-200 px-6 py-3 rounded-full text-slate-700 font-semibold hover:bg-blue-600 hover:text-white transition-all shadow-sm">
               View All Announcements{" "}
               <ChevronRight
                 size={18}
@@ -92,22 +94,16 @@ const Home = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {notices.map((notice) => (
-              <Card
-                key={notice.id}
-                title={notice.title}
-                badge={notice.category}
-                content={notice.content}
-                footer={`Posted on ${new Date(notice.date).toLocaleDateString()}`}
-              />
-            ))}
-          </div>
+          <Notices />
         </div>
       </section>
 
+
+
+      
+
       {/* Running Board (Infinite Image Marquee) */}
-      <section className="py-12 bg-white overflow-hidden border-y border-slate-100">
+      <section className="py-12 bg-[var(--bg-primary)] overflow-hidden border-y border-slate-100">
         <div className="mb-8 text-center">
           <h3 className="text-xl font-bold text-slate-400 uppercase tracking-[0.3em]">
             Campus Life
@@ -149,12 +145,18 @@ const Home = () => {
             are now open. Secure your spot in our vibrant learning community.
           </p>
           <div className="relative z-10 flex flex-col sm:flex-row gap-6 justify-center">
-            <button className="flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/30 transition-all active:scale-95">
+            <Link
+              to="/admissions"
+              className="flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/30 transition-all active:scale-95"
+            >
               Start Application <ArrowRightCircle size={20} />
-            </button>
-            <button className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-xl font-bold hover:bg-white/20 transition-all active:scale-95">
+            </Link>
+            <Link
+              to="/contact"
+              className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-xl font-bold hover:bg-white/20 transition-all active:scale-95 flex items-center justify-center"
+            >
               Inquire Now
-            </button>
+            </Link>
           </div>
         </div>
       </section>

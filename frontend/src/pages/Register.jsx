@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 const Register = () => {
+  const { role } = useParams();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -11,6 +13,7 @@ const Register = () => {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -24,14 +27,14 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await register(formData.name, formData.email, formData.password);
-      navigate("/login");
+      await register(formData.name, formData.email, formData.password, role || "student");
+      navigate(role ? `/login/${role}` : "/login");
     } catch (err) {
       console.error("Register Error:", err);
 
       setError(
         err?.message ||
-          (typeof err === "string" ? err : "Registration failed")
+        (typeof err === "string" ? err : "Registration failed")
       );
     } finally {
       setLoading(false);
@@ -42,8 +45,8 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
 
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-          Create Account
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 capitalize">
+          {role ? `Register as ${role}` : "Create Account"}
         </h2>
 
         {/* Error */}
@@ -53,7 +56,7 @@ const Register = () => {
           </div>
         )}
 
-        <form onSubmit={onSubmit} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6" autoComplete="off">
 
           {/* Name */}
           <div>
@@ -63,6 +66,7 @@ const Register = () => {
             <input
               type="text"
               name="name"
+              autoComplete="off"
               value={formData.name}
               onChange={onChange}
               required
@@ -79,6 +83,7 @@ const Register = () => {
             <input
               type="email"
               name="email"
+              autoComplete="off"
               value={formData.email}
               onChange={onChange}
               required
@@ -87,20 +92,34 @@ const Register = () => {
             />
           </div>
 
-          {/* Password */}
+          {/* Password with Toggle Button */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Password
             </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={onChange}
-              required
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-              placeholder="••••••••"
-            />
+            <div className="relative mt-1">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                autoComplete="new-password"
+                value={formData.password}
+                onChange={onChange}
+                required
+                className="block w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 transition"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Password must be at least 6 characters
+            </p>
           </div>
 
           {/* Button */}
@@ -118,7 +137,7 @@ const Register = () => {
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
             <Link
-              to="/login"
+              to={role ? `/login/${role}` : "/login"}
               className="font-medium text-blue-600 hover:text-blue-500"
             >
               Sign in

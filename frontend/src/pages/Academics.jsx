@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   BookOpen,
   Cpu,
@@ -68,10 +69,10 @@ const Academics = () => {
   ];
 
   return (
-    <div className="bg-white animate-in fade-in duration-700">
+    <div className="bg-[var(--card-bg)] animate-in fade-in duration-700">
       {/* Hero Section */}
       <div className="bg-slate-900 py-28 px-4 text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-blue-600/10 mix-blend-overlay"></div>
+        
         <div className="relative z-10">
           <span className="text-blue-400 font-bold tracking-widest uppercase text-sm">
             Academic Excellence
@@ -111,7 +112,7 @@ const Academics = () => {
               <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 {item.icon}
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">
+              <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3">
                 {item.title}
               </h3>
               <p className="text-slate-600 leading-relaxed">{item.desc}</p>
@@ -121,24 +122,24 @@ const Academics = () => {
 
         {/* Departments Grid */}
         <div className="mb-32">
-          <h2 className="text-3xl font-bold text-slate-900 mb-12 text-center">
+          <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-12 text-center">
             Academic Departments
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {departments.map((dept, i) => (
               <div
                 key={i}
-                className="group bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300"
+                className="group bg-[var(--card-bg)] p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300"
               >
                 <div className="flex justify-between items-start mb-8">
-                  <div className="p-4 bg-slate-50 rounded-2xl text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                  <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
                     {dept.icon}
                   </div>
                   <span className="text-slate-300 font-mono text-xl">
                     0{i + 1}
                   </span>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
                   {dept.title}
                 </h3>
                 <p className="text-slate-600 mb-8 leading-relaxed">
@@ -153,7 +154,7 @@ const Academics = () => {
                     {dept.subjects.map((sub, j) => (
                       <span
                         key={j}
-                        className="px-4 py-2 bg-slate-50 text-slate-700 rounded-full text-sm font-medium border border-slate-100"
+                        className="px-4 py-2 bg-[var(--bg-secondary)] text-slate-700 rounded-full text-sm font-medium border border-slate-100"
                       >
                         {sub}
                       </span>
@@ -198,12 +199,18 @@ const Academics = () => {
                   </div>
                 ))}
               </div>
-              <a className="mt-8 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors" href="#/about">
+              <Link
+                to="/gallery"
+                className="mt-12 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors"
+              >
                 Explore Our Campus <ArrowRight size={20} />
-              </a>
-              <a className="mt-6 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors" href="#/prospectus">
+              </Link>
+              <Link
+                to="/prospectus"
+                className="mt-6 flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors"
+              >
                 Download Prospectus <ArrowRight size={20} />
-              </a>
+              </Link>
             </div>
             <div className="lg:w-1/2 h-[400px] lg:h-auto">
               <img
@@ -218,7 +225,7 @@ const Academics = () => {
         {/* Academic Outcome Section */}
         <div className="mt-32 text-center bg-blue-50 p-6 sm:p-12 rounded-3xl border border-blue-100">
           <BookOpen className="mx-auto text-blue-600 mb-6" size={48} />
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-4">
             Academic Excellence Guaranteed
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto mb-8">
