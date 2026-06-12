@@ -60,21 +60,32 @@ const FAQ = () => {
         {faqData.map((item, index) => (
           <div
             key={index}
-            className="border rounded-lg shadow-sm overflow-hidden"
+            className="border rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden"
           >
             <button
               onClick={() => toggleFAQ(index)}
-              className="w-full text-left px-4 py-3 bg-blue-600 text-white font-medium flex justify-between items-center"
+              aria-expanded={openIndex === index}
+              aria-controls={`faq-${index}`}
+              className="w-full text-left px-4 py-3 bg-blue-600 hover:bg-blue-700 transition-colors text-white font-medium flex justify-between items-center"
             >
               {item.question}
-              <span>{openIndex === index ? "−" : "+"}</span>
+              <span
+                className={`text-xl transition-transform duration-300 ${
+                  openIndex === index ? "rotate-180" : ""
+                }`}
+              >
+                +
+              </span>
             </button>
 
-            {openIndex === index && (
-              <div className="px-4 py-3 bg-white text-gray-700">
-                {item.answer}
-              </div>
-            )}
+            <div
+              id={`faq-${index}`}
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                openIndex === index ? "max-h-40 p-4" : "max-h-0"
+              } bg-white text-gray-700`}
+            >
+              <p>{item.answer}</p>
+            </div>
           </div>
         ))}
       </div>
