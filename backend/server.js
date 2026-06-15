@@ -1,9 +1,10 @@
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
-
 const authRoutes = require("./routes/Auth");
 const inquiryRoutes = require("./routes/inquiryRoutes.js");
 const noticeRoutes = require("./routes/noticeRoutes.js");
@@ -12,6 +13,24 @@ const contactRoutes = require("./routes/contactRoutes.js");
 const teacherRoutes = require("./routes/teacherRoutes.js");
 dotenv.config();
 const app = express();
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "EduStream Academy API",
+      version: "1.0.0",
+      description:
+        "API documentation for EduStream Academy Management Portal",
+    },
+    servers: [
+      {
+        url: "http://localhost:5000",
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use(cors());
 app.use(express.json());
 
@@ -23,6 +42,11 @@ app.use("/api/applications", applicationRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
 // connect to mongodb
 
 // connect to mongodb with proper try-catch
