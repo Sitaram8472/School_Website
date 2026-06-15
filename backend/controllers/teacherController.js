@@ -17,14 +17,19 @@ const getMyNotices = async (req, res) => {
 
 const postNotice = async (req, res) => {
   try {
-    const { title, message, targetClass } = req.body;
-    if (!title || !message) {
-      return res.status(400).json({ success: false, message: 'Title and message are required.' });
+    const { title, content, targetClass } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({
+        success: false,
+        message: 'Title and content are required.'
+      });
     }
 
     const notice = await Notice.create({
       title,
-      message,
+      category: 'Teacher',
+      content,
       targetClass: targetClass || 'All',
       postedBy: req.user._id,
       teacherName: req.user.name,

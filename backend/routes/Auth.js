@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
+const { register, login, logout, forgotPassword, resetPassword } = require("../controllers/Authcontroller");
 const {
   register,
   login,
   forgotPassword,
   resetPassword,
 } = require("../controllers/Authcontroller");
+const { register, login, logout, forgotPassword, resetPassword } = require("../controllers/Authcontroller");
+upstream/main
 
 /**
  * @swagger
@@ -75,6 +78,7 @@ router.post("/register", register);
  *         description: Invalid credentials
  */
 router.post("/login", login);
+router.post("/logout", logout);
 
 /**
  * @swagger
@@ -95,6 +99,8 @@ router.post("/login", login);
  *       200:
  *         description: Reset link sent if account exists
  */
+router.post("/logout", logout);
+upstream/main
 router.post("/forgot-password", forgotPassword);
 
 /**

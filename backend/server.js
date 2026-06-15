@@ -5,6 +5,12 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
+const validateEnv = require("./config/validateEnv.js");
+const cookieParser = require("cookie-parser");
+const validateEnv = require("./config/validateEnv.js");
+
+const cookieParser = require("cookie-parser");
+upstream/main
 const authRoutes = require("./routes/Auth");
 const inquiryRoutes = require("./routes/inquiryRoutes.js");
 const noticeRoutes = require("./routes/noticeRoutes.js");
@@ -13,6 +19,7 @@ const contactRoutes = require("./routes/contactRoutes.js");
 const teacherRoutes = require("./routes/teacherRoutes.js");
 dotenv.config();
 const app = express();
+
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
@@ -32,7 +39,12 @@ const swaggerOptions = {
 };
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use(cors());
+
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+upstream/main
 app.use(express.json());
+validateEnv();
+app.use(cookieParser());
 
 // routes
 app.use("/api/auth", authRoutes);

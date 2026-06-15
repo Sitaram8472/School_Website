@@ -33,17 +33,28 @@ exports.register = async (req, res) => {
       isVerified: false,
     });
 
-    // Generate Token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    // FIX: Send a response
-    res.status(201).json({
-      message: "User registered successfully",
-      token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 3600000,
+      })
+      .status(201)
+      .json({
+        message: "User registered successfully",
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
+      });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
@@ -60,18 +71,48 @@ exports.login = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 
+    if (!user.isVerified) {
+      return res.status(403).json({
+        message: "Please verify your email to log in",
+        needsVerification: true,
+      });
+    }
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    res.status(200).json({
-      message: "Login successful",
-      token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 3600000,
+      })
+      .status(200)
+      .json({
+        message: "Login successful",
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
+      });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
+};
+
+exports.logout = (req, res) => {
+  res
+    .clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    })
+    .status(200)
+    .json({ message: "Logout successful" });
 };
 
 exports.forgotPassword = async (req, res) => {
@@ -81,14 +122,21 @@ exports.forgotPassword = async (req, res) => {
 
     // Return same message regardless of whether email exists (prevents enumeration)
     if (!user) {
-      return res.status(200).json({ message: "If that email is registered, a reset link has been sent." });
+      return res
+        .status(200)
+        .json({
+          message: "If that email is registered, a reset link has been sent.",
+        });
     }
 
     const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(rawToken)
+      .digest("hex");
 
     user.resetPasswordToken = hashedToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
@@ -97,20 +145,23 @@ exports.forgotPassword = async (req, res) => {
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       const transporter = nodemailer.createTransport({
         service: process.env.EMAIL_SERVICE || "gmail",
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
       });
 
       await transporter.sendMail({
         from: `"EduStream Academy" <${process.env.EMAIL_USER}>`,
         to: user.email,
-        subject: "EduStream Academy – Password Reset Request",
+        subject: "EduStream Academy - Password Reset Request",
         html: `
           <p>Hi ${user.name},</p>
-          <p>We received a request to reset your password. Click the link below — it expires in <strong>1 hour</strong>.</p>
+          <p>We received a request to reset your password. Click the link below. It expires in <strong>1 hour</strong>.</p>
           <p><a href="${resetUrl}">${resetUrl}</a></p>
           <p>If you did not request this, you can safely ignore this email.</p>
           <br/>
-          <p>— EduStream Academy</p>
+          <p>- EduStream Academy</p>
         `,
       });
     } else {
@@ -118,7 +169,9 @@ exports.forgotPassword = async (req, res) => {
       console.log(`[DEV] Password reset link for ${email}: ${resetUrl}`);
     }
 
-    res.status(200).json({ message: "If that email is registered, a reset link has been sent." });
+    res
+      .status(200)
+      .json({ message: "If that email is registered, a reset link has been sent." });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
@@ -129,11 +182,15 @@ exports.resetPassword = async (req, res) => {
     const { token, password } = req.body;
 
     if (!token || !password) {
-      return res.status(400).json({ message: "Token and new password are required." });
+      return res
+        .status(400)
+        .json({ message: "Token and new password are required." });
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters." });
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters." });
     }
 
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
@@ -144,7 +201,12 @@ exports.resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: "Reset link is invalid or has expired. Please request a new one." });
+      return res
+        .status(400)
+        .json({
+          message:
+            "Reset link is invalid or has expired. Please request a new one.",
+        });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -153,7 +215,9 @@ exports.resetPassword = async (req, res) => {
     user.resetPasswordExpires = undefined;
     await user.save();
 
-    res.status(200).json({ message: "Password reset successfully. You can now log in with your new password." });
+    res.status(200).json({
+      message: "Password reset successfully. You can now log in with your new password.",
+    });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }

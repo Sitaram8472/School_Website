@@ -3,7 +3,7 @@ import api from '../../utils/axios';
 
 const NoticePanel = () => {
   const [notices, setNotices] = useState([]);
-  const [form, setForm] = useState({ title: '', message: '', targetClass: '' });
+  const [form, setForm] = useState({ title: '', content: '', targetClass: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -21,8 +21,8 @@ const NoticePanel = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.title || !form.message) {
-      setError('Title and message are required.');
+    if (!form.title || !form.content) {
+      setError('Title and content are required.');
       return;
     }
     setLoading(true);
@@ -30,7 +30,7 @@ const NoticePanel = () => {
     try {
       await api.post('/teacher/notices', form);
       setSuccess('Notice posted successfully!');
-      setForm({ title: '', message: '', targetClass: '' });
+      setForm({ title: '', content: '', targetClass: '' });
       fetchNotices();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to post notice.');
@@ -63,9 +63,9 @@ const NoticePanel = () => {
           className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <textarea
-          placeholder="Notice message *"
-          value={form.message}
-          onChange={e => setForm({ ...form, message: e.target.value })}
+          placeholder="Notice content *"
+          value={form.content}
+          onChange={e => setForm({ ...form, content: e.target.value })}
           rows={3}
           className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -95,7 +95,7 @@ const NoticePanel = () => {
             <div key={notice._id} className="flex items-start justify-between bg-gray-50 rounded-xl p-4">
               <div>
                 <p className="font-semibold text-gray-800 text-sm">{notice.title}</p>
-                <p className="text-gray-500 text-xs mt-1">{notice.message}</p>
+                <p className="text-gray-500 text-xs mt-1">{notice.content}</p>
                 {notice.targetClass && (
                   <span className="inline-block mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
                     {notice.targetClass}
