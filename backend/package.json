@@ -20,7 +20,9 @@
     "mongoose": "^9.4.1",
     "multer": "^2.1.1",
     "mysql": "^2.18.1",
-    "nodemailer": "^8.0.10"
+    "nodemailer": "^8.0.10",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
