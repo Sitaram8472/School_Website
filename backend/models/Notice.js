@@ -16,6 +16,7 @@ const noticeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     targetClass: {
       type: String,
       default: 'All',

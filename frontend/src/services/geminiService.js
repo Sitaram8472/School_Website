@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+let chatSession = null;
 
 export const getAIResponse = async (userPrompt) => {
   if (!API_KEY) {
@@ -13,25 +14,31 @@ export const getAIResponse = async (userPrompt) => {
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(API_KEY);
+    if (!chatSession) {
+      const genAI = new GoogleGenerativeAI(API_KEY);
+      const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        systemInstruction: `You are the EduStream Academy AI Assistant. 
+You provide helpful, concise information about the school, admissions, academics, and teachers. 
+Key Information:
+- Admissions for 2026 are open.
+- We offer an Academic Resource Hub and a Real-Time Notice Board.
+- We have a Summer Vacation starting June 1st, 2026.
+Be professional and encouraging. Keep your answers conversational. If you don't know an answer, suggest contacting office@edustream.edu.`,
+      });
+      chatSession = model.startChat({
+        history: [],
+      });
+    }
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "You are the EduStream Academy AI Assistant. Provide helpful, concise information about the school, admissions, academics, and teachers. Be professional and encouraging. If you don't know an answer, suggest contacting office@edustream.edu.",
-    });
-
-    const result = await model.generateContent(userPrompt);
-
-    const responseText =
-      result?.response?.text?.() ||
-      "I'm sorry, I couldn't process that request.";
-
-    return responseText;
+    const result = await chatSession.sendMessage(userPrompt);
+    return result.response.text();
   } catch (error) {
     console.error("Gemini API Error:", error);
-
-    // Better fallback message
     return "I'm having trouble connecting right now. Please try again later.";
   }
+};
+
+export const resetChatSession = () => {
+  chatSession = null;
 };
