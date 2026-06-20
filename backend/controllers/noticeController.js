@@ -65,6 +65,12 @@ exports.createNotice = async (req, res) => {
       date: new Date(),
     });
 
+    // Emit socket event
+    const io = req.app.get("io");
+    if (io) {
+      io.emit("new-notice", newNotice);
+    }
+
     return res.status(201).json({
       success: true,
       message: "Notice created successfully",

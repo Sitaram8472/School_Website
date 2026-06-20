@@ -18,7 +18,6 @@ const noticeSchema = new mongoose.Schema(
     },
     message: {
       type: String,
-      required: [true, 'Message is required'],
       trim: true,
     },
     targetClass: {
@@ -28,7 +27,6 @@ const noticeSchema = new mongoose.Schema(
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
     },
     teacherName: {
       type: String,

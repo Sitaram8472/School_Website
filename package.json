@@ -10,5 +10,8 @@
   },
   "scripts": {
     "prepare": "husky"
+  },
+  "dependencies": {
+    "mongodb": "^7.3.0"
   }
 }

@@ -105,16 +105,16 @@ const Home = () => {
       {/* Running Board (Infinite Image Marquee) */}
       <section className="py-12 bg-[var(--bg-primary)] overflow-hidden border-y border-slate-100">
         <div className="mb-8 text-center">
-          <h3 className="text-xl font-bold text-slate-400 uppercase tracking-[0.3em]">
+          <h3 className="text-xl font-bold text-[var(--text-secondary)] uppercase tracking-[0.3em]">
             Campus Life
           </h3>
         </div>
-        <div className="relative flex overflow-x-hidden">
-          <div className="animate-marquee flex gap-6">
-            {galleryImages.map((img, index) => (
+        <div className="relative flex overflow-x-hidden group">
+          <div className="animate-marquee flex gap-6 w-max group-hover:[animation-play-state:paused]">
+            {[...galleryImages, ...galleryImages].map((img, index) => (
               <div
                 key={index}
-                className="w-[300px] h-[200px] rounded-2xl overflow-hidden shadow-lg flex-shrink-0 border-4 border-white"
+                className="w-[300px] h-[200px] rounded-2xl overflow-hidden shadow-lg flex-shrink-0 border-4 border-[var(--card-bg)]"
               >
                 <img
                   src={img}

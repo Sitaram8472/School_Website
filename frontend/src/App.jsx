@@ -28,6 +28,7 @@ import Register from "./pages/Register";
 import DownloadProspectus from "./pages/DownloadProspectus";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import AcademicResourceHub from "./pages/AcademicResourceHub";
 
 import { AuthProvider } from "./context/AuthContext";
 
@@ -141,6 +142,12 @@ const App = () => {
               <Route path="/admissions" element={
                 <ProtectedRoute>
                   <Admissions />
+                </ProtectedRoute>
+              } />
+
+              <Route path="/resources" element={
+                <ProtectedRoute>
+                  <AcademicResourceHub />
                 </ProtectedRoute>
               } />
               
