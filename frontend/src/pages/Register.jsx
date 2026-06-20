@@ -28,7 +28,7 @@ const Register = () => {
 
     try {
       await register(formData.name, formData.email, formData.password, role || "student");
-      navigate(role ? `/login/${role}` : "/login");
+      navigate("/verify-email-sent");
     } catch (err) {
       console.error("Register Error:", err);
 

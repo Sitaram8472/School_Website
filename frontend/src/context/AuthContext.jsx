@@ -35,6 +35,9 @@ export const AuthProvider = ({ children }) => {
       setUser(data.user);
 
       localStorage.setItem("userInfo", JSON.stringify(data.user));
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
 
       return data;
     } catch (error) {
@@ -52,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Register Function - Supports both with and without role
+  // Register Function - account remains unauthenticated until email verification
   const register = async (name, email, password, role = "student") => {
     try {
       const { data } = await api.post("/auth/register", {
@@ -61,13 +64,6 @@ export const AuthProvider = ({ children }) => {
         password,
         role,
       });
-
-      // Save token and user after registration
-      if (data.token) {
-        setUser(data);
-        localStorage.setItem("userInfo", JSON.stringify(data));
-        localStorage.setItem("token", data.token);
-      }
 
       return data;
     } catch (error) {
@@ -88,6 +84,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
 
       localStorage.removeItem("userInfo");
+      localStorage.removeItem("token");
     } catch (error) {
       console.error("Logout Error:", error);
     }

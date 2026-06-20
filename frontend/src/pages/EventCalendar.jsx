@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 import events from "../data/events";
 
@@ -28,6 +30,20 @@ const EventCalendar = () => {
 
   const upcomingEvent = filteredEvents.find((event) => getDaysLeft(event.date) >= 0);
 
+  const exportPDF = () => {
+    const doc = new jsPDF();
+    autoTable(doc, {
+      head: [["Title", "Date", "Role", "Description"]],
+      body: filteredEvents.map((event) => [
+        event.title,
+        event.date,
+        event.role,
+        event.description,
+      ]),
+    });
+    doc.save("events.pdf");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-6 py-10">
       {/* Heading */}
@@ -38,6 +54,15 @@ const EventCalendar = () => {
       <p className="text-center text-gray-600 text-lg mb-10">
         View upcoming events, deadlines, and important schedules
       </p>
+
+      <div className="flex justify-center mb-8">
+        <button
+          onClick={exportPDF}
+          className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-green-700 transition"
+        >
+          Export to PDF
+        </button>
+      </div>
 
       {/* Role Buttons */}
       <div className="flex justify-center gap-4 mb-16 flex-wrap">
@@ -56,14 +81,14 @@ const EventCalendar = () => {
         ))}
       </div>
 
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 sm:mb-12">
         <p className="text-xl font-semibold text-gray-700">
           Total Upcoming Events: {filteredEvents.length}
         </p>
       </div>
 
       {upcomingEvent && (
-        <div className="max-w-4xl mx-auto mb-12">
+        <div className="max-w-4xl mx-auto mb-12 sm:mb-16">
           <div className="bg-gradient-to-r from-yellow-100 to-orange-100 border-l-4 border-yellow-500 p-6 rounded-2xl shadow-lg">
             <h2 className="text-2xl font-bold text-yellow-800 mb-2">
               🌟 Upcoming Event
@@ -81,8 +106,8 @@ const EventCalendar = () => {
       )}
 
       {/* Calendar Section */}
-      <div className="flex justify-center mb-16 sm:mb-32 mt-6">
-        <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-2xl border border-blue-100 sm:scale-125">
+      <div className="flex justify-center mb-16 sm:mb-32 mt-8 sm:mt-12">
+        <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-2xl border border-blue-100 sm:scale-125 sm:origin-top">
           <Calendar onChange={setDate} value={date} />
         </div>
       </div>

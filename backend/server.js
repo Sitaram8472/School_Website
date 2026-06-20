@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
+const validateEnv = require("./config/validateEnv.js");
 
 const cookieParser = require("cookie-parser");
 
@@ -37,6 +38,7 @@ io.on("connection", (socket) => {
 
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
+validateEnv();
 app.use(cookieParser());
 
 // routes
