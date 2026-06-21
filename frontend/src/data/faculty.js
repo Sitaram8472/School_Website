@@ -1,0 +1,68 @@
+const faculty = [
+  {
+    id: 1,
+    name: "Dr. Raj Sharma",
+    department: "Science",
+    subject: "Physics",
+    email: "raj@school.com",
+    image: "https://randomuser.me/api/portraits/men/1.jpg",
+  },
+  {
+    id: 2,
+    name: "Anita Verma",
+    department: "Mathematics",
+    subject: "Algebra",
+    email: "anita@school.com",
+    image: "https://randomuser.me/api/portraits/women/2.jpg",
+  },
+  {
+    id: 3,
+    name: "Rahul Gupta",
+    department: "Computer Science",
+    subject: "Programming",
+    email: "rahul@school.com",
+    image: "https://randomuser.me/api/portraits/men/3.jpg",
+  },
+  {
+    id: 4,
+    name: "Sneha Kapoor",
+    department: "English",
+    subject: "Literature",
+    email: "sneha@school.com",
+    image: "https://randomuser.me/api/portraits/women/4.jpg",
+  },
+  {
+    id: 5,
+    name: "Vikram Singh",
+    department: "Science",
+    subject: "Chemistry",
+    email: "vikram@school.com",
+    image: "https://randomuser.me/api/portraits/men/5.jpg",
+  },
+  {
+    id: 6,
+    name: "Pooja Mehta",
+    department: "Mathematics",
+    subject: "Calculus",
+    email: "pooja@school.com",
+    image: "https://randomuser.me/api/portraits/women/6.jpg",
+  },
+  {
+    id: 7,
+    name: "Arjun Nair",
+    department: "Computer Science",
+    subject: "Data Structures",
+    email: "arjun@school.com",
+    image: "https://randomuser.me/api/portraits/men/7.jpg",
+  },
+  {
+    id: 8,
+    name: "Neha Sharma",
+    department: "English",
+    subject: "Grammar",
+    email: "neha@school.com",
+    image: "https://randomuser.me/api/portraits/women/8.jpg",
+  },
+];
+
+export default faculty;

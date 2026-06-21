@@ -10,10 +10,10 @@ const Notfound = () => {
       </h1>
 
       <div className="-mt-16 relative z-10">
-        <h2 className="text-3xl font-bold text-slate-900 mb-4">
+        <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-4">
           Page Not Found
         </h2>
-        <p className="text-slate-600 mb-8 max-w-md">
+        <p className="text-[var(--text-secondary)] mb-8 max-w-md">
           The page you are looking for might have been removed, had its name
           changed, or is temporarily unavailable.
         </p>

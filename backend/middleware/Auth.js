@@ -3,18 +3,15 @@ const User = require("../models/User");
 
 const protect = async (req, res, next) => {
   try {
-    let token = req.headers.authorization;
+    let token = req.cookies.token;
 
     // Check token exists
-    if (!token || !token.startsWith("Bearer ")) {
+    if (!token) {
       return res.status(401).json({
         success: false,
         message: "Not authorized, no token",
       });
     }
-
-    // Extract token
-    token = token.split(" ")[1];
 
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
