@@ -4,12 +4,15 @@ import { teachers } from "../data/Teachers";
 import AttendanceManager from "../components/AttendanceManager";
 import TeacherCard from "../components/TeacherCard";
 import API from "../utils/axios";
+import { hasPermission, getUserRole } from "../utils/permissions";
 import { BookOpen, Calendar, Send, Sparkles, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function Teacher() {
   const { user } = useContext(AuthContext);
-  const isTeacher = user?.user?.role === "teacher" || user?.role === "teacher";
-  const teacherName = user?.user?.name || user?.name;
+  const role = getUserRole(user);
+  const canCreateNotice = hasPermission(role, "create_notice");
+  const canManageAttendance = hasPermission(role, "manage_attendance");
+  const teacherName = user?.name || user?.user?.name;
 
   // Notice form state
   const [noticeData, setNoticeData] = useState({
@@ -55,7 +58,7 @@ export default function Teacher() {
         {/* ========================================== */}
         {/* TEACHER DASHBOARD VIEW (AUTHENTICATED ONLY) */}
         {/* ========================================== */}
-        {isTeacher && (
+        {canCreateNotice && (
           <div className="mb-20">
             {/* Dashboard Header */}
             <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 text-white rounded-3xl p-8 shadow-2xl mb-10 relative overflow-hidden">
@@ -221,7 +224,7 @@ export default function Teacher() {
             <TeacherCard key={teacher.id} teacher={teacher} />
           ))}
         </div>
-        <AttendanceManager />
+        {canManageAttendance && <AttendanceManager />}
       </div>
     </div>
   );

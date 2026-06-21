@@ -33,6 +33,8 @@ import ResendVerification from "./pages/ResendVerification";
 import VerifyEmailSent from "./pages/VerifyEmailSent";
 
 import { AuthContext } from "./context/AuthContext";
+import RoleProtectedRoute from "./components/RoleProtectedRoute";
+import TeacherDashboard from "./pages/TeacherDashboard";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -136,9 +138,15 @@ const App = () => {
               } />
               
               <Route path="/teacher" element={
-                <ProtectedRoute>
+                <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <Teacher />
-                </ProtectedRoute>
+                </RoleProtectedRoute>
+              } />
+
+              <Route path="/teacher/dashboard" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <TeacherDashboard />
+                </RoleProtectedRoute>
               } />
               
               <Route path="/academics" element={
@@ -184,9 +192,9 @@ const App = () => {
               } />
               
               <Route path="/student" element={
-                <ProtectedRoute>
+                <RoleProtectedRoute allowedRoles={["student"]}>
                   <Student />
-                </ProtectedRoute>
+                </RoleProtectedRoute>
               } />
 
               {/* Catch-all route for 404 Page Not Found */}

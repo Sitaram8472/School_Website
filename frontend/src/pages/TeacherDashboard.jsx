@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
+import { getUserRole, hasRole } from '../utils/permissions';
 import NoticePanel from '../components/teacher/NoticePanel';
 import ResourcePanel from '../components/teacher/ResourcePanel';
 import AttendancePanel from '../components/teacher/AttendancePanel';
@@ -12,14 +13,14 @@ const TeacherDashboard = () => {
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
 
-  // user from AuthContext is the full login response: { token, user: { id, name, email, role } }
-  const userInfo = user?.user;
+  const role = getUserRole(user);
+  const displayName = user?.name || user?.user?.name;
 
   useEffect(() => {
-    if (!user || userInfo?.role !== 'teacher') {
+    if (!user || !hasRole(user, 'teacher', 'admin')) {
       navigate('/login');
     }
-  }, [user]);
+  }, [user, navigate]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -28,8 +29,8 @@ const TeacherDashboard = () => {
         setStats(res.data.stats);
       } catch (err) { console.error(err); }
     };
-    if (userInfo?.role === 'teacher') fetchStats();
-  }, [userInfo]);
+    if (hasRole(user, 'teacher', 'admin')) fetchStats();
+  }, [user]);
 
   const tabs = [
     { id: 'notices',    label: 'Notices' },
@@ -46,7 +47,7 @@ const TeacherDashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">
-                Welcome, {userInfo?.name || 'Teacher'}!
+                Welcome, {displayName || 'Teacher'}!
               </h1>
               <p className="text-blue-100 mt-1 text-sm">Teacher Dashboard — EduStream Academy</p>
             </div>

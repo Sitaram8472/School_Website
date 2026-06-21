@@ -37,7 +37,7 @@ const upload = multer({
   },
 });
 
-router.use(protect, verifyRole('teacher'));
+router.use(protect, verifyRole('teacher', 'admin'));
 
 router.get('/stats', getDashboardStats);
 

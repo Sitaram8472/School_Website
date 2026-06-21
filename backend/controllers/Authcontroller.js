@@ -25,11 +25,17 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    if (role && !["student", "teacher"].includes(role)) {
+      return res.status(403).json({ message: "Invalid role" });
+    }
+
+    const userRole = ["student", "teacher"].includes(role) ? role : "student";
+
     user = await User.create({
       name,
       email,
       password: hashedPassword,
-      role: role || "student",
+      role: userRole,
       isVerified: false,
     });
 

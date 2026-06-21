@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { getUserRole } from "../utils/permissions";
 import {
   BookOpen,
   ClipboardCheck,
@@ -15,7 +16,7 @@ import attendanceData from "../data/attendance";
 
 const Student = () => {
   const { user } = useContext(AuthContext);
-  const displayName = user?.user?.name || user?.name || "Deepali";
+  const displayName = getUserRole(user) ? (user?.name || user?.user?.name || "Student") : "Student";
 
   const savedAttendance = JSON.parse(localStorage.getItem("attendanceRecords"));
 

@@ -24,11 +24,13 @@ const Login = () => {
     try {
       const data = await login(formData.email, formData.password);
       const userRole = data?.user?.role || "student";
-      
-      if (userRole === "teacher") {
-        navigate("/teacher");
-      } else {
+
+      if (userRole === "teacher" || userRole === "admin") {
+        navigate("/teacher/dashboard");
+      } else if (userRole === "student") {
         navigate("/student");
+      } else {
+        navigate("/home");
       }
     } catch (err) {
       console.error("Login Error:", err);

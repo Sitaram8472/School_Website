@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { getUserRole } from "../utils/permissions";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,17 +9,20 @@ const Navbar = () => {
   
   
   const { user, logout } = useContext(AuthContext);
-  const isLoggedIn = !!user;  // true if user exists
+  const isLoggedIn = !!user;
+  const role = getUserRole(user);
 
   const navLinks = [
     { name: "Home", path: "/home" },
     { name: "About", path: "/about" },
-    { name: "Teacher", path: "/teacher" },
     { name: "Academics", path: "/academics" },
     { name: "Contact", path: "/contact" },
     { name: "Calendar", path: "/calendar" },
     { name: "Gallery", path: "/gallery" },
-    { name: "Student", path: "/student" },
+    ...(role === "student" ? [{ name: "Student", path: "/student" }] : []),
+    ...(role === "teacher" || role === "admin"
+      ? [{ name: "Teacher Dashboard", path: "/teacher/dashboard" }]
+      : []),
   ];
 
   const handleLogout = () => {
