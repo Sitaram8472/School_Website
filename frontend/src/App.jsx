@@ -63,6 +63,7 @@ const App = () => {
             <Route path="/admissions/scholarship" element={<Scholarship />} />
             <Route path="/prospectus" element={<DownloadProspectus />} /> 
             <Route path="/student" element={<Student />} />
+            <Route path="/parent-portal" element={<ParentPortal />} />
             
             {/* Catch-all route for 404 Page Not Found */}
             <Route path="*" element={<NotFound />} />
