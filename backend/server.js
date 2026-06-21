@@ -2,17 +2,32 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path");
+const validateEnv = require("./config/validateEnv.js");
+
+const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./routes/Auth");
-const inquiryRoutes = require('./routes/inquiryRoutes.js');
+const inquiryRoutes = require("./routes/inquiryRoutes.js");
+const noticeRoutes = require("./routes/noticeRoutes.js");
+const applicationRoutes = require("./routes/applicationRoutes");
+const contactRoutes = require("./routes/contactRoutes.js");
+const teacherRoutes = require("./routes/teacherRoutes.js");
 dotenv.config();
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
+validateEnv();
+app.use(cookieParser());
 
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/inquiries", inquiryRoutes);
+app.use("/api/notices", noticeRoutes);
+app.use("/api/applications", applicationRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/teacher", teacherRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // connect to mongodb
 
 // connect to mongodb with proper try-catch

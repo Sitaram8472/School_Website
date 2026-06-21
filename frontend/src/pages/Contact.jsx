@@ -1,4 +1,5 @@
 import api from "../utils/axios";
+import ContactFeedbackForm from "../components/Contact";
 
 import { useState } from "react";
 import { getAIResponse } from "../services/geminiService";
@@ -125,7 +126,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-[var(--bg-secondary)] min-h-screen">
       {/* ---------------- Hero Section ---------------- */}
       <div className="bg-linear-to-r from-slate-950 via-slate-900 to-blue-950 py-20 px-4 text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-5">
@@ -146,7 +147,7 @@ const Contact = () => {
           {/* ========================================================= */}
 
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-slate-900">
+            <h2 className="text-3xl font-bold text-[var(--text-primary)]">
               Get in Touch
             </h2>
 
@@ -174,7 +175,7 @@ const Contact = () => {
             ].map((item, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all"
+                className="flex items-start gap-4 bg-[var(--card-bg)] p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all"
               >
                 <div className="p-3 bg-blue-50 rounded-xl">
                   {item.icon}
@@ -185,7 +186,7 @@ const Contact = () => {
                     {item.title}
                   </p>
 
-                  <p className="text-slate-900 font-medium mt-1">
+                  <p className="text-[var(--text-primary)] font-medium mt-1">
                     {item.detail}
                   </p>
                 </div>
@@ -211,14 +212,14 @@ const Contact = () => {
           <div className="lg:col-span-2 space-y-8">
             {/* ---------------- AI Assistant ---------------- */}
 
-            <div className="bg-white p-8 rounded-3xl border border-blue-100 shadow-md ring-4 ring-blue-50">
+            <div className="bg-[var(--card-bg)] p-8 rounded-3xl border border-blue-100 shadow-md ring-4 ring-blue-50">
               <div className="flex items-center gap-4 mb-6">
                 <div className="bg-blue-600 text-white p-3 rounded-xl">
                   <Sparkles size={24} />
                 </div>
 
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900">
+                  <h2 className="text-2xl font-bold text-[var(--text-primary)]">
                     EduStream AI Assistant
                   </h2>
 
@@ -234,7 +235,7 @@ const Contact = () => {
                   onChange={(e) => setQuestion(e.target.value)}
                   rows="4"
                   placeholder="Ask me anything, e.g. 'What are the admission requirements for 2026?'"
-                  className="w-full p-4 pr-14 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 resize-none transition-all"
+                  className="w-full p-4 pr-14 bg-[var(--bg-secondary)] border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 resize-none transition-all"
                 />
 
                 <button
@@ -261,8 +262,8 @@ const Contact = () => {
 
             {/* ---------------- Inquiry Form ---------------- */}
 
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
-              <h2 className="text-2xl font-bold text-slate-900 mb-8">
+            <div className="bg-[var(--card-bg)] p-8 rounded-3xl border border-slate-200 shadow-sm">
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-8">
                 Send an Official Inquiry
               </h2>
 
@@ -282,7 +283,7 @@ const Contact = () => {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Enter full name"
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full p-3 bg-[var(--bg-secondary)] border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
                   />
                 </div>
 
@@ -298,7 +299,7 @@ const Contact = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter email address"
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full p-3 bg-[var(--bg-secondary)] border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
                   />
                 </div>
 
@@ -312,7 +313,7 @@ const Contact = () => {
                     name="department"
                     value={formData.department}
                     onChange={handleChange}
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full p-3 bg-[var(--bg-secondary)] border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
                   >
                     <option value="">Choose Department</option>
 
@@ -344,7 +345,7 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="How can we help you?"
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all resize-none"
+                    className="w-full p-3 bg-[var(--bg-secondary)] border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all resize-none"
                   />
                 </div>
 
@@ -385,6 +386,11 @@ const Contact = () => {
               </form>
             </div>
           </div>
+        </div>
+
+        {/* Feedback Form Section */}
+        <div className="mt-12">
+          <ContactFeedbackForm />
         </div>
       </div>
     </div>
