@@ -74,10 +74,11 @@ const ContactFeedbackForm = () => {
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5" noValidate>
         {/* Name */}
         <div>
-          <label className="block mb-2 text-sm font-semibold text-slate-700">
+          <label htmlFor="name" className="block mb-2 text-sm font-semibold text-slate-700">
             Full Name <span className="text-red-500">*</span>
           </label>
           <input
+            id="name"
             type="text"
             name="name"
             value={formData.name}
@@ -92,10 +93,11 @@ const ContactFeedbackForm = () => {
 
         {/* Email */}
         <div>
-          <label className="block mb-2 text-sm font-semibold text-slate-700">
+          <label htmlFor="email" className="block mb-2 text-sm font-semibold text-slate-700">
             Email Address <span className="text-red-500">*</span>
           </label>
           <input
+            id="email"
             type="email"
             name="email"
             value={formData.email}
@@ -110,10 +112,11 @@ const ContactFeedbackForm = () => {
 
         {/* Subject */}
         <div className="md:col-span-2">
-          <label className="block mb-2 text-sm font-semibold text-slate-700">
+          <label htmlFor="subject" className="block mb-2 text-sm font-semibold text-slate-700">
             Subject <span className="text-red-500">*</span>
           </label>
           <input
+            id="subject"
             type="text"
             name="subject"
             value={formData.subject}
@@ -128,11 +131,13 @@ const ContactFeedbackForm = () => {
 
         {/* Message */}
         <div className="md:col-span-2">
-          <label className="block mb-2 text-sm font-semibold text-slate-700">
+          <label htmlFor="message" className="block mb-2 text-sm font-semibold text-slate-700">
             Message <span className="text-red-500">*</span>
           </label>
           <textarea
+            id="message"
             name="message"
+            maxLength={1000}
             value={formData.message}
             onChange={handleChange}
             rows={5}
@@ -142,6 +147,9 @@ const ContactFeedbackForm = () => {
             }`}
           />
           {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+         <p className={`text-xs mt-1 text-right ${formData.message.length >= 900 ? "text-red-400" : "text-slate-400"}`}>
+         {formData.message.length} / 1000
+         </p> 
         </div>
 
         {/* Submit */}
