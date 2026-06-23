@@ -20,8 +20,19 @@ app.use(express.json());
 validateEnv();
 app.use(cookieParser());
 
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5,
+    message: {
+        success: false,
+        message: "Too many requests. Please try again after 15 minutes."
+    },
+    standardHeaders: true,
+    legacyHeaders: false
+});
+
 // routes
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/inquiries", inquiryRoutes);
 app.use("/api/notices", noticeRoutes);
 app.use("/api/applications", applicationRoutes);
