@@ -1,3 +1,36 @@
+## 🛠️ Tech Stack
+
+### Frontend
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+
+### Backend & Database
+![NodeJS](https://img.shields.io/badge/node.js-%236DA55F.svg?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+
+## ✨ Key Features
+
+* **📋 Real-Time Notice Board:** Instantly broadcast important announcements, updates, and events across the portal to keep students and faculty aligned.
+* **📚 Resource Sharing:** A centralized hub for uploading, downloading, and organizing study materials, assignments, and lecture notes.
+* **🤖 AI Assistant:** An integrated intelligent chatbot to help users navigate the portal, answer frequent queries, and provide instant support.
+
+
+## 📁 Project Structure
+
+```text
+edustream/
+├── backend/                # Server-side logic, APIs, and database models
+│   ├── config/             # Database connection and environment configurations
+│   └── routes/             # API route definitions
+├── frontend/               # Client-side React application
+│   ├── public/             # Static assets
+│   └── src/                # React components and pages
+├── config/                 # Global repository configuration files
+└── README.md               # Project documentation
+
 # 🎓 EduStream Academy Portal
 
 EduStream is a comprehensive Full-Stack Academic Management Portal designed to bridge the gap between students, faculty, and administration.Built with the MERN stack (MongoDB, Express, React, Node.js), it features real-time notice boards, academic resource sharing, and an AI-integrated support system for student inquiries.
