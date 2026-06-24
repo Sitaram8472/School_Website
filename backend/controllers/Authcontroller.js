@@ -4,11 +4,19 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 
+const normalizeEmail = (email) => {
+  return email?.trim().toLowerCase();
+};
+
 exports.register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    let user = await User.findOne({ email });
+    const normalizedEmail = normalizeEmail(email);
+
+    let user = await User.findOne({
+      email: normalizedEmail
+    });
     if (user) return res.status(400).json({ message: "User already exists" });
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,7 +41,7 @@ exports.register = async (req, res) => {
 
     user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       role: userRole,
       isVerified: false,
@@ -49,9 +57,8 @@ exports.register = async (req, res) => {
     user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
     await user.save();
 
-    const verifyUrl = `${
-      process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"
-    }/verify-email/${rawToken}`;
+    const verifyUrl = `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"
+      }/verify-email/${rawToken}`;
 
     try {
       await sendEmail({
@@ -88,8 +95,11 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const normalizedEmail = normalizeEmail(email);
 
+    const user = await User.findOne({
+      email: normalizedEmail
+    });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -144,7 +154,11 @@ exports.logout = (req, res) => {
 exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email });
+    const normalizedEmail = normalizeEmail(email);
+
+    const user = await User.findOne({
+      email: normalizedEmail
+    });
 
     // Return same message regardless of whether email exists (prevents enumeration)
     if (!user) {
@@ -276,7 +290,11 @@ exports.resendVerification = async (req, res) => {
       return res.status(400).json({ message: "Email is required" });
     }
 
-    const user = await User.findOne({ email });
+    const normalizedEmail = normalizeEmail(email);
+
+    const user = await User.findOne({
+      email: normalizedEmail
+    });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -295,9 +313,8 @@ exports.resendVerification = async (req, res) => {
     user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
     await user.save();
 
-    const verifyUrl = `${
-      process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"
-    }/verify-email/${rawToken}`;
+    const verifyUrl = `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"
+      }/verify-email/${rawToken}`;
 
     try {
       await sendEmail({
