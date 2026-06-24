@@ -1,5 +1,13 @@
-import React from "react";
-import { BookOpen, ClipboardCheck, Download, Bell, User } from "lucide-react";
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { getUserRole } from "../utils/permissions";
+import {
+  BookOpen,
+  ClipboardCheck,
+  Download,
+  Bell,
+  User,
+} from "lucide-react";
 
 import physicsNotes from "../assets/prospectus/physics-notes.pdf";
 import chemistryLab from "../assets/prospectus/chemistry-lab.pdf";
@@ -7,27 +15,30 @@ import mathFormulas from "../assets/prospectus/math-formulas.pdf";
 import attendanceData from "../data/attendance";
 
 const Student = () => {
+  const { user } = useContext(AuthContext);
+  const displayName = getUserRole(user) ? (user?.name || user?.user?.name || "Student") : "Student";
+
   const savedAttendance = JSON.parse(localStorage.getItem("attendanceRecords"));
 
+  // Calculate attendance data with proper fallbacks
   const presentClasses = savedAttendance
-    ? Object.values(savedAttendance).filter((status) => status === "Present")
-        .length
-    : presentClasses;
+    ? Object.values(savedAttendance).filter((status) => status === "Present").length
+    : 0;
 
   const totalClasses = savedAttendance
     ? Object.keys(savedAttendance).length
-    : totalClasses;
-  const attendancePercentage = (
-    (presentClasses / totalClasses) *
-    100
-  ).toFixed(0);
-  const absentClasses =
-    totalClasses - presentClasses;
-  const monthlyAttendancePercentage = (
-    (attendanceData.monthlyReport.presentClasses /
-      attendanceData.monthlyReport.totalClasses) *
-    100
-  ).toFixed(0);
+    : 0;
+
+  const attendancePercentage = totalClasses > 0 
+    ? ((presentClasses / totalClasses) * 100).toFixed(0)
+    : 0;
+    
+  const absentClasses = totalClasses - presentClasses;
+  
+  const monthlyAttendancePercentage = attendanceData?.monthlyReport
+    ? ((attendanceData.monthlyReport.presentClasses / attendanceData.monthlyReport.totalClasses) * 100).toFixed(0)
+    : 0;
+
   const assignments = [
     {
       id: 1,
@@ -42,6 +53,7 @@ const Student = () => {
       due: "28 May 2026",
     },
   ];
+
   const notifications = [
     {
       id: 1,
@@ -89,27 +101,26 @@ const Student = () => {
 
   return (
     <div
-    className="min-h-screen p-4 sm:p-6 overflow-hidden"
-    style={{
-      background: "var(--bg-primary)",
-      color: "var(--text-primary)",
-    }}
-  >
-
+      className="min-h-screen p-4 sm:p-6 overflow-hidden"
+      style={{
+        background: "var(--bg-primary)",
+        color: "var(--text-primary)",
+      }}
+    >
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white rounded-3xl p-8 shadow-2xl mb-10">
         <div className="flex items-center gap-4">
-          <div className="bg-[var(--card-bg)] text-blue-700 p-4 rounded-full shadow-lg">
+          <div className="bg-white text-blue-700 p-4 rounded-full shadow-lg">
             <User size={32} />
           </div>
 
           <div>
             <h1 className="text-2xl sm:text-4xl font-bold">
-              Welcome Back, Deepali 👋
+              Welcome Back, {displayName} 👋
             </h1>
 
             <p className="text-blue-100 mt-2 text-lg">
-              Here’s your academic dashboard overview.
+              Here's your academic dashboard overview.
             </p>
           </div>
         </div>
@@ -117,7 +128,7 @@ const Student = () => {
 
       {/* Stats Cards */}
       <div className="grid md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-[var(--card-bg)] rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
+        <div className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
           <div className="flex items-center gap-4">
             <div className="bg-blue-100 p-3 rounded-full text-blue-700">
               <BookOpen />
@@ -130,7 +141,7 @@ const Student = () => {
           </div>
         </div>
 
-        <div className="bg-[var(--card-bg)] rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
+        <div className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
           <div className="flex items-center gap-4">
             <div className="bg-green-100 p-3 rounded-full text-green-700">
               <ClipboardCheck />
@@ -138,13 +149,12 @@ const Student = () => {
 
             <div>
               <h2 className="text-3xl font-bold">{attendancePercentage}%</h2>
-
               <p className="text-gray-500">Attendance</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-[var(--card-bg)] rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
+        <div className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
           <div className="flex items-center gap-4">
             <div className="bg-yellow-100 p-3 rounded-full text-yellow-700">
               <Bell />
@@ -158,30 +168,29 @@ const Student = () => {
         </div>
       </div>
 
+      {/* Attendance Summary */}
       <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
         <h2 className="text-3xl font-bold text-blue-700 mb-6">
           Attendance Summary
         </h2>
 
-        <div className="grid md:grid-cols-5 gap-6">
+        <div className="grid md:grid-cols-4 gap-6">
           <div>
             <h3 className="text-xl font-semibold text-gray-700">
               Total Classes
             </h3>
-
             <p className="text-3xl font-bold">{totalClasses}</p>
           </div>
 
           <div>
             <h3 className="text-xl font-semibold text-gray-700">Present</h3>
-
             <p className="text-3xl font-bold text-green-600">
               {presentClasses}
             </p>
           </div>
+
           <div>
             <h3 className="text-xl font-semibold text-gray-700">Absent</h3>
-
             <p className="text-3xl font-bold text-red-600">{absentClasses}</p>
           </div>
 
@@ -189,7 +198,6 @@ const Student = () => {
             <h3 className="text-xl font-semibold text-gray-700">
               Attendance %
             </h3>
-
             <p className="text-3xl font-bold text-blue-600">
               {attendancePercentage}%
             </p>
@@ -197,25 +205,24 @@ const Student = () => {
         </div>
       </div>
 
+      {/* Monthly Attendance Report */}
       <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
         <h2 className="text-3xl font-bold text-blue-700 mb-6">
           Monthly Attendance Report
         </h2>
 
-        <div className="grid md:grid-cols-5 gap-6">
+        <div className="grid md:grid-cols-4 gap-6">
           <div>
             <h3 className="text-xl font-semibold text-gray-700">Month</h3>
-
             <p className="text-2xl font-bold">
-              {attendanceData.monthlyReport.month}
+              {attendanceData?.monthlyReport?.month || "N/A"}
             </p>
           </div>
 
           <div>
             <h3 className="text-xl font-semibold text-gray-700">Present</h3>
-
             <p className="text-2xl font-bold text-green-600">
-              {attendanceData.monthlyReport.presentClasses}
+              {attendanceData?.monthlyReport?.presentClasses || 0}
             </p>
           </div>
 
@@ -223,14 +230,13 @@ const Student = () => {
             <h3 className="text-xl font-semibold text-gray-700">
               Total Classes
             </h3>
-
             <p className="text-2xl font-bold">
-              {attendanceData.monthlyReport.totalClasses}
+              {attendanceData?.monthlyReport?.totalClasses || 0}
             </p>
           </div>
+
           <div>
             <h3 className="text-xl font-semibold text-gray-700">Percentage</h3>
-
             <p className="text-2xl font-bold text-blue-600">
               {monthlyAttendancePercentage}%
             </p>
@@ -239,7 +245,7 @@ const Student = () => {
       </div>
 
       {/* Assignments */}
-      <div className="bg-[var(--card-bg)] rounded-3xl shadow-2xl p-8 mb-10">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
         <h2 className="text-3xl font-bold text-blue-700 mb-6">
           Upcoming Assignments
         </h2>
@@ -293,7 +299,7 @@ const Student = () => {
       </div>
 
       {/* Study Materials */}
-      <div className="bg-[var(--card-bg)] rounded-3xl shadow-2xl p-8">
+      <div className="bg-white rounded-3xl shadow-2xl p-8">
         <h2 className="text-3xl font-bold text-blue-700 mb-6">
           Study Materials
         </h2>

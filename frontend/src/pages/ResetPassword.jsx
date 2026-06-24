@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import API from "../utils/axios";
 
 const ResetPassword = () => {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const { token } = useParams();
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
