@@ -40,9 +40,12 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+<<<<<<< HEAD
 // Validate environment variables after applying fallbacks
 validateEnv();
 
+=======
+>>>>>>> upstream/main
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/inquiries", inquiryRoutes);
@@ -52,8 +55,16 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+<<<<<<< HEAD
 // Connect to MongoDB
+=======
+// Connect to mongodb with try-catch
+>>>>>>> upstream/main
 async function connectDB() {
+  if (!process.env.MONGO_URL) {
+    console.warn("WARNING: MONGO_URL not found. Skipping database connection. API endpoints that require the database will not work.");
+    return;
+  }
   try {
     await mongoose.connect(MONGO_URL);
     console.log("Connected to MongoDB");
@@ -63,6 +74,7 @@ async function connectDB() {
   }
 }
 
+<<<<<<< HEAD
 // Start the server after MongoDB connects
 async function startServer() {
   await connectDB();
@@ -76,5 +88,8 @@ async function startServer() {
       process.exit(1);
     });
 }
+=======
+connectDB();
+>>>>>>> upstream/main
 
 startServer();

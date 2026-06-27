@@ -12,17 +12,46 @@ const Register = () => {
   });
 
   const [error, setError] = useState("");
+  const [formErrors, setFormErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const onChange = (e) =>
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (formErrors[e.target.name]) {
+      setFormErrors({ ...formErrors, [e.target.name]: null });
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.name.trim()) {
+      errors.name = "Please fill out this field.";
+    } else if (!formData.name.trim().includes(" ")) {
+      errors.name = "Please enter your full name.";
+    }
+    if (!formData.email) {
+      errors.email = "Please fill out this field.";
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      errors.email = "Please enter a valid email address.";
+    }
+    if (!formData.password) {
+      errors.password = "Please fill out this field.";
+    } else if (formData.password.length < 6) {
+      errors.password = "Password must be at least 6 characters.";
+    }
+    return errors;
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    const validationErrors = validateForm();
+    setFormErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+
     setError("");
     setLoading(true);
 
@@ -56,7 +85,7 @@ const Register = () => {
           </div>
         )}
 
-        <form onSubmit={onSubmit} className="space-y-6" autoComplete="off">
+        <form onSubmit={onSubmit} className="space-y-6" autoComplete="off" noValidate>
 
           {/* Name */}
           <div>
@@ -69,10 +98,12 @@ const Register = () => {
               autoComplete="off"
               value={formData.name}
               onChange={onChange}
-              required
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition"
               placeholder="John Doe"
             />
+            {formErrors.name && (
+              <p className="text-xs text-red-600 mt-1">{formErrors.name}</p>
+            )}
           </div>
 
           {/* Email */}
@@ -86,10 +117,12 @@ const Register = () => {
               autoComplete="off"
               value={formData.email}
               onChange={onChange}
-              required
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition"
               placeholder="name@company.com"
             />
+            {formErrors.email && (
+              <p className="text-xs text-red-600 mt-1">{formErrors.email}</p>
+            )}
           </div>
 
           {/* Password with Toggle Button */}
@@ -104,7 +137,6 @@ const Register = () => {
                 autoComplete="new-password"
                 value={formData.password}
                 onChange={onChange}
-                required
                 className="block w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                 placeholder="••••••••"
               />
@@ -117,6 +149,9 @@ const Register = () => {
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
+            {formErrors.password && (
+              <p className="text-xs text-red-600 mt-1">{formErrors.password}</p>
+            )}
             <p className="text-xs text-gray-500 mt-1">
               Password must be at least 6 characters
             </p>
