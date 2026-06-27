@@ -134,14 +134,12 @@ const About = () => {
               <Award className="text-blue-600" /> Our Mission
             </h2>
             <p className="text-[var(--text-secondary)] mb-6 leading-relaxed">
-              At EduStream, we believe that education is more than just academic
-              achievement. It's about fostering curiosity, critical thinking,
-              and character. Our mission is to provide an inclusive environment
-              where every student is challenged to reach their full potential.
+              At EduStream, we believe that education is more than just academic achievement. It's about fostering curiosity, critical thinking,
+              and character. Our mission is to provide an inclusive environment where every student is challenged to reach their full potential
+              and encouraged to go above and beyond!
             </p>
             <p className="text-slate-600 leading-relaxed">
-              We integrate traditional academic values with modern technological
-              advancements, ensuring our students are not only prepared for
+              We integrate traditional academic values with modern technological advancements, ensuring our students are not only prepared for
               university but for a rapidly changing global landscape.
             </p>
           </div>
