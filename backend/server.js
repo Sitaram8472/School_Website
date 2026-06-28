@@ -13,9 +13,12 @@ const noticeRoutes = require("./routes/noticeRoutes.js");
 const applicationRoutes = require("./routes/applicationRoutes");
 const contactRoutes = require("./routes/contactRoutes.js");
 const teacherRoutes = require("./routes/teacherRoutes.js");
+
+const helmetMiddleware = require("./config/helmet.js");
 dotenv.config();
 const app = express();
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(helmetMiddleware);
 app.use(express.json());
 validateEnv();
 app.use(cookieParser());
