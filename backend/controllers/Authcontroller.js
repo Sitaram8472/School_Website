@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
+const generateToken = require("../utils/generateToken");
 
 const normalizeEmail = (email) => {
   return email?.trim().toLowerCase();
@@ -47,11 +48,13 @@ exports.register = async (req, res) => {
       isVerified: false,
     });
 
-    const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(rawToken)
-      .digest("hex");
+    // const rawToken = crypto.randomBytes(32).toString("hex");
+    // const hashedToken = crypto
+    //   .createHash("sha256")
+    //   .update(rawToken)
+    //   .digest("hex");
+
+    const {rawToken, hashedToken} = generateToken()
 
     user.verificationToken = hashedToken;
     user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
@@ -169,11 +172,13 @@ exports.forgotPassword = async (req, res) => {
         });
     }
 
-    const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(rawToken)
-      .digest("hex");
+    const {rawToken, hashedToken} = generateToken()
+
+    // const rawToken = crypto.randomBytes(32).toString("hex");
+    // const hashedToken = crypto
+    //   .createHash("sha256")
+    //   .update(rawToken)
+    //   .digest("hex");
 
     user.resetPasswordToken = hashedToken;
     user.resetPasswordExpires = Date.now() + 3600000;
@@ -303,11 +308,13 @@ exports.resendVerification = async (req, res) => {
       return res.status(400).json({ message: "Email is already verified" });
     }
 
-    const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(rawToken)
-      .digest("hex");
+    const {rawToken, hashedToken} = generateToken()
+
+    // const rawToken = crypto.randomBytes(32).toString("hex");
+    // const hashedToken = crypto
+    //   .createHash("sha256")
+    //   .update(rawToken)
+    //   .digest("hex");
 
     user.verificationToken = hashedToken;
     user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
