@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { getUserRole } from "../utils/permissions";
 import {
   BookOpen,
   ClipboardCheck,
@@ -10,8 +12,33 @@ import {
 import physicsNotes from "../assets/prospectus/physics-notes.pdf";
 import chemistryLab from "../assets/prospectus/chemistry-lab.pdf";
 import mathFormulas from "../assets/prospectus/math-formulas.pdf";
+import attendanceData from "../data/attendance";
 
 const Student = () => {
+  const { user } = useContext(AuthContext);
+  const displayName = getUserRole(user) ? (user?.name || user?.user?.name || "Student") : "Student";
+
+  const savedAttendance = JSON.parse(localStorage.getItem("attendanceRecords"));
+
+  // Calculate attendance data with proper fallbacks
+  const presentClasses = savedAttendance
+    ? Object.values(savedAttendance).filter((status) => status === "Present").length
+    : 0;
+
+  const totalClasses = savedAttendance
+    ? Object.keys(savedAttendance).length
+    : 0;
+
+  const attendancePercentage = totalClasses > 0 
+    ? ((presentClasses / totalClasses) * 100).toFixed(0)
+    : 0;
+    
+  const absentClasses = totalClasses - presentClasses;
+  
+  const monthlyAttendancePercentage = attendanceData?.monthlyReport
+    ? ((attendanceData.monthlyReport.presentClasses / attendanceData.monthlyReport.totalClasses) * 100).toFixed(0)
+    : 0;
+
   const assignments = [
     {
       id: 1,
@@ -24,6 +51,33 @@ const Student = () => {
       title: "Science Project",
       subject: "Science",
       due: "28 May 2026",
+    },
+  ];
+
+  const notifications = [
+    {
+      id: 1,
+      title: "New Notice Released",
+      message: "School annual function scheduled for June 15.",
+      type: "notice",
+    },
+    {
+      id: 2,
+      title: "Assignment Reminder",
+      message: "Math assignment due tomorrow.",
+      type: "assignment",
+    },
+    {
+      id: 3,
+      title: "Event Alert",
+      message: "Science exhibition registration is open.",
+      type: "event",
+    },
+    {
+      id: 4,
+      title: "Parent Meeting Reminder",
+      message: "Parent-teacher meeting will be held on June 20.",
+      type: "parent",
     },
   ];
 
@@ -46,7 +100,13 @@ const Student = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:p-6 overflow-hidden">
+    <div
+      className="min-h-screen p-4 sm:p-6 overflow-hidden"
+      style={{
+        background: "var(--bg-primary)",
+        color: "var(--text-primary)",
+      }}
+    >
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white rounded-3xl p-8 shadow-2xl mb-10">
         <div className="flex items-center gap-4">
@@ -56,11 +116,11 @@ const Student = () => {
 
           <div>
             <h1 className="text-2xl sm:text-4xl font-bold">
-              Welcome Back, Deepali 👋
+              Welcome Back, {displayName} 👋
             </h1>
 
             <p className="text-blue-100 mt-2 text-lg">
-              Here’s your academic dashboard overview.
+              Here's your academic dashboard overview.
             </p>
           </div>
         </div>
@@ -88,7 +148,7 @@ const Student = () => {
             </div>
 
             <div>
-              <h2 className="text-3xl font-bold">92%</h2>
+              <h2 className="text-3xl font-bold">{attendancePercentage}%</h2>
               <p className="text-gray-500">Attendance</p>
             </div>
           </div>
@@ -101,9 +161,85 @@ const Student = () => {
             </div>
 
             <div>
-              <h2 className="text-3xl font-bold">4</h2>
+              <h2 className="text-3xl font-bold">{notifications.length}</h2>
               <p className="text-gray-500">Notifications</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Attendance Summary */}
+      <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
+        <h2 className="text-3xl font-bold text-blue-700 mb-6">
+          Attendance Summary
+        </h2>
+
+        <div className="grid md:grid-cols-4 gap-6">
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">
+              Total Classes
+            </h3>
+            <p className="text-3xl font-bold">{totalClasses}</p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Present</h3>
+            <p className="text-3xl font-bold text-green-600">
+              {presentClasses}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Absent</h3>
+            <p className="text-3xl font-bold text-red-600">{absentClasses}</p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">
+              Attendance %
+            </h3>
+            <p className="text-3xl font-bold text-blue-600">
+              {attendancePercentage}%
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Monthly Attendance Report */}
+      <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
+        <h2 className="text-3xl font-bold text-blue-700 mb-6">
+          Monthly Attendance Report
+        </h2>
+
+        <div className="grid md:grid-cols-4 gap-6">
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Month</h3>
+            <p className="text-2xl font-bold">
+              {attendanceData?.monthlyReport?.month || "N/A"}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Present</h3>
+            <p className="text-2xl font-bold text-green-600">
+              {attendanceData?.monthlyReport?.presentClasses || 0}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">
+              Total Classes
+            </h3>
+            <p className="text-2xl font-bold">
+              {attendanceData?.monthlyReport?.totalClasses || 0}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700">Percentage</h3>
+            <p className="text-2xl font-bold text-blue-600">
+              {monthlyAttendancePercentage}%
+            </p>
           </div>
         </div>
       </div>
@@ -131,6 +267,32 @@ const Student = () => {
               <p className="text-red-500 mt-3 font-semibold">
                 Due: {assignment.due}
               </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Notification Center */}
+      <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
+        <h2 className="text-3xl font-bold text-blue-700 mb-6">
+          Notification Center
+        </h2>
+
+        <div className="space-y-4">
+          {notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className="border rounded-2xl p-5 bg-gradient-to-r from-white to-blue-50 hover:shadow-xl transition duration-300"
+            >
+              <h3 className="text-xl font-bold text-gray-800">
+                {notification.title}
+              </h3>
+
+              <p className="text-gray-600 mt-2">{notification.message}</p>
+
+              <span className="text-sm text-blue-600 font-medium">
+                {notification.type}
+              </span>
             </div>
           ))}
         </div>

@@ -9,16 +9,17 @@ import {
   ChevronDown,
   GraduationCap,
   ShieldCheck,
+  
 } from "lucide-react";
 
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 import prospectusPdf from "../assets/prospectus/prospectus.pdf";
 import prospectusCover from "../assets/prospectus/prospectus-cover.jpg";
 
 const Admissions = () => {
   const [openFaq, setOpenFaq] = useState(null);
-
+  const navigate = useNavigate();
   const steps = [
     {
       title: "Online Registration",
@@ -58,7 +59,7 @@ const Admissions = () => {
   ];
 
   return (
-    <div className="bg-white animate-in fade-in duration-700">
+    <div className="bg-[var(--bg-primary)] animate-in fade-in duration-700">
       {/* Hero Section */}
       <div className="relative bg-slate-900 py-28 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
@@ -86,15 +87,18 @@ const Admissions = () => {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-xl">
+            <Link
+              to="/register/student"
+              className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-xl"
+            >
               Apply Online Now
-            </button>
+            </Link>
 
             {/* Prospectus Card */}
             <a
               href={prospectusPdf}
               download
-              className="group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/20 transition-all duration-300 max-w-md"
+              className="group bg-[var(--card-bg)]/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-4 hover:bg-[var(--card-bg)]/20 transition-all duration-300 max-w-md"
             >
               <img
                 src={prospectusCover}
@@ -126,7 +130,7 @@ const Admissions = () => {
         {/* Requirements Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-32 items-center">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-8">
+            <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-8">
               Eligibility & Requirements
             </h2>
 
@@ -150,7 +154,7 @@ const Admissions = () => {
             </div>
           </div>
 
-          <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200">
+          <div className="bg-[var(--bg-secondary)] p-8 rounded-3xl border border-slate-200">
             <GraduationCap size={48} className="text-blue-600 mb-6" />
 
             <h3 className="text-2xl font-bold mb-4">
@@ -174,19 +178,19 @@ const Admissions = () => {
 
         {/* Enrollment Process */}
         <div className="mb-32">
-          <h2 className="text-3xl font-bold text-center mb-16 text-slate-900">
+          <h2 className="text-3xl font-bold text-center mb-16 text-[var(--text-primary)]">
             The 4-Step Enrollment Journey
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             {steps.map((step, i) => (
               <div key={i} className="relative group">
-                <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all h-full">
+                <div className="bg-[var(--card-bg)] p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all h-full">
                   <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                     {step.icon}
                   </div>
 
-                  <h3 className="text-xl font-bold mb-3 text-slate-900">
+                  <h3 className="text-xl font-bold mb-3 text-[var(--text-primary)]">
                     {step.title}
                   </h3>
 
@@ -264,7 +268,7 @@ const Admissions = () => {
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full p-5 text-left bg-white hover:bg-slate-50 flex justify-between items-center transition-colors"
+                  className="w-full p-5 text-left bg-[var(--card-bg)] hover:bg-[var(--bg-secondary)] flex justify-between items-center transition-colors"
                 >
                   <span className="font-bold text-slate-800">
                     {faq.q}
@@ -279,7 +283,7 @@ const Admissions = () => {
                 </button>
 
                 {openFaq === i && (
-                  <div className="p-5 bg-slate-50 border-t border-slate-200 text-slate-600">
+                  <div className="p-5 bg-[var(--bg-secondary)] border-t border-slate-200 text-slate-600">
                     {faq.a}
                   </div>
                 )}
