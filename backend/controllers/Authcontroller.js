@@ -4,19 +4,44 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 
+// =============================================
+// Helper Functions
+// =============================================
+
 const normalizeEmail = (email) => {
   return email?.trim().toLowerCase();
 };
+
+const sanitizeInput = (input) => {
+  if (typeof input !== 'string') return input;
+  return input.replace(/[<>]/g, '');
+};
+
+const validatePassword = (password) => {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return regex.test(password);
+};
+
+const generateAccessToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
+};
+
+const generateRefreshToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET, { expiresIn: "7d" });
+};
+
+// =============================================
+// Register Controller
+// =============================================
 
 exports.register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
+    const sanitizedName = sanitizeInput(name);
     const normalizedEmail = normalizeEmail(email);
 
-    let user = await User.findOne({
-      email: normalizedEmail
-    });
+    let user = await User.findOne({ email: normalizedEmail });
     if (user) return res.status(400).json({ message: "User already exists" });
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,10 +49,10 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: "Invalid email format" });
     }
 
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ message: "Password must be at least 6 characters" });
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message: "Password must be at least 8 characters with uppercase, lowercase, number, and special character (@$!%*?&)"
+      });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -36,29 +61,26 @@ exports.register = async (req, res) => {
     if (role && !["student", "teacher"].includes(role)) {
       return res.status(403).json({ message: "Invalid role" });
     }
-
     const userRole = ["student", "teacher"].includes(role) ? role : "student";
 
     user = await User.create({
-      name,
+      name: sanitizedName,
       email: normalizedEmail,
       password: hashedPassword,
       role: userRole,
       isVerified: false,
+      failedLoginAttempts: 0,
+      accountLockedUntil: null,
     });
 
     const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(rawToken)
-      .digest("hex");
+    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
 
     user.verificationToken = hashedToken;
     user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
     await user.save();
 
-    const verifyUrl = `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"
-      }/verify-email/${rawToken}`;
+    const verifyUrl = `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"}/verify-email/${rawToken}`;
 
     try {
       await sendEmail({
@@ -78,8 +100,7 @@ exports.register = async (req, res) => {
     }
 
     res.status(201).json({
-      message:
-        "Registration successful. Please check your inbox to verify your account before logging in.",
+      message: "Registration successful. Please check your inbox to verify your account before logging in.",
       user: {
         id: user._id,
         name: user.name,
@@ -92,57 +113,160 @@ exports.register = async (req, res) => {
   }
 };
 
+// =============================================
+// Login Controller (with Account Lockout)
+// =============================================
+
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const normalizedEmail = normalizeEmail(email);
 
-    const user = await User.findOne({
-      email: normalizedEmail
-    });
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
+    if (user.accountLockedUntil && user.accountLockedUntil > Date.now()) {
+      const remainingMinutes = Math.ceil((user.accountLockedUntil - Date.now()) / 60000);
+      return res.status(403).json({
+        message: `Account locked. Please try again after ${remainingMinutes} minutes.`,
+        locked: true,
+      });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) {
+      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+
+      if (user.failedLoginAttempts >= 5) {
+        user.accountLockedUntil = Date.now() + 15 * 60 * 1000;
+        user.failedLoginAttempts = 0;
+        await user.save();
+        return res.status(403).json({
+          message: "Account locked due to too many failed attempts. Try again after 15 minutes.",
+          locked: true,
+        });
+      }
+
+      await user.save();
+      return res.status(400).json({
+        message: "Invalid credentials",
+        remainingAttempts: 5 - user.failedLoginAttempts,
+      });
+    }
+
+    user.failedLoginAttempts = 0;
+    user.accountLockedUntil = null;
 
     if (!user.isVerified) {
+      await user.save();
       return res.status(403).json({
         message: "Please verify your email to log in",
         needsVerification: true,
       });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 3600000,
     });
 
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 3600000,
-      })
-      .status(200)
-      .json({
-        message: "Login successful",
-        token,
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        },
-      });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      message: "Login successful",
+      accessToken,
+      refreshToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
-exports.logout = (req, res) => {
+// =============================================
+// Refresh Token Controller
+// =============================================
+
+exports.refreshToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: "Refresh token required" });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET);
+
+    const user = await User.findById(decoded.id);
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(401).json({ message: "Invalid refresh token" });
+    }
+
+    const newAccessToken = generateAccessToken(user._id);
+
+    const newRefreshToken = generateRefreshToken(user._id);
+    user.refreshToken = newRefreshToken;
+    await user.save();
+
+    res.cookie("token", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 3600000,
+    });
+
+    res.status(200).json({
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    });
+  } catch (error) {
+    res.status(401).json({ message: "Invalid or expired refresh token" });
+  }
+};
+
+// =============================================
+// Logout Controller
+// =============================================
+
+exports.logout = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (userId) {
+      const user = await User.findById(userId);
+      if (user) {
+        user.refreshToken = null;
+        await user.save();
+      }
+    }
+  } catch (error) {
+    // Continue with logout even if DB fails
+  }
+
   res
     .clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    })
+    .clearCookie("refreshToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
@@ -151,36 +275,31 @@ exports.logout = (req, res) => {
     .json({ message: "Logout successful" });
 };
 
+// =============================================
+// Forgot Password Controller
+// =============================================
+
 exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const normalizedEmail = normalizeEmail(email);
 
-    const user = await User.findOne({
-      email: normalizedEmail
-    });
+    const user = await User.findOne({ email: normalizedEmail });
 
-    // Return same message regardless of whether email exists (prevents enumeration)
     if (!user) {
-      return res
-        .status(200)
-        .json({
-          message: "If that email is registered, a reset link has been sent.",
-        });
+      return res.status(200).json({
+        message: "If that email is registered, a reset link has been sent.",
+      });
     }
 
     const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(rawToken)
-      .digest("hex");
+    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
 
     user.resetPasswordToken = hashedToken;
     user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
-    const frontendUrl =
-      process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173";
+    const frontendUrl = process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173";
     const resetUrl = `${frontendUrl}/reset-password/${rawToken}`;
 
     try {
@@ -200,28 +319,30 @@ exports.forgotPassword = async (req, res) => {
       console.log(`[DEV] Password reset link for ${email}: ${resetUrl}`);
     }
 
-    res
-      .status(200)
-      .json({ message: "If that email is registered, a reset link has been sent." });
+    res.status(200).json({
+      message: "If that email is registered, a reset link has been sent.",
+    });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
+
+// =============================================
+// Reset Password Controller
+// =============================================
 
 exports.resetPassword = async (req, res) => {
   try {
     const { token, password } = req.body;
 
     if (!token || !password) {
-      return res
-        .status(400)
-        .json({ message: "Token and new password are required." });
+      return res.status(400).json({ message: "Token and new password are required." });
     }
 
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ message: "Password must be at least 6 characters." });
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message: "Password must be at least 8 characters with uppercase, lowercase, number, and special character (@$!%*?&)"
+      });
     }
 
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
@@ -232,12 +353,9 @@ exports.resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Reset link is invalid or has expired. Please request a new one.",
-        });
+      return res.status(400).json({
+        message: "Reset link is invalid or has expired. Please request a new one.",
+      });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -254,12 +372,13 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
+// =============================================
+// Verify Email Controller
+// =============================================
+
 exports.verifyEmail = async (req, res) => {
   try {
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(req.params.token)
-      .digest("hex");
+    const hashedToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
 
     const user = await User.findOne({
       verificationToken: hashedToken,
@@ -267,9 +386,7 @@ exports.verifyEmail = async (req, res) => {
     });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: "Verification link is invalid or has expired." });
+      return res.status(400).json({ message: "Verification link is invalid or has expired." });
     }
 
     user.isVerified = true;
@@ -283,6 +400,12 @@ exports.verifyEmail = async (req, res) => {
   }
 };
 
+// =============================================
+// Resend Verification Controller (with Cooldown)
+// =============================================
+
+const emailCooldown = new Map();
+
 exports.resendVerification = async (req, res) => {
   try {
     const { email } = req.body;
@@ -292,9 +415,17 @@ exports.resendVerification = async (req, res) => {
 
     const normalizedEmail = normalizeEmail(email);
 
-    const user = await User.findOne({
-      email: normalizedEmail
-    });
+    const lastSent = emailCooldown.get(normalizedEmail);
+    if (lastSent && Date.now() - lastSent < 5 * 60 * 1000) {
+      const remainingSeconds = Math.ceil((5 * 60 * 1000 - (Date.now() - lastSent)) / 1000);
+      const remainingMinutes = Math.ceil(remainingSeconds / 60);
+      return res.status(429).json({
+        message: `Please wait ${remainingMinutes} minute(s) before requesting again.`,
+        retryAfter: remainingSeconds,
+      });
+    }
+
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -304,17 +435,19 @@ exports.resendVerification = async (req, res) => {
     }
 
     const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(rawToken)
-      .digest("hex");
+    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
 
     user.verificationToken = hashedToken;
     user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
     await user.save();
 
-    const verifyUrl = `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"
-      }/verify-email/${rawToken}`;
+    emailCooldown.set(normalizedEmail, Date.now());
+
+    setTimeout(() => {
+      emailCooldown.delete(normalizedEmail);
+    }, 5 * 60 * 1000);
+
+    const verifyUrl = `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"}/verify-email/${rawToken}`;
 
     try {
       await sendEmail({

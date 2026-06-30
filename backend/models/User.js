@@ -27,10 +27,12 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters"],
     },
+    
     isVerified: {
       type: Boolean,
       default: false,
     },
+    
     role: {
       type: String,
       enum: {
@@ -57,6 +59,24 @@ const userSchema = new mongoose.Schema(
 
     verificationTokenExpiry: {
       type: Date,
+      default: null,
+    },
+
+    // =============================================
+    // NEW SECURITY FIELDS
+    // =============================================
+    failedLoginAttempts: {
+      type: Number,
+      default: 0,
+    },
+
+    accountLockedUntil: {
+      type: Date,
+      default: null,
+    },
+
+    refreshToken: {
+      type: String,
       default: null,
     },
   },
