@@ -24,9 +24,10 @@ const noticeSchema = new mongoose.Schema(
     },
     message: {
       type: String,
-      required: [true, 'Message is required'],
       trim: true,
-      minlength: [5, 'Message must be at least 5 characters'],
+      default: function () {
+        return this.content || 'No details provided';
+      },
     },
     targetClass: {
       type: String,
@@ -44,6 +45,26 @@ const noticeSchema = new mongoose.Schema(
       trim: true,
       maxlength: [100, 'Teacher name cannot exceed 100 characters'],
     },
+    status: {
+      type: String,
+      enum: {
+        values: ['draft', 'scheduled', 'published', 'archived'],
+        message: 'Invalid status',
+      },
+      default: 'draft',
+    },
+    publishAt: {
+      type: Date,
+      default: null,
+    },
+    expiresAt: {
+      type: Date,
+      default: null,
+    },
+    publishedAt: {
+      type: Date,
+      default: null,
+    },
     date: {
       type: Date,
       default: Date.now,
@@ -56,5 +77,7 @@ const noticeSchema = new mongoose.Schema(
 noticeSchema.index({ category: 1 });
 noticeSchema.index({ targetClass: 1 });
 noticeSchema.index({ date: -1 });
+noticeSchema.index({ status: 1, publishAt: 1 });
+noticeSchema.index({ status: 1, expiresAt: 1 });
 
 module.exports = mongoose.model('Notice', noticeSchema);

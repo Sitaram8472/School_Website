@@ -38,4 +38,17 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const optionalProtect = async (req, res, next) => {
+  try {
+    let token = req.cookies?.token;
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select("-password");
+    }
+    next();
+  } catch (error) {
+    next();
+  }
+};
+
+module.exports = { protect, optionalProtect };

@@ -46,6 +46,9 @@ async function connectDB() {
 
 connectDB();
 
+// Initialize notice scheduler
+require("./scheduler/noticeScheduler");
+
 const PORT = process.env.PORT || 5000;
 
 // Start server with error handling

@@ -17,13 +17,49 @@ const getMyNotices = async (req, res) => {
 
 const postNotice = async (req, res) => {
   try {
-    const { title, content, targetClass } = req.body;
+    const { title, content, targetClass, status, publishAt, expiresAt } = req.body;
 
-    if (!title || !content) {
+    if (!title || !title.trim() || !content) {
       return res.status(400).json({
         success: false,
         message: 'Title and content are required.'
       });
+    }
+
+    const now = new Date();
+
+    // Validation checks
+    if (publishAt) {
+      const pubDate = new Date(publishAt);
+      if (pubDate < now) {
+        return res.status(400).json({
+          success: false,
+          message: 'Publication date/time cannot be in the past.'
+        });
+      }
+    }
+
+    if (expiresAt) {
+      const expDate = new Date(expiresAt);
+      const compareDate = publishAt ? new Date(publishAt) : now;
+      if (expDate < compareDate) {
+        return res.status(400).json({
+          success: false,
+          message: 'Expiration date must be after publication date.'
+        });
+      }
+    }
+
+    let noticeStatus = 'published';
+    let finalPublishedAt = null;
+
+    if (status === 'draft') {
+      noticeStatus = 'draft';
+    } else if (publishAt && new Date(publishAt) > now) {
+      noticeStatus = 'scheduled';
+    } else {
+      noticeStatus = 'published';
+      finalPublishedAt = now;
     }
 
     const notice = await Notice.create({
@@ -33,6 +69,11 @@ const postNotice = async (req, res) => {
       targetClass: targetClass || 'All',
       postedBy: req.user._id,
       teacherName: req.user.name,
+      status: noticeStatus,
+      publishAt: publishAt ? new Date(publishAt) : null,
+      expiresAt: expiresAt ? new Date(expiresAt) : null,
+      publishedAt: finalPublishedAt,
+      date: finalPublishedAt || now,
     });
 
     res.status(201).json({ success: true, message: 'Notice posted successfully!', notice });
