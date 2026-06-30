@@ -27,16 +27,19 @@ async function connectDB() {
 }
 
 
-connectDB();
-
 const PORT = process.env.PORT || 5000;
 
-// Start server with error handling
-app
-  .listen(PORT, () => {
-    console.log(`server is started on port ${PORT}`);
-  })
-  .on("error", (err) => {
-    console.log("Server error:", err.message);
+async function startServer() {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server started on port ${PORT}`);
+    });
+  } catch (err) {
+    console.log("Failed to start server:", err.message);
     process.exit(1);
-  });
+  }
+}
+
+startServer();
