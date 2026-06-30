@@ -7,24 +7,24 @@ const faqData = [
       "Students are placed based on previous academic records, entrance assessment (if applicable), and age criteria to ensure balanced learning environments.",
   },
   {
-    question: "What makes this school different from other schools nearby?",
+    question: "What makes this school different from other nearby schools?",
     answer:
-      "We focus on a hybrid learning model combining academic excellence, digital tools, personality development, and real-world skill exposure through projects and events.",
+      "We focus on a hybrid learning model combining academic excellence, digital tools, personality development, and real-world skill exposure through projects and events, ensuring all students receive a holistic education.",
   },
   {
     question: "Can parents track student academic progress online?",
     answer:
-      "Yes, parents can access performance reports, attendance, and feedback through the student dashboard portal.",
+      "Yes, parents can access student performance reports, attendance, and feedback through the student dashboard portal.",
   },
   {
     question: "Are students allowed to participate in tech or innovation clubs?",
     answer:
-      "Yes, we encourage participation in coding clubs, robotics, science exhibitions, debate teams, and creative arts programs.",
+      "Yes, we strongly encourage participation in coding clubs, robotics, science exhibitions, debate teams, and creative arts programs.",
   },
   {
     question: "How are teachers selected and evaluated?",
     answer:
-      "Teachers are selected through a multi-stage process including subject expertise evaluation, demo classes, and continuous performance feedback reviews.",
+      "Teachers are selected through a comprehensive multi-stage process including subject expertise evaluation, demo classes, and continuous performance feedback reviews.",
   },
   {
     question: "Does the school provide career guidance for higher studies?",
@@ -34,12 +34,12 @@ const faqData = [
   {
     question: "What safety measures are implemented on campus?",
     answer:
-      "The campus includes CCTV surveillance, verified staff access, emergency protocols, and regular safety drills for students.",
+      "The campus employs CCTV surveillance, verified staff access, emergency protocols, and regular safety drills for students.",
   },
   {
     question: "How does the school handle student doubts outside classroom hours?",
     answer:
-      "Students can use after-school doubt sessions, digital forums, and teacher office hours for academic support.",
+      "Students can utilize after-school doubt sessions, digital forums, and teacher office hours for academic support.",
   },
 ];
 

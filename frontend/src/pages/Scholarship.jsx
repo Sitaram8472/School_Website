@@ -67,9 +67,7 @@ function Scholarship() {
           </h1>
 
           <p className="text-slate-300 text-lg leading-relaxed max-w-3xl mx-auto mt-6">
-            We are committed to supporting talented and deserving students
-            through our Scholarship Programs. These scholarships reward
-            dedication, academic excellence, creativity, and talent.
+            We are committed to supporting talented and deserving students through our Scholarship Programs. These scholarships reward dedication, academic excellence, creativity, and talent.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row justify-center gap-5">
@@ -100,8 +98,7 @@ function Scholarship() {
           </h2>
 
           <p className="text-slate-600 mt-4 max-w-2xl mx-auto text-lg">
-            Supporting students through financial aid, academic rewards, and
-            talent recognition programs.
+            Supporting students through financial aid, academic rewards, and talent recognition programs.
           </p>
         </div>
 
@@ -140,9 +137,7 @@ function Scholarship() {
             </h2>
 
             <p className="text-slate-600 text-lg leading-relaxed mb-8">
-              Students can apply online with clear eligibility criteria and
-              quick verification. Our mission is to make education accessible
-              for every deserving learner.
+              Students can apply online, provided they meet the eligibility criteria and undergo a quick verification process. Our mission is to make education accessible for every deserving learner.
             </p>
 
             <div className="space-y-5">
@@ -171,8 +166,7 @@ function Scholarship() {
               </h3>
 
               <p className="text-slate-300 leading-relaxed mb-8">
-                Apply for Scholarships Now and take the first step toward a
-                brighter future with world-class learning opportunities.
+                Apply for scholarships Now and take the first step toward a brighter future with world-class learning opportunities.
               </p>
 
               <Link

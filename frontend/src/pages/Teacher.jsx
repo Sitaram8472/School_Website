@@ -73,7 +73,7 @@ export default function Teacher() {
                     Welcome Back, Prof. {teacherName} 🎓
                   </h1>
                   <p className="text-slate-300 mt-1">
-                    Manage classes, create announcements, and coordinate stem projects.
+                    Manage classes, create announcements, and coordinate STEM projects.
                   </p>
                 </div>
                 <div className="flex gap-4">
@@ -214,8 +214,7 @@ export default function Teacher() {
           </h2>
           <div className="w-24 h-1.5 bg-blue-600 mx-auto rounded-full mb-6"></div>
           <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
-            Our faculty members bring a wealth of practical experience, scholastic integrity,
-            and academic rigor to every classroom.
+            Our faculty members bring a wealth of practical experience, scholastic integrity, and academic rigor to every classroom.
           </p>
         </div>
 

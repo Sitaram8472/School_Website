@@ -15,7 +15,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-// Import images from your assets folder
+// Import images from assets folder
 import img1 from "../assets/campus/campus1.jpg";
 import img2 from "../assets/campus/campus2.jpg";
 import img3 from "../assets/campus/campus3.jpg";
