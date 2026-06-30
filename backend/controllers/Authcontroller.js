@@ -49,6 +49,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: "Invalid email format" });
     }
 
+    // Password validation - model will also validate, but keeping here for early response
     if (!validatePassword(password)) {
       return res.status(400).json({
         message: "Password must be at least 8 characters with uppercase, lowercase, number, and special character (@$!%*?&)"
@@ -69,8 +70,6 @@ exports.register = async (req, res) => {
       password: hashedPassword,
       role: userRole,
       isVerified: false,
-      failedLoginAttempts: 0,
-      accountLockedUntil: null,
     });
 
     const rawToken = crypto.randomBytes(32).toString("hex");
@@ -125,8 +124,16 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-    if (user.accountLockedUntil && user.accountLockedUntil > Date.now()) {
-      const remainingMinutes = Math.ceil((user.accountLockedUntil - Date.now()) / 60000);
+    // Check if account is active
+    if (!user.isActive) {
+      return res.status(403).json({
+        message: "Account has been deactivated. Please contact support.",
+      });
+    }
+
+    // Check if account is locked using model method
+    if (user.isAccountLocked()) {
+      const remainingMinutes = user.getRemainingLockTime();
       return res.status(403).json({
         message: `Account locked. Please try again after ${remainingMinutes} minutes.`,
         locked: true,
@@ -135,27 +142,28 @@ exports.login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
-
-      if (user.failedLoginAttempts >= 5) {
-        user.accountLockedUntil = Date.now() + 15 * 60 * 1000;
-        user.failedLoginAttempts = 0;
+      // Using model method to increment failed attempts
+      await user.incrementFailedAttempts();
+      
+      // Check if account got locked
+      if (user.isAccountLocked()) {
         await user.save();
         return res.status(403).json({
           message: "Account locked due to too many failed attempts. Try again after 15 minutes.",
           locked: true,
         });
       }
-
-      await user.save();
+      
       return res.status(400).json({
         message: "Invalid credentials",
         remainingAttempts: 5 - user.failedLoginAttempts,
       });
     }
 
-    user.failedLoginAttempts = 0;
-    user.accountLockedUntil = null;
+    // Reset failed attempts using model method
+    const ip = req.ip || req.connection.remoteAddress;
+    const userAgent = req.headers['user-agent'];
+    await user.resetFailedAttempts(ip, userAgent);
 
     if (!user.isVerified) {
       await user.save();
@@ -168,8 +176,7 @@ exports.login = async (req, res) => {
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
 
-    user.refreshToken = refreshToken;
-    await user.save();
+    await user.updateRefreshToken(refreshToken);
 
     res.cookie("token", accessToken, {
       httpOnly: true,
@@ -194,6 +201,8 @@ exports.login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        isActive: user.isActive,
+        lastLoginAt: user.lastLoginAt,
       },
     });
   } catch (error) {
@@ -220,11 +229,14 @@ exports.refreshToken = async (req, res) => {
       return res.status(401).json({ message: "Invalid refresh token" });
     }
 
-    const newAccessToken = generateAccessToken(user._id);
+    // Check if account is active
+    if (!user.isActive) {
+      return res.status(403).json({ message: "Account is deactivated" });
+    }
 
+    const newAccessToken = generateAccessToken(user._id);
     const newRefreshToken = generateRefreshToken(user._id);
-    user.refreshToken = newRefreshToken;
-    await user.save();
+    await user.updateRefreshToken(newRefreshToken);
 
     res.cookie("token", newAccessToken, {
       httpOnly: true,
@@ -252,7 +264,14 @@ exports.logout = async (req, res) => {
     if (userId) {
       const user = await User.findById(userId);
       if (user) {
-        user.refreshToken = null;
+        await user.clearRefreshToken();
+        
+        user.securityLogs.push({
+          event: "logout",
+          timestamp: new Date(),
+          ip: req.ip || req.connection.remoteAddress,
+          userAgent: req.headers['user-agent'],
+        });
         await user.save();
       }
     }
@@ -287,6 +306,13 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email: normalizedEmail });
 
     if (!user) {
+      return res.status(200).json({
+        message: "If that email is registered, a reset link has been sent.",
+      });
+    }
+
+    // Check if account is active
+    if (!user.isActive) {
       return res.status(200).json({
         message: "If that email is registered, a reset link has been sent.",
       });
@@ -358,10 +384,18 @@ exports.resetPassword = async (req, res) => {
       });
     }
 
+    // Check if account is active
+    if (!user.isActive) {
+      return res.status(403).json({
+        message: "Account is deactivated. Cannot reset password.",
+      });
+    }
+
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
+    user.lastPasswordChangeAt = new Date();
     await user.save();
 
     res.status(200).json({
@@ -434,6 +468,11 @@ exports.resendVerification = async (req, res) => {
       return res.status(400).json({ message: "Email is already verified" });
     }
 
+    // Check if account is active
+    if (!user.isActive) {
+      return res.status(403).json({ message: "Account is deactivated" });
+    }
+
     const rawToken = crypto.randomBytes(32).toString("hex");
     const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
 
@@ -471,5 +510,109 @@ exports.resendVerification = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
+
+// =============================================
+// Deactivate Account Controller
+// =============================================
+
+exports.deactivateAccount = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    const { reason } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await user.deactivateAccount(reason || "User requested deactivation");
+
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.status(200).json({
+      message: "Account deactivated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
+
+// =============================================
+// Activate Account Controller (Admin only)
+// =============================================
+
+exports.activateAccount = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const normalizedEmail = normalizeEmail(email);
+    const user = await User.findOne({ email: normalizedEmail });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await user.activateAccount();
+
+    res.status(200).json({
+      message: "Account activated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
+
+// =============================================
+// Get Account Status Controller
+// =============================================
+
+exports.getAccountStatus = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const user = await User.findById(userId).select('-password -refreshToken -resetPasswordToken -verificationToken');
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isVerified: user.isVerified,
+        isActive: user.isActive,
+        lastLoginAt: user.lastLoginAt,
+        isLocked: user.isAccountLocked(),
+        failedLoginAttempts: user.failedLoginAttempts,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
