@@ -59,6 +59,13 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    // ===== NEW: Add this field for refresh token system =====
+    refreshToken: {
+      type: String,
+      default: null,
+    },
+    // ===== END NEW =====
   },
   {
     timestamps: true,
