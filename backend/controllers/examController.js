@@ -44,8 +44,11 @@ exports.getExam = async (req, res) => {
     const exam = await Exam.findById(req.params.id);
     if (!exam) return res.status(404).json({ success: false, error: "Exam not found" });
 
-    // Hide answers from students
-    if (req.user.role === 'student') {
+    const isCreator = req.user.id === exam.creator.toString();
+    const isAdmin = req.user.role === 'admin';
+
+    // Hide answers if the user is not the creator and not an admin
+    if (!isCreator && !isAdmin) {
       const examData = exam.toObject();
       examData.questions.forEach(q => delete q.correctAnswer);
       return res.status(200).json({ success: true, data: examData });
