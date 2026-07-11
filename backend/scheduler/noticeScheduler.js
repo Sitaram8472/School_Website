@@ -1,12 +1,17 @@
+// backend/scheduler/noticeScheduler.js
 const cron = require('node-cron');
 const Notice = require('../models/Notice');
+const logger = require('../config/logger');
 
 const checkAndProcessNotices = async () => {
   const now = new Date();
-  console.log(`[Scheduler] Checking notices at ${now.toISOString()}`);
+
+  logger.info('Checking notices', {
+    timestamp: now.toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 
   try {
-    // 1. Publish scheduled notices in one query using updateMany
     const publishResult = await Notice.updateMany(
       {
         status: 'scheduled',
@@ -16,16 +21,18 @@ const checkAndProcessNotices = async () => {
         $set: {
           status: 'published',
           publishedAt: now,
-          date: now // Update the sort date to make it appear fresh
+          date: now
         }
       }
     );
 
     if (publishResult.modifiedCount > 0) {
-      console.log(`[Scheduler] Auto-published ${publishResult.modifiedCount} scheduled notice(s).`);
+      logger.info('Auto-published scheduled notices', {
+        count: publishResult.modifiedCount,
+        action: 'publish'
+      });
     }
 
-    // 2. Archive expired notices in one query using updateMany
     const archiveResult = await Notice.updateMany(
       {
         status: 'published',
@@ -39,15 +46,29 @@ const checkAndProcessNotices = async () => {
     );
 
     if (archiveResult.modifiedCount > 0) {
-      console.log(`[Scheduler] Auto-archived ${archiveResult.modifiedCount} expired notice(s).`);
+      logger.info('Auto-archived expired notices', {
+        count: archiveResult.modifiedCount,
+        action: 'archive'
+      });
     }
+
+    if (publishResult.modifiedCount === 0 && archiveResult.modifiedCount === 0) {
+      logger.debug('No notices to process');
+    }
+
   } catch (error) {
-    console.error('[Scheduler] Error running notice cron job:', error);
+    logger.error('Error running notice cron job', {
+      error: error.message,
+      stack: error.stack
+    });
   }
 };
 
 cron.schedule('* * * * *', checkAndProcessNotices);
 
-console.log('[Scheduler] Notice background scheduler initialized.');
+logger.info('Notice background scheduler initialized', {
+  schedule: '* * * * *',
+  status: 'running'
+});
 
 module.exports = { checkAndProcessNotices };

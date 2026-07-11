@@ -25,7 +25,8 @@
     "node-cron": "^4.5.0",
     "nodemailer": "^9.0.3",
     "pdfkit": "^0.19.1",
-    "socket.io": "^4.8.3"
+    "socket.io": "^4.8.3",
+    "winston": "^3.19.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

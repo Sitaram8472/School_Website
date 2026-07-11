@@ -57,7 +57,7 @@ const ProtectedRoute = ({ children }) => {
   if (loading) return null;
 
   if (!user) {
-    return <Navigate to="/register" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
@@ -86,12 +86,8 @@ const App = () => {
 
         <main className="grow">
           <Routes>
-            {/* Default route - protected home */}
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            } />
+            {/* Default route - public home */}
+            <Route path="/" element={<Home />} />
 
             {/* Auth Routes - Public (only for non-logged in users) */}
             <Route path="/login" element={
@@ -128,19 +124,18 @@ const App = () => {
             <Route path="/resend-verification" element={<ResendVerification />} />
             <Route path="/verify-email-sent" element={<VerifyEmailSent />} />
 
-            {/* Protected Routes (Need Login) */}
-            <Route path="/home" element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            } />
+            {/* Public Routes (No Login Required) */}
+            <Route path="/home" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/academics" element={<Academics />} />
+            <Route path="/admissions" element={<Admissions />} />
+            <Route path="/admissions/scholarship" element={<Scholarship />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/calendar" element={<EventCalendar />} />
+            <Route path="/prospectus" element={<DownloadProspectus />} />
 
-            <Route path="/about" element={
-              <ProtectedRoute>
-                <About />
-              </ProtectedRoute>
-            } />
-
+            {/* Protected Routes - Role-Based (Login Required) */}
             <Route path="/teacher" element={
               <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                 <Teacher />
@@ -163,48 +158,6 @@ const App = () => {
               <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                 <SubmissionList />
               </RoleProtectedRoute>
-            } />
-
-            <Route path="/academics" element={
-              <ProtectedRoute>
-                <Academics />
-              </ProtectedRoute>
-            } />
-
-            <Route path="/admissions" element={
-              <ProtectedRoute>
-                <Admissions />
-              </ProtectedRoute>
-            } />
-
-            <Route path="/gallery" element={
-              <ProtectedRoute>
-                <Gallery />
-              </ProtectedRoute>
-            } />
-
-            <Route path="/contact" element={
-              <ProtectedRoute>
-                <Contact />
-              </ProtectedRoute>
-            } />
-
-            <Route path="/calendar" element={
-              <ProtectedRoute>
-                <EventCalendar />
-              </ProtectedRoute>
-            } />
-
-            <Route path="/admissions/scholarship" element={
-              <ProtectedRoute>
-                <Scholarship />
-              </ProtectedRoute>
-            } />
-
-            <Route path="/prospectus" element={
-              <ProtectedRoute>
-                <DownloadProspectus />
-              </ProtectedRoute>
             } />
 
             <Route path="/student" element={
