@@ -3,6 +3,7 @@ const Resource = require('../models/Resource');
 const Attendance = require('../models/Attendance');
 const path = require('path');
 const fs = require('fs');
+const { memoryCache } = require('../utils/cache');
 
 // ---- NOTICES ----
 
@@ -76,6 +77,8 @@ const postNotice = async (req, res) => {
       date: finalPublishedAt || now,
     });
 
+    memoryCache.invalidate('stats_' + req.user._id);
+
     res.status(201).json({ success: true, message: 'Notice posted successfully!', notice });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
@@ -92,6 +95,7 @@ const deleteNotice = async (req, res) => {
     }
 
     await notice.deleteOne();
+    memoryCache.invalidate('stats_' + req.user._id);
     res.json({ success: true, message: 'Notice deleted successfully.' });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
@@ -130,6 +134,8 @@ const uploadResource = async (req, res) => {
       teacherName: req.user.name,
     });
 
+    memoryCache.invalidate('stats_' + req.user._id);
+
     res.status(201).json({ success: true, message: 'Resource uploaded successfully!', resource });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
@@ -149,6 +155,7 @@ const deleteResource = async (req, res) => {
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
     await resource.deleteOne();
+    memoryCache.invalidate('stats_' + req.user._id);
     res.json({ success: true, message: 'Resource deleted.' });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
@@ -181,6 +188,8 @@ const markAttendance = async (req, res) => {
       teacherName: req.user.name,
     });
 
+    memoryCache.invalidate('stats_' + req.user._id);
+
     res.status(201).json({ success: true, message: 'Attendance marked successfully!', attendance });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
@@ -191,19 +200,34 @@ const markAttendance = async (req, res) => {
 
 const getDashboardStats = async (req, res) => {
   try {
+    const cacheKey = 'stats_' + req.user._id;
+    const cachedStats = memoryCache.get(cacheKey);
+
+    if (cachedStats) {
+      return res.json({
+        success: true,
+        stats: cachedStats,
+      });
+    }
+
     const [noticeCount, resourceCount, attendanceCount] = await Promise.all([
       Notice.countDocuments({ postedBy: req.user._id }),
       Resource.countDocuments({ uploadedBy: req.user._id }),
       Attendance.countDocuments({ markedBy: req.user._id }),
     ]);
 
+    const statsObj = {
+      noticesPosted: noticeCount,
+      resourcesUploaded: resourceCount,
+      attendanceRecords: attendanceCount,
+    };
+
+    // Cache for 1 minute (60 seconds)
+    memoryCache.set(cacheKey, statsObj, 60);
+
     res.json({
       success: true,
-      stats: {
-        noticesPosted: noticeCount,
-        resourcesUploaded: resourceCount,
-        attendanceRecords: attendanceCount,
-      },
+      stats: statsObj,
     });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
