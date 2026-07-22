@@ -10,6 +10,7 @@ const User = require("../models/User");
 const TEST_USERS = [
   { name: "Test Student", email: "student@test.com", password: "test123", role: "student" },
   { name: "Test Teacher", email: "teacher@test.com", password: "test123", role: "teacher" },
+  { name: "Test Teacher 2", email: "teacher2@test.com", password: "test123", role: "teacher" },
   { name: "Test Admin", email: "admin@test.com", password: "test123", role: "admin" },
 ];
 

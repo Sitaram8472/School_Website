@@ -199,6 +199,10 @@ exports.scheduleNotice = async (req, res) => {
       });
     }
 
+    if (req.permissionType === 'own' && notice.postedBy.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'Forbidden: You do not have permission to perform this action.' });
+    }
+
     // Verify constraints if expiresAt is set
     if (notice.expiresAt && notice.expiresAt < pubDate) {
       return res.status(400).json({
@@ -238,6 +242,10 @@ exports.cancelSchedule = async (req, res) => {
       });
     }
 
+    if (req.permissionType === 'own' && notice.postedBy.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'Forbidden: You do not have permission to perform this action.' });
+    }
+
     notice.status = "draft";
     notice.publishAt = null;
     await notice.save();
@@ -266,6 +274,10 @@ exports.archiveNotice = async (req, res) => {
         success: false,
         message: "Notice not found",
       });
+    }
+
+    if (req.permissionType === 'own' && notice.postedBy.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'Forbidden: You do not have permission to perform this action.' });
     }
 
     notice.status = "archived";
@@ -297,6 +309,14 @@ exports.updateNotice = async (req, res) => {
         success: false,
         message: "Notice not found",
       });
+    }
+
+    if (req.permissionType === 'own' && notice.postedBy.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'Forbidden: You do not have permission to perform this action.' });
+    }
+
+    if (req.permissionType === 'own' && notice.postedBy.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'Forbidden: You do not have permission to perform this action.' });
     }
 
     if (title !== undefined) {

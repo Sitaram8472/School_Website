@@ -3,9 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
-
-// ===== NEW: Account Lockout System =====
-const failedAttempts = new Map(); // Store failed login attempts
+const generateToken = require("../utils/generateToken");
 
 // ===== NEW: Email Cooldown System =====
 const emailCooldown = new Map(); // Store email resend timestamps
@@ -18,30 +16,6 @@ const normalizeEmail = (email) => {
 const validatePassword = (password) => {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return regex.test(password);
-};
-
-// ===== NEW: Account Lockout Check Function =====
-const checkAccountLockout = (email) => {
-  const attempts = failedAttempts.get(email);
-  if (attempts && attempts.count >= 5) {
-    const lockoutTime = attempts.lockoutTime || 0;
-    if (Date.now() - lockoutTime < 15 * 60 * 1000) {
-      return true; // Account is locked
-    } else {
-      failedAttempts.delete(email); // Reset after lockout period
-    }
-  }
-  return false;
-};
-
-// ===== NEW: Record Failed Attempt =====
-const recordFailedAttempt = (email) => {
-  const attempts = failedAttempts.get(email) || { count: 0 };
-  attempts.count += 1;
-  if (attempts.count >= 5) {
-    attempts.lockoutTime = Date.now();
-  }
-  failedAttempts.set(email, attempts);
 };
 
 // ===== NEW: Email Cooldown Check =====
@@ -103,11 +77,13 @@ exports.register = async (req, res) => {
       isVerified: false,
     });
 
-    const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(rawToken)
-      .digest("hex");
+    // const rawToken = crypto.randomBytes(32).toString("hex");
+    // const hashedToken = crypto
+    //   .createHash("sha256")
+    //   .update(rawToken)
+    //   .digest("hex");
+
+    const {rawToken, hashedToken} = generateToken()
 
     user.verificationToken = hashedToken;
     user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
@@ -156,31 +132,40 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     const normalizedEmail = normalizeEmail(email);
 
-    // ===== NEW: Check Account Lockout =====
-    if (checkAccountLockout(normalizedEmail)) {
-      return res.status(403).json({
-        message: "Account is temporarily locked. Please try again after 15 minutes."
-      });
-    }
-
     const user = await User.findOne({
       email: normalizedEmail
     });
     if (!user) {
-      // ===== NEW: Record failed attempt =====
-      recordFailedAttempt(normalizedEmail);
       return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // ===== NEW: Check Account Lockout =====
+    if (user.lockoutUntil && user.lockoutUntil > Date.now()) {
+      return res.status(403).json({
+        message: "Account is temporarily locked. Please try again after 15 minutes."
+      });
+    } else if (user.lockoutUntil && user.lockoutUntil <= Date.now()) {
+      user.failedLoginAttempts = 0;
+      user.lockoutUntil = undefined;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       // ===== NEW: Record failed attempt =====
-      recordFailedAttempt(normalizedEmail);
+      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+      if (user.failedLoginAttempts >= 5) {
+        user.lockoutUntil = Date.now() + 15 * 60 * 1000;
+      }
+      await user.save();
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     // ===== NEW: Reset failed attempts on successful login =====
-    failedAttempts.delete(normalizedEmail);
+    if (user.failedLoginAttempts > 0 || user.lockoutUntil) {
+      user.failedLoginAttempts = 0;
+      user.lockoutUntil = undefined;
+      await user.save();
+    }
 
     if (!user.isVerified) {
       return res.status(403).json({
@@ -197,9 +182,12 @@ exports.login = async (req, res) => {
     );
 
     // ===== NEW: Generate Refresh Token =====
+    if (!process.env.REFRESH_TOKEN_SECRET) {
+      throw new Error("FATAL: REFRESH_TOKEN_SECRET is not defined.");
+    }
     const refreshToken = jwt.sign(
       { id: user._id, email: user.email },
-      process.env.REFRESH_TOKEN_SECRET || "your_refresh_secret_key",
+      process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -295,11 +283,13 @@ exports.forgotPassword = async (req, res) => {
         });
     }
 
-    const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(rawToken)
-      .digest("hex");
+    const {rawToken, hashedToken} = generateToken()
+
+    // const rawToken = crypto.randomBytes(32).toString("hex");
+    // const hashedToken = crypto
+    //   .createHash("sha256")
+    //   .update(rawToken)
+    //   .digest("hex");
 
     user.resetPasswordToken = hashedToken;
     user.resetPasswordExpires = Date.now() + 3600000;
@@ -448,11 +438,13 @@ exports.resendVerification = async (req, res) => {
       return res.status(400).json({ message: "Email is already verified" });
     }
 
-    const rawToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(rawToken)
-      .digest("hex");
+    const {rawToken, hashedToken} = generateToken()
+
+    // const rawToken = crypto.randomBytes(32).toString("hex");
+    // const hashedToken = crypto
+    //   .createHash("sha256")
+    //   .update(rawToken)
+    //   .digest("hex");
 
     user.verificationToken = hashedToken;
     user.verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
@@ -500,9 +492,12 @@ exports.refreshToken = async (req, res) => {
       });
     }
 
+    if (!process.env.REFRESH_TOKEN_SECRET) {
+      throw new Error("FATAL: REFRESH_TOKEN_SECRET is not defined.");
+    }
     const decoded = jwt.verify(
       refreshToken,
-      process.env.REFRESH_TOKEN_SECRET || "your_refresh_secret_key"
+      process.env.REFRESH_TOKEN_SECRET
     );
 
     const user = await User.findById(decoded.id);

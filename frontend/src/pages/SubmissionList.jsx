@@ -32,8 +32,8 @@ const SubmissionList = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6 my-8">
-      <button 
-        onClick={() => navigate('/teacher/dashboard')} 
+      <button
+        onClick={() => navigate('/teacher/dashboard')}
         className="flex items-center text-blue-600 hover:text-blue-800 mb-6 transition"
       >
         <ArrowLeft className="w-4 h-4 mr-1" /> Back to Dashboard
@@ -77,7 +77,7 @@ const SubmissionList = () => {
                       )}
                     </td>
                     <td className="p-4 text-sm text-gray-500">
-                      {new Date(sub.submittedAt).toLocaleString()}
+                      {new Date(sub.createdAt).toLocaleString()}
                     </td>
                   </tr>
                 ))}
