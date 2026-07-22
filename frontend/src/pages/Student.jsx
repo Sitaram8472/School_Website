@@ -17,7 +17,7 @@ import physicsNotes from "../assets/prospectus/physics-notes.pdf";
 import chemistryLab from "../assets/prospectus/chemistry-lab.pdf";
 import mathFormulas from "../assets/prospectus/math-formulas.pdf";
 import attendanceData from "../data/attendance";
-
+import AttendanceAnalytics from "../components/AttendanceAnalytics";
 const Student = () => {
   const { user } = useContext(AuthContext);
   const displayName = getUserRole(user) ? (user?.name || user?.user?.name || "Student") : "Student";
@@ -304,7 +304,10 @@ const Student = () => {
           </div>
         </div>
       </div>
-
+<AttendanceAnalytics
+  overallAttendance={monthlyAttendancePercentage}
+  subjects={attendanceData.subjectAttendance}
+/>
       {/* Assignments */}
       <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
         <h2 className="text-3xl font-bold text-blue-700 mb-6">
