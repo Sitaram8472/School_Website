@@ -4,6 +4,7 @@ const Resource = require('../models/Resource');
 const Attendance = require('../models/Attendance');
 const path = require('path');
 const fs = require('fs');
+const { memoryCache } = require('../utils/cache');
 
 // Reusable error handler
 const handleError = (res, err, message = 'Server error') => {
@@ -125,6 +126,8 @@ const postNotice = async (req, res) => {
       date: finalPublishedAt || now,
     });
 
+    memoryCache.invalidate('stats_' + req.user._id);
+
     if (noticeStatus === 'published') {
       const io = req.app.get('io');
       if (io) {
@@ -151,7 +154,7 @@ const deleteNotice = async (req, res) => {
 
     notice.deletedAt = new Date();
     await notice.save();
-
+    memoryCache.invalidate('stats_' + req.user._id);
     res.json({ success: true, message: 'Notice deleted successfully.' });
   } catch (err) {
     handleError(res, err);
@@ -268,6 +271,8 @@ const uploadResource = async (req, res) => {
       teacherName: req.user.name,
     });
 
+    memoryCache.invalidate('stats_' + req.user._id);
+
     res.status(201).json({ success: true, message: 'Resource uploaded successfully!', resource });
   } catch (err) {
     handleError(res, err);
@@ -288,6 +293,7 @@ const deleteResource = async (req, res) => {
     resource.deletedAt = new Date();
     await resource.save();
 
+    memoryCache.invalidate('stats_' + req.user._id);
     res.json({ success: true, message: 'Resource deleted.' });
   } catch (err) {
     handleError(res, err);
@@ -364,6 +370,8 @@ const markAttendance = async (req, res) => {
       teacherName: req.user.name,
     });
 
+    memoryCache.invalidate('stats_' + req.user._id);
+
     res.status(201).json({ success: true, message: 'Attendance marked successfully!', attendance });
   } catch (err) {
     handleError(res, err);
@@ -374,19 +382,34 @@ const markAttendance = async (req, res) => {
 
 const getDashboardStats = async (req, res) => {
   try {
+    const cacheKey = 'stats_' + req.user._id;
+    const cachedStats = memoryCache.get(cacheKey);
+
+    if (cachedStats) {
+      return res.json({
+        success: true,
+        stats: cachedStats,
+      });
+    }
+
     const [noticeCount, resourceCount, attendanceCount] = await Promise.all([
       Notice.countDocuments({ postedBy: req.user._id, deletedAt: null }),
       Resource.countDocuments({ uploadedBy: req.user._id, deletedAt: null }),
       Attendance.countDocuments({ markedBy: req.user._id, deletedAt: null }),
     ]);
 
+    const statsObj = {
+      noticesPosted: noticeCount,
+      resourcesUploaded: resourceCount,
+      attendanceRecords: attendanceCount,
+    };
+
+    // Cache for 1 minute (60 seconds)
+    memoryCache.set(cacheKey, statsObj, 60);
+
     res.json({
       success: true,
-      stats: {
-        noticesPosted: noticeCount,
-        resourcesUploaded: resourceCount,
-        attendanceRecords: attendanceCount,
-      },
+      stats: statsObj,
     });
   } catch (err) {
     handleError(res, err);
