@@ -87,7 +87,7 @@ const App = () => {
         <main className="grow">
           <Routes>
             {/* Default route - public home */}
-            <Route path="/" element={<Home />} />
+           <Route path="/" element={<Navigate to="/student" replace />} />
 
             {/* Auth Routes - Public (only for non-logged in users) */}
             <Route path="/login" element={
@@ -160,11 +160,7 @@ const App = () => {
               </RoleProtectedRoute>
             } />
 
-            <Route path="/student" element={
-              <RoleProtectedRoute allowedRoles={["student"]}>
-                <Student />
-              </RoleProtectedRoute>
-            } />
+            <Route path="/student" element={<Student />} />
 
             <Route path="/student/exam/:examId" element={
               <RoleProtectedRoute allowedRoles={["student"]}>
