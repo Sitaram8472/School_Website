@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import api from "../utils/axios";
+import { connectSocket, disconnectSocket } from "../utils/socket";
 
 export const AuthContext = createContext();
 
@@ -11,9 +12,13 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     try {
       const userInfo = localStorage.getItem("userInfo");
+      const token = localStorage.getItem("token");
 
       if (userInfo) {
         setUser(JSON.parse(userInfo));
+        if (token) {
+          connectSocket(token);
+        }
       }
     } catch (error) {
       console.error("Failed to load user from localStorage:", error);
@@ -37,6 +42,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("userInfo", JSON.stringify(data.user));
       if (data.token) {
         localStorage.setItem("token", data.token);
+        connectSocket(data.token);
       }
 
       return data;
@@ -89,6 +95,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       localStorage.removeItem("userInfo");
       localStorage.removeItem("token");
+      disconnectSocket();
     }
   };
 

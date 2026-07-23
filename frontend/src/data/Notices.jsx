@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API from "../utils/axios";
 import Card from "../components/Card";
+import { getSocket } from "../utils/socket";
 
 // Fallback notice data in case the backend is unreachable
 export const notices = [
@@ -41,6 +42,21 @@ const Notices = () => {
     };
 
     loadNotices();
+  }, []);
+
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket) return;
+
+    const handleNewNotice = (notice) => {
+      setDbNotices((prevNotices) => [notice, ...prevNotices]);
+    };
+
+    socket.on("newNotice", handleNewNotice);
+
+    return () => {
+      socket.off("newNotice", handleNewNotice);
+    };
   }, []);
 
   if (loading) {

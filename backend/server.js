@@ -4,6 +4,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const http = require("http");
+const { Server } = require("socket.io");
+const jwt = require("jsonwebtoken");
 
 // Load environment variables first
 dotenv.config();
@@ -91,7 +94,40 @@ app.get("/api/health", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true
+  }
+});
+
+io.use((socket, next) => {
+  try {
+    const token = socket.handshake.auth.token;
+    if (!token) {
+      return next(new Error('Authentication error: Token missing'));
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    socket.user = decoded;
+    next();
+  } catch (err) {
+    next(new Error('Authentication error: Invalid token'));
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log(`[Socket] User connected: ${socket.user.id || socket.user._id}`);
+  
+  socket.on("disconnect", () => {
+    console.log(`[Socket] User disconnected: ${socket.user.id || socket.user._id}`);
+  });
+});
+
+app.set('io', io);
+
+server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 }).on("error", (err) => {
   console.log("Server error:", err.message);

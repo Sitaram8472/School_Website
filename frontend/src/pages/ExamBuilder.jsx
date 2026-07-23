@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import api from '../utils/axios';
 
 const ExamBuilder = () => {
   const navigate = useNavigate();
@@ -32,32 +33,24 @@ const ExamBuilder = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/exams', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          course: courseId, // Using the param from route
-          timeLimit,
-          isPublished: true,
-          questions
-        })
+      const response = await api.post('/exams', {
+        title,
+        description,
+        course: courseId, // Using the param from route
+        timeLimit,
+        isPublished: true,
+        questions
       });
 
-      if (response.ok) {
+      if (response.data.success) {
         alert('Exam Created Successfully!');
         navigate('/teacher/dashboard');
       } else {
-        const error = await response.json();
-        alert('Failed to create exam: ' + error.message);
+        alert('Failed to create exam: ' + response.data.message);
       }
     } catch (err) {
       console.error(err);
-      alert('An error occurred.');
+      alert('An error occurred: ' + (err.response?.data?.message || err.response?.data?.error || err.message));
     }
   };
 
