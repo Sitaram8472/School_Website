@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useContext, useRef, useCallback } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { getUserRole } from "../utils/permissions";
+import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +13,7 @@ const Navbar = () => {
   const closeTimer = useRef(null);
 
   const { user, logout } = useContext(AuthContext);
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const isLoggedIn = !!user;
   const role = getUserRole(user);
@@ -98,6 +100,13 @@ const Navbar = () => {
                   )}
                 </NavLink>
               ))}
+              <button
+  onClick={toggleTheme}
+  className="p-2 rounded-full bg-white text-blue-600 hover:bg-gray-200 transition"
+  aria-label="Toggle Theme"
+>
+  {theme === "light" ? "🌙" : "☀️"}
+</button>
 
               {/* Auth — based on login status */}
               {!isLoggedIn ? (
@@ -149,6 +158,7 @@ const Navbar = () => {
                         className="block px-4 py-3 text-slate-700 hover:bg-blue-50 hover:text-blue-600 font-medium focus:outline-none focus:bg-blue-50"
                         onClick={() => setIsDropdownOpen(false)}
                       >
+
                         Sign Up
                       </NavLink>
                     </div>
