@@ -1,8 +1,11 @@
 const User = require("../models/User");
+const { eventBus, EVENTS } = require("../core/events");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const sendEmail = require("../utils/sendEmail");
+// ===== NEW: Account Lockout System =====
+const failedAttempts = new Map(); // Store failed login attempts
+
 const generateToken = require("../utils/generateToken");
 
 // ===== NEW: Email Cooldown System =====
@@ -92,22 +95,11 @@ exports.register = async (req, res) => {
     const verifyUrl = `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"
       }/verify-email/${rawToken}`;
 
-    try {
-      await sendEmail({
-        to: user.email,
-        subject: "EduStream Academy - Verify Your Email",
-        html: `
-          <p>Hi ${user.name},</p>
-          <p>Thank you for registering. Please verify your email using the link below (valid for 24 hours):</p>
-          <p><a href="${verifyUrl}">${verifyUrl}</a></p>
-          <br/>
-          <p>- EduStream Academy</p>
-        `,
-      });
-    } catch (emailError) {
-      console.error("Verification email error:", emailError.message);
-      console.log(`[DEV] Verification link for ${email}: ${verifyUrl}`);
-    }
+    // Emit event instead of direct email logic
+    eventBus.emit(EVENTS.USER_REGISTERED, {
+      user: { name: user.name, email: user.email },
+      verifyUrl
+    });
 
     res.status(201).json({
       message:
@@ -299,22 +291,11 @@ exports.forgotPassword = async (req, res) => {
       process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173";
     const resetUrl = `${frontendUrl}/reset-password/${rawToken}`;
 
-    try {
-      await sendEmail({
-        to: user.email,
-        subject: "EduStream Academy - Password Reset Request",
-        html: `
-          <p>Hi ${user.name},</p>
-          <p>We received a request to reset your password. Click the link below. It expires in <strong>1 hour</strong>.</p>
-          <p><a href="${resetUrl}">${resetUrl}</a></p>
-          <p>If you did not request this, you can safely ignore this email.</p>
-          <br/>
-          <p>- EduStream Academy</p>
-        `,
-      });
-    } catch (emailError) {
-      console.log(`[DEV] Password reset link for ${email}: ${resetUrl}`);
-    }
+    // Emit event instead of direct email logic
+    eventBus.emit(EVENTS.PASSWORD_RESET_REQUESTED, {
+      user: { name: user.name, email: user.email },
+      resetUrl
+    });
 
     res
       .status(200)
@@ -453,22 +434,10 @@ exports.resendVerification = async (req, res) => {
     const verifyUrl = `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"
       }/verify-email/${rawToken}`;
 
-    try {
-      await sendEmail({
-        to: user.email,
-        subject: "EduStream Academy - Verify Your Email",
-        html: `
-          <p>Hi ${user.name},</p>
-          <p>Here is your new verification link (valid for 24 hours):</p>
-          <p><a href="${verifyUrl}">${verifyUrl}</a></p>
-          <br/>
-          <p>- EduStream Academy</p>
-        `,
-      });
-    } catch (emailError) {
-      console.error("Resend verification email error:", emailError.message);
-      console.log(`[DEV] Verification link for ${email}: ${verifyUrl}`);
-    }
+    eventBus.emit(EVENTS.VERIFICATION_RESENT, {
+      user: { name: user.name, email: user.email },
+      verifyUrl
+    });
 
     return res.status(200).json({
       message: "A fresh verification link has been sent to your email.",
