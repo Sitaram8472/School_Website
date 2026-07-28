@@ -4,6 +4,7 @@ const events = [
     title: "Math Examination",
     date: "2026-05-25",
     role: "student",
+    category: "Exam",
     description: "Semester mathematics examination",
   },
   {
@@ -11,6 +12,7 @@ const events = [
     title: "Science Exhibition",
     date: "2026-05-28",
     role: "student",
+    category: "Competition",
     description: "Annual science project showcase",
   },
   {
@@ -18,6 +20,7 @@ const events = [
     title: "Teacher Workshop",
     date: "2026-05-27",
     role: "teacher",
+    category: "Workshop",
     description: "AI tools training workshop",
   },
   {
@@ -25,6 +28,7 @@ const events = [
     title: "Faculty Meeting",
     date: "2026-05-30",
     role: "teacher",
+    category: "School Event",
     description: "Monthly academic planning meeting",
   },
   {
@@ -32,6 +36,7 @@ const events = [
     title: "Staff Meeting",
     date: "2026-05-29",
     role: "staff",
+    category: "School Event",
     description: "Administrative monthly meeting",
   },
   {
@@ -39,6 +44,7 @@ const events = [
     title: "Campus Maintenance",
     date: "2026-06-02",
     role: "staff",
+    category: "School Event",
     description: "Infrastructure and maintenance review",
   },
   {
@@ -46,6 +52,7 @@ const events = [
     title: "Summer Vacation",
     date: "2026-06-10",
     role: "student",
+    category: "Holiday",
     description: "School closed for summer holidays",
   },
   {
@@ -53,6 +60,7 @@ const events = [
     title: "Scholarship Application Deadline",
     date: "2026-06-15",
     role: "student",
+    category: "Assignment",
     description: "Last date to submit scholarship applications",
   },
 ];
