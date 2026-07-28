@@ -23,6 +23,8 @@ const Student = () => {
   const displayName = getUserRole(user) ? (user?.name || user?.user?.name || "Student") : "Student";
   const [exams, setExams] = React.useState([]);
   const [isGenerating, setIsGenerating] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
+const [selectedSubject, setSelectedSubject] = React.useState("All");
 
   const handleDownloadReport = async () => {
     try {
@@ -89,20 +91,84 @@ const Student = () => {
     ? ((attendanceData.monthlyReport.presentClasses / attendanceData.monthlyReport.totalClasses) * 100).toFixed(0)
     : 0;
 
-  const assignments = [
-    {
-      id: 1,
-      title: "Math Assignment",
-      subject: "Mathematics",
-      due: "25 May 2026",
-    },
-    {
-      id: 2,
-      title: "Science Project",
-      subject: "Science",
-      due: "28 May 2026",
-    },
-  ];
+ const assignments = [
+  {
+    id: 1,
+    title: "Linear Algebra Assignment",
+    subject: "Mathematics",
+    dueDate: "2026-08-05",
+    details: "Complete Chapters 1 to 4 and submit the worksheet.",
+    link: "#",
+  },
+  {
+    id: 2,
+    title: "Physics Lab Report",
+    subject: "Physics",
+    dueDate: "2026-08-02",
+    details: "Submit the optics experiment report.",
+    link: "#",
+  },
+  {
+    id: 3,
+    title: "Chemistry Assignment",
+    subject: "Chemistry",
+    dueDate: "2026-08-01",
+    details: "Prepare organic chemistry notes.",
+    link: "#",
+  },
+  {
+    id: 4,
+    title: "Programming Exercise",
+    subject: "Computer Science",
+    dueDate: "2026-08-08",
+    details: "Complete React component exercises.",
+    link: "#",
+  },
+];
+const getAssignmentStatus = (dueDate) => {
+  const today = new Date();
+  const due = new Date(dueDate);
+
+  today.setHours(0, 0, 0, 0);
+  due.setHours(0, 0, 0, 0);
+
+  const diff = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+
+  if (diff < 0) return "Overdue";
+  if (diff === 0) return "Due Today";
+  return "Upcoming";
+};
+
+const getDaysRemaining = (dueDate) => {
+  const today = new Date();
+  const due = new Date(dueDate);
+
+  today.setHours(0, 0, 0, 0);
+  due.setHours(0, 0, 0, 0);
+
+  return Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+};
+
+const filteredAssignments = assignments
+  .filter(
+    (assignment) =>
+      (selectedSubject === "All" ||
+        assignment.subject === selectedSubject) &&
+      assignment.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+  )
+  .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+const subjects = [
+  "All",
+  ...new Set(assignments.map((a) => a.subject)),
+];
+
+
+// 👇 Your existing code continues here
+
+
 
   const notifications = [
     {
@@ -308,33 +374,99 @@ const Student = () => {
   overallAttendance={monthlyAttendancePercentage}
   subjects={attendanceData.subjectAttendance}
 />
-      {/* Assignments */}
-      <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
-        <h2 className="text-3xl font-bold text-blue-700 mb-6">
-          Upcoming Assignments
-        </h2>
+     {/* Assignment Submission Deadline Tracker */}
+<div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
+  <h2 className="text-3xl font-bold text-blue-700 mb-6">
+    Assignment Submission Deadline Tracker
+  </h2>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {assignments.map((assignment) => (
-            <div
-              key={assignment.id}
-              className="border rounded-2xl p-5 hover:shadow-2xl hover:-translate-y-1 transition duration-300 bg-gradient-to-br from-white to-blue-50"
+  {/* Search & Filter */}
+  <div className="flex flex-col md:flex-row gap-4 mb-6">
+    <input
+      type="text"
+      placeholder="Search assignments..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="border rounded-xl p-3 flex-1"
+    />
+
+    <select
+      value={selectedSubject}
+      onChange={(e) => setSelectedSubject(e.target.value)}
+      className="border rounded-xl p-3"
+    >
+      {subjects.map((subject) => (
+        <option key={subject} value={subject}>
+          {subject}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  <div className="grid md:grid-cols-2 gap-6">
+    {filteredAssignments.map((assignment) => {
+      const status = getAssignmentStatus(assignment.dueDate);
+      const days = getDaysRemaining(assignment.dueDate);
+
+      return (
+        <div
+          key={assignment.id}
+          className="border rounded-2xl p-5 bg-gradient-to-br from-white to-blue-50 hover:shadow-xl transition"
+        >
+          <h3 className="text-2xl font-bold">
+            {assignment.title}
+          </h3>
+
+          <p className="mt-2">
+            <strong>Subject:</strong> {assignment.subject}
+          </p>
+
+          <p>
+  <strong>Due:</strong>{" "}
+  {new Date(assignment.dueDate).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  })}
+</p>
+
+          <p className="mt-2 text-gray-600">
+            {assignment.details}
+          </p>
+
+          <p className="mt-3 font-semibold">
+            {days > 0
+              ? `⏳ ${days} Days Left`
+              : days === 0
+              ? "⏰ Due Today"
+              : `⚠️ ${Math.abs(days)} Days Overdue`}
+          </p>
+
+          <span
+            className={`inline-block mt-3 px-4 py-1 rounded-full text-white ${
+              status === "Upcoming"
+                ? "bg-green-600"
+                : status === "Due Today"
+                ? "bg-yellow-500"
+                : "bg-red-600"
+            }`}
+          >
+            {status}
+          </span>
+
+          <div className="mt-5">
+            <a
+              href={assignment.link}
+              className="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700"
             >
-              <h3 className="text-2xl font-bold text-gray-800">
-                {assignment.title}
-              </h3>
-
-              <p className="text-gray-500 mt-2 text-lg">
-                Subject: {assignment.subject}
-              </p>
-
-              <p className="text-red-500 mt-3 font-semibold">
-                Due: {assignment.due}
-              </p>
-            </div>
-          ))}
+              View Details
+            </a>
+          </div>
         </div>
-      </div>
+      );
+    })}
+  </div>
+</div>
 
       {/* Available Exams */}
       <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
