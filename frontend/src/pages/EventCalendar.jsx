@@ -6,6 +6,15 @@ import autoTable from "jspdf-autotable";
 
 import events from "../data/events";
 
+const categories = [
+  { label: "All", value: "All", icon: "📋" },
+  { label: "Exams", value: "Exam", icon: "📚" },
+  { label: "Holidays", value: "Holiday", icon: "🎉" },
+  { label: "Assignments", value: "Assignment", icon: "📝" },
+  { label: "Workshops", value: "Workshop", icon: "🎤" },
+  { label: "School Events", value: "School Event", icon: "📅" },
+  { label: "Competitions", value: "Competition", icon: "🏆" },
+];
 const roles = ["student", "teacher", "staff"];
 
 const getDaysLeft = (eventDate) => {
@@ -26,8 +35,14 @@ const formatDateForComparison = (date) =>
 const EventCalendar = () => {
   const [date, setDate] = useState(new Date());
   const [currentRole, setCurrentRole] = useState("student");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const filteredEvents = events.filter((event) => event.role === currentRole);
+  const filteredEvents = events.filter(
+  (event) =>
+    event.role === currentRole &&
+    (selectedCategory === "All" ||
+      event.category === selectedCategory),
+);
 
   const selectedDate = formatDateForComparison(date);
 
@@ -51,11 +66,12 @@ const EventCalendar = () => {
   const exportPDF = () => {
     const doc = new jsPDF();
     autoTable(doc, {
-      head: [["Title", "Date", "Role", "Description"]],
+      head: [["Title", "Date", "Role", "Category", "Description"]],
       body: filteredEvents.map((event) => [
         event.title,
         event.date,
         event.role,
+         event.category,
         event.description,
       ]),
     });
@@ -95,6 +111,22 @@ const EventCalendar = () => {
             }`}
           >
             {role.charAt(0).toUpperCase() + role.slice(1)}
+          </button>
+        ))}
+      </div>
+            {/* Category Filter Buttons */}
+      <div className="flex justify-center gap-3 mb-10 flex-wrap">
+        {categories.map((category) => (
+          <button
+            key={category.value}
+            onClick={() => setSelectedCategory(category.value)}
+            className={`px-5 py-2 rounded-full font-medium transition-all duration-300 ${
+              selectedCategory === category.value
+                ? "bg-green-600 text-white shadow-lg"
+                : "bg-white text-gray-700 border border-gray-300 hover:bg-green-50"
+            }`}
+          >
+            {category.icon} {category.label}
           </button>
         ))}
       </div>
@@ -172,13 +204,20 @@ const EventCalendar = () => {
             >
               {/* Card Header */}
               <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {event.title}
-                </h2>
-                <span className="bg-blue-100 text-blue-700 text-sm px-4 py-1 rounded-full capitalize">
-                  {event.role}
-                </span>
-              </div>
+  <h2 className="text-2xl font-bold text-gray-800">
+    {event.title}
+  </h2>
+
+  <div className="flex gap-2">
+    <span className="bg-blue-100 text-blue-700 text-sm px-4 py-1 rounded-full capitalize">
+      {event.role}
+    </span>
+
+    <span className="bg-green-100 text-green-700 text-sm px-4 py-1 rounded-full">
+      {event.category}
+    </span>
+  </div>
+</div>
 
               <p className="text-gray-500 mb-3 text-lg">📅 {event.date}</p>
 
