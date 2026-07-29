@@ -18,6 +18,7 @@ import chemistryLab from "../assets/prospectus/chemistry-lab.pdf";
 import mathFormulas from "../assets/prospectus/math-formulas.pdf";
 import attendanceData from "../data/attendance";
 import AttendanceAnalytics from "../components/AttendanceAnalytics";
+import AssignmentStatistics from "../components/AssignmentStatistics";
 const Student = () => {
   const { user } = useContext(AuthContext);
   const displayName = getUserRole(user) ? (user?.name || user?.user?.name || "Student") : "Student";
@@ -97,6 +98,7 @@ const [selectedSubject, setSelectedSubject] = React.useState("All");
     title: "Linear Algebra Assignment",
     subject: "Mathematics",
     dueDate: "2026-08-05",
+     status:"Completed",
     details: "Complete Chapters 1 to 4 and submit the worksheet.",
     link: "#",
   },
@@ -105,6 +107,7 @@ const [selectedSubject, setSelectedSubject] = React.useState("All");
     title: "Physics Lab Report",
     subject: "Physics",
     dueDate: "2026-08-02",
+    status: "Pending",
     details: "Submit the optics experiment report.",
     link: "#",
   },
@@ -113,6 +116,7 @@ const [selectedSubject, setSelectedSubject] = React.useState("All");
     title: "Chemistry Assignment",
     subject: "Chemistry",
     dueDate: "2026-08-01",
+    status: "Pending",
     details: "Prepare organic chemistry notes.",
     link: "#",
   },
@@ -121,9 +125,10 @@ const [selectedSubject, setSelectedSubject] = React.useState("All");
     title: "Programming Exercise",
     subject: "Computer Science",
     dueDate: "2026-08-08",
+    status: "Overdue",
     details: "Complete React component exercises.",
     link: "#",
-  },
+ },
 ];
 const getAssignmentStatus = (dueDate) => {
   const today = new Date();
@@ -374,6 +379,7 @@ const subjects = [
   overallAttendance={monthlyAttendancePercentage}
   subjects={attendanceData.subjectAttendance}
 />
+<AssignmentStatistics assignments={assignments} />
      {/* Assignment Submission Deadline Tracker */}
 <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
   <h2 className="text-3xl font-bold text-blue-700 mb-6">
