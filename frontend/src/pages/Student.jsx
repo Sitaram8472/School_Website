@@ -20,6 +20,7 @@ import attendanceData from "../data/attendance";
 import AttendanceAnalytics from "../components/AttendanceAnalytics";
 import AssignmentStatistics from "../components/AssignmentStatistics";
 import StudentPerformanceTracker from "../components/StudentPerformanceTracker";
+import WeeklyClassSchedule from "../components/WeeklyClassSchedule";
 const Student = () => {
   const { user } = useContext(AuthContext);
   const displayName = getUserRole(user) ? (user?.name || user?.user?.name || "Student") : "Student";
@@ -413,6 +414,7 @@ const performanceData = [
 />
 <AssignmentStatistics assignments={assignments} />
 <StudentPerformanceTracker performanceData={performanceData} />
+<WeeklyClassSchedule />
      {/* Assignment Submission Deadline Tracker */}
 <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
   <h2 className="text-3xl font-bold text-blue-700 mb-6">
