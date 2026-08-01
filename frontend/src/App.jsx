@@ -17,6 +17,7 @@ const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
 const Teacher = lazy(() => import("./pages/Teacher"));
 const Academics = lazy(() => import("./pages/Academics"));
+const Timetable = lazy(() => import("./pages/Timetable"));
 const Admissions = lazy(() => import("./pages/Admission"));
 const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("./pages/Notfound"));
@@ -142,6 +143,14 @@ const App = () => {
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/calendar" element={<EventCalendar />} />
+
+              {/* Class timetable - resolved per signed-in user */}
+              <Route path="/timetable" element={
+                <ProtectedRoute>
+                  <Timetable />
+                </ProtectedRoute>
+              } />
+
               <Route path="/prospectus" element={<DownloadProspectus />} />
   
               {/* Protected Routes - Role-Based (Login Required) */}
