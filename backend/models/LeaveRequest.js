@@ -165,8 +165,8 @@ leaveRequestSchema.virtual('isDecided').get(function () {
  * Date sanity and the derived day count. A half-day request is always 0.5 days
  * and must sit inside a single date.
  */
-leaveRequestSchema.pre('validate', function (next) {
-  if (!this.fromDate || !this.toDate) return next();
+leaveRequestSchema.pre('validate', async function () {
+  if (!this.fromDate || !this.toDate) return;
 
   const from = new Date(this.fromDate);
   const to = new Date(this.toDate);
@@ -174,7 +174,7 @@ leaveRequestSchema.pre('validate', function (next) {
   to.setHours(0, 0, 0, 0);
 
   if (to.getTime() < from.getTime()) {
-    return next(leaveError('The end date cannot be before the start date'));
+    throw leaveError('The end date cannot be before the start date');
   }
 
   if (this.isNew) {
@@ -183,9 +183,7 @@ leaveRequestSchema.pre('validate', function (next) {
     earliest.setDate(earliest.getDate() - BACKDATE_GRACE_DAYS);
 
     if (from.getTime() < earliest.getTime()) {
-      return next(
-        leaveError(`Leave cannot be requested more than ${BACKDATE_GRACE_DAYS} days in the past`)
-      );
+      throw leaveError(`Leave cannot be requested more than ${BACKDATE_GRACE_DAYS} days in the past`);
     }
   }
 
@@ -194,14 +192,12 @@ leaveRequestSchema.pre('validate', function (next) {
 
   if (this.isHalfDay) {
     if (inclusiveDays > 1) {
-      return next(leaveError('A half-day request must start and end on the same date'));
+      throw leaveError('A half-day request must start and end on the same date');
     }
     this.totalDays = 0.5;
   } else {
     this.totalDays = inclusiveDays;
   }
-
-  return next();
 });
 
 /**
