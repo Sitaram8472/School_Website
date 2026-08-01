@@ -26,6 +26,7 @@ const Gallery = lazy(() => import("./pages/Gallery"));
 const Student = lazy(() => import("./pages/Student"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const LeaveRequests = lazy(() => import("./pages/LeaveRequests"));
 const DownloadProspectus = lazy(() => import("./pages/DownloadProspectus"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -176,7 +177,14 @@ const App = () => {
                   <ExamTakingInterface />
                 </RoleProtectedRoute>
               } />
-  
+
+              {/* Leave requests - students apply, teachers review from the dashboard */}
+              <Route path="/leaves" element={
+                <ProtectedRoute>
+                  <LeaveRequests />
+                </ProtectedRoute>
+              } />
+
               {/* Catch-all route for 404 Page Not Found */}
               <Route path="*" element={<NotFound />} />
             </Routes>

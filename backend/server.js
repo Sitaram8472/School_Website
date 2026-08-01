@@ -26,6 +26,7 @@ const teacherRoutes = require('./routes/teacherRoutes.js');
 const chatRoutes = require('./routes/chatRoutes.js');
 const courseRoutes = require('./routes/courseRoutes.js');
 const examRoutes = require('./routes/examRoutes.js');
+const leaveRoutes = require('./routes/leaveRoutes.js');
 const submissionRoutes = require('./routes/submissionRoutes.js');
 const reportRoutes = require('./routes/reportRoutes.js');
 
@@ -55,6 +56,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api", chatRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/exams", examRoutes);
+app.use("/api/leaves", leaveRoutes);
 app.use("/api/submissions", submissionRoutes);
 app.use("/api/reports", reportRoutes);
 
