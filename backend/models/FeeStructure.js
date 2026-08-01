@@ -127,14 +127,13 @@ feeStructureSchema.index({ isActive: 1 });
  * The total is the sum of the components, recomputed on every save. Anything
  * the client sent in `totalAmount` is discarded.
  */
-feeStructureSchema.pre('validate', function (next) {
+feeStructureSchema.pre('validate', async function () {
   if (Array.isArray(this.components)) {
     this.totalAmount = this.components.reduce(
       (sum, component) => sum + (Number(component.amount) || 0),
       0
     );
   }
-  next();
 });
 
 /**

@@ -174,17 +174,17 @@ feeInvoiceSchema.index({ academicYear: 1, className: 1 });
  * Generate a readable invoice number once, on first save. Uses the document id
  * suffix so it stays unique without a counter collection.
  */
-feeInvoiceSchema.pre('validate', function (next) {
+feeInvoiceSchema.pre('validate', async function () {
   if (!this.invoiceNumber) {
     const year = (this.academicYear || '').replace(/\D/g, '').slice(0, 4) || 'XXXX';
     this.invoiceNumber = `INV-${year}-${this._id.toString().slice(-8).toUpperCase()}`;
   }
 
-  if (this.isNew && (this.balance === undefined || this.balance === null)) {
-    this.balance = this.totalAmount;
+  // `balance` defaults to 0, so it is never undefined by the time this runs —
+  // derive it from the amounts instead of testing for a missing value.
+  if (this.isNew) {
+    this.balance = Math.max(0, (this.totalAmount || 0) + (this.lateFee || 0) - (this.amountPaid || 0));
   }
-
-  next();
 });
 
 /**
