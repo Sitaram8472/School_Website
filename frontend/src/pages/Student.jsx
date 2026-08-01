@@ -21,10 +21,24 @@ import AttendanceAnalytics from "../components/AttendanceAnalytics";
 import AssignmentStatistics from "../components/AssignmentStatistics";
 import StudentPerformanceTracker from "../components/StudentPerformanceTracker";
 import WeeklyClassSchedule from "../components/WeeklyClassSchedule";
+import ExamCountdownWidget from "../components/ExamCountdownWidget";
 const Student = () => {
   const { user } = useContext(AuthContext);
   const displayName = getUserRole(user) ? (user?.name || user?.user?.name || "Student") : "Student";
-  const [exams, setExams] = React.useState([]);
+  const [exams, setExams] = React.useState([
+  {
+    _id: "1",
+    title: "Mathematics Midterm",
+    subject: "Mathematics",
+    date: "2026-08-05T10:00:00",
+  },
+  {
+    _id: "2",
+    title: "Physics Practical",
+    subject: "Physics",
+    date: "2026-08-03T09:00:00",
+  },
+]);
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
 const [selectedSubject, setSelectedSubject] = React.useState("All");
@@ -66,6 +80,7 @@ const [selectedSubject, setSelectedSubject] = React.useState("All");
       try {
         const res = await api.get('/exams');
         setExams(res.data.data);
+        console.log("Exams:", res.data.data);
       } catch (err) {
         console.error("Error fetching exams:", err);
       }
@@ -415,6 +430,7 @@ const performanceData = [
 <AssignmentStatistics assignments={assignments} />
 <StudentPerformanceTracker performanceData={performanceData} />
 <WeeklyClassSchedule />
+<ExamCountdownWidget exams={exams} />
      {/* Assignment Submission Deadline Tracker */}
 <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
   <h2 className="text-3xl font-bold text-blue-700 mb-6">
@@ -525,8 +541,8 @@ const performanceData = [
                 <h3 className="text-2xl font-bold text-gray-800">{exam.title}</h3>
                 <p className="text-gray-500 mt-2 text-lg">Course: {exam.course?.name || "General"}</p>
                 <div className="text-blue-600 mt-3 font-semibold flex gap-4">
-                  <span>⏱ {exam.timeLimit} mins</span>
-                  <span>❓ {exam.questions.length} Questions</span>
+                  <span>⏱ {exam.timeLimit || 60} mins</span>
+<span>❓ {exam.questions?.length || 0} Questions</span>
                 </div>
               </div>
               <Link
