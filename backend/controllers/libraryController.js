@@ -65,7 +65,7 @@ exports.addBook = async (req, res) => {
         message: 'A book with this ISBN is already in the catalogue.',
       });
     }
-    if (err.name === 'ValidationError' || err instanceof mongoose.Error) {
+    if (err.name === 'ValidationError' || err instanceof mongoose.Error || err.userFacing === true) {
       return res.status(400).json({ success: false, message: err.message });
     }
     return handleError(res, err, 'Failed to add book');
@@ -186,7 +186,7 @@ exports.updateBook = async (req, res) => {
     if (err.code === 11000) {
       return res.status(409).json({ success: false, message: 'Another book already uses this ISBN.' });
     }
-    if (err.name === 'ValidationError' || err instanceof mongoose.Error) {
+    if (err.name === 'ValidationError' || err instanceof mongoose.Error || err.userFacing === true) {
       return res.status(400).json({ success: false, message: err.message });
     }
     return handleError(res, err, 'Failed to update book');

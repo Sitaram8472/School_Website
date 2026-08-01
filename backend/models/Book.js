@@ -156,16 +156,16 @@ bookSchema.virtual('issuedCopies').get(function () {
  * A new book starts fully available. On later edits the invariant
  * `0 <= availableCopies <= totalCopies` is enforced rather than assumed.
  */
-bookSchema.pre('validate', function (next) {
-  if (this.isNew && (this.availableCopies === undefined || this.availableCopies === null || this.availableCopies === 0)) {
+bookSchema.pre('validate', async function () {
+  if (this.isNew && !this.availableCopies) {
     this.availableCopies = this.totalCopies;
   }
 
   if (this.availableCopies > this.totalCopies) {
-    return next(new Error('Available copies cannot exceed total copies'));
+    const error = new Error('Available copies cannot exceed total copies');
+    error.userFacing = true;
+    throw error;
   }
-
-  return next();
 });
 
 bookSchema.statics.CATEGORIES = CATEGORIES;
