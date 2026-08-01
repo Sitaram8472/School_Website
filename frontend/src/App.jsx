@@ -31,6 +31,7 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const ResendVerification = lazy(() => import("./pages/ResendVerification"));
+const Library = lazy(() => import("./pages/Library"));
 const VerifyEmailSent = lazy(() => import("./pages/VerifyEmailSent"));
 
 import { AuthContext } from "./context/AuthContext";
@@ -168,7 +169,14 @@ const App = () => {
                   <SubmissionList />
                 </RoleProtectedRoute>
               } />
-  
+
+              {/* School library - catalogue for all, circulation for librarians */}
+              <Route path="/library" element={
+                <ProtectedRoute>
+                  <Library />
+                </ProtectedRoute>
+              } />
+
               <Route path="/student" element={<Student />} />
   
               <Route path="/student/exam/:examId" element={
