@@ -96,13 +96,12 @@ const periodSchema = new mongoose.Schema(
   { _id: true }
 );
 
-periodSchema.pre('validate', function (next) {
+periodSchema.pre('validate', async function () {
   if (TIME_PATTERN.test(this.startTime || '') && TIME_PATTERN.test(this.endTime || '')) {
     if (toMinutes(this.endTime) <= toMinutes(this.startTime)) {
-      return next(scheduleError(`Period ${this.periodNumber} on ${this.day} ends before it starts`));
+      throw scheduleError(`Period ${this.periodNumber} on ${this.day} ends before it starts`);
     }
   }
-  return next();
 });
 
 const timetableSchema = new mongoose.Schema(
@@ -168,8 +167,8 @@ timetableSchema.index({ 'periods.teacher': 1 });
  * A class cannot be in two places at once. Reject overlapping periods and
  * duplicate period numbers on the same day before anything is written.
  */
-timetableSchema.pre('validate', function (next) {
-  if (!Array.isArray(this.periods) || this.periods.length < 2) return next();
+timetableSchema.pre('validate', async function () {
+  if (!Array.isArray(this.periods) || this.periods.length < 2) return;
 
   const byDay = new Map();
 
@@ -187,7 +186,7 @@ timetableSchema.pre('validate', function (next) {
 
     for (const period of periods) {
       if (seenNumbers.has(period.periodNumber)) {
-        return next(scheduleError(`Duplicate period number ${period.periodNumber} on ${day}`));
+        throw scheduleError(`Duplicate period number ${period.periodNumber} on ${day}`);
       }
       seenNumbers.add(period.periodNumber);
     }
@@ -199,17 +198,13 @@ timetableSchema.pre('validate', function (next) {
       const current = sorted[i];
 
       if (toMinutes(current.startTime) < toMinutes(previous.endTime)) {
-        return next(
-          scheduleError(
-            `${day}: "${current.subject}" (${current.startTime}-${current.endTime}) overlaps ` +
-              `"${previous.subject}" (${previous.startTime}-${previous.endTime})`
-          )
+        throw scheduleError(
+          `${day}: "${current.subject}" (${current.startTime}-${current.endTime}) overlaps ` +
+            `"${previous.subject}" (${previous.startTime}-${previous.endTime})`
         );
       }
     }
   }
-
-  return next();
 });
 
 /**
