@@ -7,6 +7,7 @@ import NoticePanel from '../components/teacher/NoticePanel';
 import ResourcePanel from '../components/teacher/ResourcePanel';
 import AttendancePanel from '../components/teacher/AttendancePanel';
 import ExamPanel from '../components/teacher/ExamPanel';
+import InfirmaryPanel from '../components/teacher/InfirmaryPanel';
 
 const TeacherDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -38,6 +39,7 @@ const TeacherDashboard = () => {
     { id: 'resources',  label: 'Resources' },
     { id: 'attendance', label: 'Attendance' },
     { id: 'exams',      label: 'Exams & Courses' },
+    { id: 'infirmary',  label: 'Infirmary' },
   ];
 
   return (
@@ -98,6 +100,7 @@ const TeacherDashboard = () => {
         {activeTab === 'resources'  && <ResourcePanel />}
         {activeTab === 'attendance' && <AttendancePanel />}
         {activeTab === 'exams'      && <ExamPanel />}
+        {activeTab === 'infirmary'  && <InfirmaryPanel />}
       </div>
     </div>
   );
