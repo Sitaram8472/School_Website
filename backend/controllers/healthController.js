@@ -45,6 +45,25 @@ const notFound = (message) => makeError(message, 404);
 
 const isMedicalStaff = (user) => MEDICAL_STAFF_ROLES.includes(user?.role);
 
+// Longest search term we will build a pattern from. Beyond this it is a probe,
+// not a search.
+const MAX_SEARCH_LENGTH = 80;
+
+/**
+ * Case-insensitive "contains" matcher over untrusted input, with the regex
+ * metacharacters escaped so the term matches literally.
+ *
+ * Passed through raw, a search of `.*` would list every student who has a
+ * health profile — which on this endpoint means leaking the roster of children
+ * with recorded medical conditions. `(a+)+$` would trigger catastrophic
+ * backtracking, around two minutes of pinned CPU for a 33-character query
+ * string, and an unbalanced `[` would throw as a 500.
+ */
+const searchPattern = (value) => {
+  const term = String(value).trim().slice(0, MAX_SEARCH_LENGTH);
+  return new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+};
+
 const assertObjectId = (value, label = 'id') => {
   if (!mongoose.Types.ObjectId.isValid(value)) {
     throw badRequest(`Invalid ${label}`);
@@ -229,7 +248,7 @@ exports.listHealthProfiles = async (req, res) => {
     if (className) filter.className = className;
     if (bloodGroup) filter.bloodGroup = bloodGroup;
     if (severeOnly === 'true') filter['allergies.severity'] = 'severe';
-    if (search) filter.studentName = new RegExp(String(search).trim(), 'i');
+    if (search) filter.studentName = searchPattern(search);
 
     const perPage = Math.min(Number(limit) || 100, 200);
     const skip = (Math.max(Number(page) || 1, 1) - 1) * perPage;
@@ -325,7 +344,7 @@ exports.getVisits = async (req, res) => {
     const filter = {};
 
     if (outcome) filter.outcome = outcome;
-    if (search) filter.studentName = new RegExp(String(search).trim(), 'i');
+    if (search) filter.studentName = searchPattern(search);
 
     if (from || to) {
       filter.visitedAt = {};
