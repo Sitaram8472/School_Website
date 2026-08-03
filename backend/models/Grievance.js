@@ -338,9 +338,19 @@ grievanceSchema.statics.slaHoursFor = function (priority) {
  * the same millisecond is rare and a retry is cheaper than a lock.
  */
 grievanceSchema.statics.nextTicketId = async function (year = new Date().getFullYear()) {
-  const prefix = `GRV-${year}-`;
+  // `year` reaches a regex, so it is coerced to a plain four-digit number
+  // rather than interpolated as given. Nothing passes a caller-supplied year
+  // today, but a static that builds a pattern from its argument is one
+  // careless call away from being a regex-injection hole, and the coercion
+  // also keeps the ticket series well-formed.
+  const safeYear = Number.parseInt(year, 10);
+  if (!Number.isInteger(safeYear) || safeYear < 1970 || safeYear > 9999) {
+    throw grievanceError(`Cannot generate a ticket id for year "${year}"`);
+  }
 
-  const latest = await this.findOne({ ticketId: new RegExp(`^${prefix}`) })
+  const prefix = `GRV-${safeYear}-`;
+
+  const latest = await this.findOne({ ticketId: { $regex: `^${prefix}` } })
     .sort({ ticketId: -1 })
     .select('ticketId')
     .lean();
