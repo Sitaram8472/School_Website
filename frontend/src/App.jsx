@@ -40,6 +40,7 @@ const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
 const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
 const SubmissionList = lazy(() => import("./pages/SubmissionList"));
+const Grievances = lazy(() => import("./pages/Grievances"));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[50vh] text-2xl font-semibold text-gray-500">
@@ -170,6 +171,13 @@ const App = () => {
               } />
   
               <Route path="/student" element={<Student />} />
+
+              {/* Grievances - anyone signed in can raise one; the committee works the queue */}
+              <Route path="/grievances" element={
+                <RoleProtectedRoute allowedRoles={["student", "teacher", "staff", "admin"]}>
+                  <Grievances />
+                </RoleProtectedRoute>
+              } />
   
               <Route path="/student/exam/:examId" element={
                 <RoleProtectedRoute allowedRoles={["student"]}>
