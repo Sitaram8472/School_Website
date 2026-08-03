@@ -39,6 +39,24 @@ const forbidden = (message) => makeError(message, 403);
 const notFound = (message) => makeError(message, 404);
 const conflict = (message) => makeError(message, 409);
 
+// Longest search term we will build a pattern from. Beyond this it is a probe,
+// not a search.
+const MAX_SEARCH_LENGTH = 80;
+
+/**
+ * Case-insensitive "contains" matcher over untrusted input, with the regex
+ * metacharacters escaped so the term matches literally.
+ *
+ * Passed through raw, a search of `.*` matched every club rather than clubs
+ * containing that text, `(a+)+$` triggered catastrophic backtracking — roughly
+ * two minutes of pinned CPU for a 33-character query string — and an
+ * unbalanced `[` threw and surfaced as a 500.
+ */
+const searchPattern = (value) => {
+  const term = String(value).trim().slice(0, MAX_SEARCH_LENGTH);
+  return new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+};
+
 const assertObjectId = (value, label = 'id') => {
   if (!mongoose.Types.ObjectId.isValid(value)) {
     throw badRequest(`Invalid ${label}`);
@@ -140,7 +158,7 @@ exports.getClubs = async (req, res) => {
     }
 
     if (search) {
-      const pattern = new RegExp(String(search).trim(), 'i');
+      const pattern = searchPattern(search);
       filter.$or = [{ name: pattern }, { description: pattern }, { coordinatorName: pattern }];
     }
 
