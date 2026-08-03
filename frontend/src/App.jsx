@@ -40,6 +40,7 @@ const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
 const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
 const SubmissionList = lazy(() => import("./pages/SubmissionList"));
+const Clubs = lazy(() => import("./pages/Clubs"));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[50vh] text-2xl font-semibold text-gray-500">
@@ -170,6 +171,13 @@ const App = () => {
               } />
   
               <Route path="/student" element={<Student />} />
+
+              {/* Clubs - students browse and join, coordinators run them from the dashboard */}
+              <Route path="/clubs" element={
+                <RoleProtectedRoute allowedRoles={["student", "teacher", "staff", "admin"]}>
+                  <Clubs />
+                </RoleProtectedRoute>
+              } />
   
               <Route path="/student/exam/:examId" element={
                 <RoleProtectedRoute allowedRoles={["student"]}>
