@@ -43,6 +43,27 @@ const conflict = (message) => makeError(message, 409);
 
 const isWarden = (user) => WARDEN_ROLES.includes(user?.role);
 
+// Longest search term we will build a pattern from. Beyond this it is a probe,
+// not a search.
+const MAX_SEARCH_LENGTH = 80;
+
+/**
+ * Escapes regex metacharacters so untrusted input is matched literally.
+ *
+ * Passed through raw, a search of `.*` quietly matches every room, and
+ * `(a+)+$` drives the regex engine into catastrophic backtracking — a
+ * 33-character query string is enough to pin a CPU core for around two
+ * minutes. An unbalanced `[` throws and surfaces as a 500 rather than a 400.
+ */
+const escapeRegex = (value) =>
+  String(value).trim().slice(0, MAX_SEARCH_LENGTH).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Case-insensitive "contains" matcher over untrusted input. */
+const searchPattern = (value) => new RegExp(escapeRegex(value), 'i');
+
+/** Case-insensitive "starts with" matcher, used to select a block by prefix. */
+const prefixPattern = (value) => new RegExp(`^${escapeRegex(value)}`, 'i');
+
 const assertObjectId = (value, label = 'id') => {
   if (!mongoose.Types.ObjectId.isValid(value)) {
     throw badRequest(`Invalid ${label}`);
@@ -107,7 +128,7 @@ exports.getRooms = async (req, res) => {
     if (status) filter.status = status;
 
     if (search) {
-      const pattern = new RegExp(String(search).trim(), 'i');
+      const pattern = searchPattern(search);
       filter.$or = [{ roomNumber: pattern }, { block: pattern }, { wardenName: pattern }];
     }
 
@@ -585,13 +606,11 @@ exports.getBoarders = async (req, res) => {
 
     const filter = { status: 'active' };
     if (search) {
-      filter.$or = [
-        { studentName: new RegExp(String(search).trim(), 'i') },
-        { roomLabel: new RegExp(String(search).trim(), 'i') },
-      ];
+      const pattern = searchPattern(search);
+      filter.$or = [{ studentName: pattern }, { roomLabel: pattern }];
     }
     if (block) {
-      filter.roomLabel = new RegExp(`^${String(block).toUpperCase()}-`, 'i');
+      filter.roomLabel = prefixPattern(`${String(block).toUpperCase()}-`);
     }
 
     const boarders = await RoomAllocation.find(filter)
