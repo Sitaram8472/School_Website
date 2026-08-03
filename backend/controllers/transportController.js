@@ -65,6 +65,25 @@ const badRequest = (message) => {
 
 const isStaff = (user) => STAFF_ROLES.includes(user?.role);
 
+// Longest search term we will build a pattern from. Beyond this it is a probe,
+// not a search.
+const MAX_SEARCH_LENGTH = 80;
+
+/**
+ * Builds a case-insensitive "contains" matcher from untrusted input.
+ *
+ * The metacharacters must be escaped. Passed through raw, a search of `.*`
+ * quietly matches every route, and `(a+)+$` drives the regex engine into
+ * catastrophic backtracking — a 33-character query string is enough to pin a
+ * CPU core for around two minutes. Escaping makes the term literal, which is
+ * what someone typing into a search box expects in the first place.
+ */
+const searchPattern = (value) => {
+  const term = String(value).trim().slice(0, MAX_SEARCH_LENGTH);
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(escaped, 'i');
+};
+
 const asObjectId = (value, label = 'id') => {
   if (!mongoose.Types.ObjectId.isValid(value)) {
     throw badRequest(`Invalid ${label}`);
@@ -146,7 +165,7 @@ exports.getRoutes = async (req, res) => {
     }
 
     if (search) {
-      const pattern = new RegExp(String(search).trim(), 'i');
+      const pattern = searchPattern(search);
       filter.$or = [{ routeCode: pattern }, { routeName: pattern }, { 'stops.name': pattern }];
     }
 
