@@ -27,6 +27,7 @@ const Student = lazy(() => import("./pages/Student"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const DownloadProspectus = lazy(() => import("./pages/DownloadProspectus"));
+const CertificateRequests = lazy(() => import("./pages/CertificateRequests"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
@@ -175,6 +176,13 @@ const App = () => {
                 <RoleProtectedRoute allowedRoles={["student"]}>
                   <ExamTakingInterface />
                 </RoleProtectedRoute>
+              } />
+
+              {/* Certificate & document requests - any signed-in student */}
+              <Route path="/certificates" element={
+                <ProtectedRoute>
+                  <CertificateRequests />
+                </ProtectedRoute>
               } />
   
               {/* Catch-all route for 404 Page Not Found */}
