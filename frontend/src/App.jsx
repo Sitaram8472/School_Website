@@ -23,6 +23,7 @@ const NotFound = lazy(() => import("./pages/Notfound"));
 const EventCalendar = lazy(() => import("./pages/EventCalendar"));
 const Scholarship = lazy(() => import("./pages/Scholarship"));
 const Gallery = lazy(() => import("./pages/Gallery"));
+const FeePortal = lazy(() => import("./pages/FeePortal"));
 const Student = lazy(() => import("./pages/Student"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -143,7 +144,14 @@ const App = () => {
               <Route path="/contact" element={<Contact />} />
               <Route path="/calendar" element={<EventCalendar />} />
               <Route path="/prospectus" element={<DownloadProspectus />} />
-  
+
+              {/* Fees & payments - any signed-in user; staff see the admin panel */}
+              <Route path="/fees" element={
+                <ProtectedRoute>
+                  <FeePortal />
+                </ProtectedRoute>
+              } />
+
               {/* Protected Routes - Role-Based (Login Required) */}
               <Route path="/teacher" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
