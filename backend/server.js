@@ -30,6 +30,7 @@ const courseRoutes = require('./routes/courseRoutes.js');
 const examRoutes = require('./routes/examRoutes.js');
 const submissionRoutes = require('./routes/submissionRoutes.js');
 const reportRoutes = require('./routes/reportRoutes.js');
+const grievanceRoutes = require('./routes/grievanceRoutes.js');
 
 dotenv.config();
 
@@ -61,6 +62,7 @@ app.use("/api/courses", courseRoutes);
 app.use("/api/exams", examRoutes);
 app.use("/api/submissions", submissionRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/grievances", grievanceRoutes);
 
 
 // Database connection
