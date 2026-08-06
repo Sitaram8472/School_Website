@@ -24,6 +24,7 @@ const NotFound = lazy(() => import("./pages/Notfound"));
 const EventCalendar = lazy(() => import("./pages/EventCalendar"));
 const Scholarship = lazy(() => import("./pages/Scholarship"));
 const Gallery = lazy(() => import("./pages/Gallery"));
+const LostAndFound = lazy(() => import("./pages/LostAndFound"));
 const FeePortal = lazy(() => import("./pages/FeePortal"));
 const Student = lazy(() => import("./pages/Student"));
 const Login = lazy(() => import("./pages/Login"));
@@ -183,6 +184,13 @@ const App = () => {
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <SubmissionList />
                 </RoleProtectedRoute>
+              } />
+
+              {/* Lost & found register - any signed-in user */}
+              <Route path="/lost-found" element={
+                <ProtectedRoute>
+                  <LostAndFound />
+                </ProtectedRoute>
               } />
   
               <Route path="/student" element={<Student />} />
