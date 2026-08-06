@@ -29,6 +29,7 @@ const chatRoutes = require('./routes/chatRoutes.js');
 const courseRoutes = require('./routes/courseRoutes.js');
 const examRoutes = require('./routes/examRoutes.js');
 const submissionRoutes = require('./routes/submissionRoutes.js');
+const conductRoutes = require('./routes/conductRoutes.js');
 const reportRoutes = require('./routes/reportRoutes.js');
 
 dotenv.config();
@@ -59,6 +60,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api", chatRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/exams", examRoutes);
+app.use("/api/conduct", conductRoutes);
 app.use("/api/submissions", submissionRoutes);
 app.use("/api/reports", reportRoutes);
 
