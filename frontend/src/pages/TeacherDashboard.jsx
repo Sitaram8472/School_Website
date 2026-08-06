@@ -8,6 +8,7 @@ import MeetingPanel from '../components/teacher/MeetingPanel';
 import ResourcePanel from '../components/teacher/ResourcePanel';
 import AttendancePanel from '../components/teacher/AttendancePanel';
 import ExamPanel from '../components/teacher/ExamPanel';
+import LeaveApprovalPanel from '../components/teacher/LeaveApprovalPanel';
 
 const TeacherDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -40,6 +41,7 @@ const TeacherDashboard = () => {
     { id: 'resources',  label: 'Resources' },
     { id: 'attendance', label: 'Attendance' },
     { id: 'exams',      label: 'Exams & Courses' },
+    { id: 'leaves',     label: 'Leave Requests' },
   ];
 
   return (
@@ -101,6 +103,7 @@ const TeacherDashboard = () => {
         {activeTab === 'resources'  && <ResourcePanel />}
         {activeTab === 'attendance' && <AttendancePanel />}
         {activeTab === 'exams'      && <ExamPanel />}
+        {activeTab === 'leaves'     && <LeaveApprovalPanel />}
       </div>
     </div>
   );
