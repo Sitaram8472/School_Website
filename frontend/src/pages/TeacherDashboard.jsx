@@ -7,6 +7,7 @@ import NoticePanel from '../components/teacher/NoticePanel';
 import MeetingPanel from '../components/teacher/MeetingPanel';
 import ResourcePanel from '../components/teacher/ResourcePanel';
 import AttendancePanel from '../components/teacher/AttendancePanel';
+import CertificatePanel from '../components/teacher/CertificatePanel';
 import ExamPanel from '../components/teacher/ExamPanel';
 
 const TeacherDashboard = () => {
@@ -39,6 +40,7 @@ const TeacherDashboard = () => {
     { id: 'meetings',   label: 'Meetings' },
     { id: 'resources',  label: 'Resources' },
     { id: 'attendance', label: 'Attendance' },
+    { id: 'certificates', label: 'Certificates' },
     { id: 'exams',      label: 'Exams & Courses' },
   ];
 
@@ -100,6 +102,7 @@ const TeacherDashboard = () => {
         {activeTab === 'meetings'   && <MeetingPanel />}
         {activeTab === 'resources'  && <ResourcePanel />}
         {activeTab === 'attendance' && <AttendancePanel />}
+        {activeTab === 'certificates' && <CertificatePanel />}
         {activeTab === 'exams'      && <ExamPanel />}
       </div>
     </div>
