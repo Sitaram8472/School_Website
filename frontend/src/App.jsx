@@ -20,6 +20,7 @@ const Academics = lazy(() => import("./pages/Academics"));
 const Admissions = lazy(() => import("./pages/Admission"));
 const Contact = lazy(() => import("./pages/Contact"));
 const MeetingBooking = lazy(() => import("./pages/MeetingBooking"));
+const Alumni = lazy(() => import("./pages/Alumni"));
 const NotFound = lazy(() => import("./pages/Notfound"));
 const EventCalendar = lazy(() => import("./pages/EventCalendar"));
 const Scholarship = lazy(() => import("./pages/Scholarship"));
@@ -173,6 +174,13 @@ const App = () => {
                 </ProtectedRoute>
               } />
   
+              {/* Alumni directory & mentorship - any signed-in user */}
+              <Route path="/alumni" element={
+                <ProtectedRoute>
+                  <Alumni />
+                </ProtectedRoute>
+              } />
+
               <Route path="/teacher/courses/:courseId/exam/new" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <ExamBuilder />
