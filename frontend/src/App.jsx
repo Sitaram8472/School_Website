@@ -31,6 +31,7 @@ const Register = lazy(() => import("./pages/Register"));
 const DownloadProspectus = lazy(() => import("./pages/DownloadProspectus"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const CourseFeedback = lazy(() => import("./pages/CourseFeedback"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const ResendVerification = lazy(() => import("./pages/ResendVerification"));
 const VerifyEmailSent = lazy(() => import("./pages/VerifyEmailSent"));
@@ -139,6 +140,14 @@ const App = () => {
               <Route path="/home" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/academics" element={<Academics />} />
+
+              {/* Course & teaching feedback - any signed-in user; authors get the panel */}
+              <Route path="/feedback" element={
+                <ProtectedRoute>
+                  <CourseFeedback />
+                </ProtectedRoute>
+              } />
+
               <Route path="/admissions" element={<Admissions />} />
               <Route path="/admissions/scholarship" element={<Scholarship />} />
               <Route path="/gallery" element={<Gallery />} />
