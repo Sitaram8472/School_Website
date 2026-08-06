@@ -4,6 +4,7 @@ import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
 import { getUserRole, hasRole } from '../utils/permissions';
 import NoticePanel from '../components/teacher/NoticePanel';
+import AssignmentPanel from '../components/teacher/AssignmentPanel';
 import MeetingPanel from '../components/teacher/MeetingPanel';
 import ResourcePanel from '../components/teacher/ResourcePanel';
 import AttendancePanel from '../components/teacher/AttendancePanel';
@@ -36,6 +37,7 @@ const TeacherDashboard = () => {
 
   const tabs = [
     { id: 'notices',    label: 'Notices' },
+    { id: 'assignments', label: 'Assignments' },
     { id: 'meetings',   label: 'Meetings' },
     { id: 'resources',  label: 'Resources' },
     { id: 'attendance', label: 'Attendance' },
@@ -97,6 +99,7 @@ const TeacherDashboard = () => {
         </div>
 
         {activeTab === 'notices'    && <NoticePanel />}
+        {activeTab === 'assignments' && <AssignmentPanel />}
         {activeTab === 'meetings'   && <MeetingPanel />}
         {activeTab === 'resources'  && <ResourcePanel />}
         {activeTab === 'attendance' && <AttendancePanel />}

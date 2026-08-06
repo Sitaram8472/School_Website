@@ -42,6 +42,10 @@ const Student = () => {
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
 const [selectedSubject, setSelectedSubject] = React.useState("All");
+// Real assignments published by teachers. Starts empty and is filled by the
+// effect below; the tracker renders an empty state until the request settles.
+const [assignments, setAssignments] = React.useState([]);
+const [assignmentsLoading, setAssignmentsLoading] = React.useState(true);
 
   const handleDownloadReport = async () => {
     try {
@@ -88,6 +92,38 @@ const [selectedSubject, setSelectedSubject] = React.useState("All");
     fetchExams();
   }, []);
 
+  React.useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const res = await api.get('/assignments', { params: { limit: 20 } });
+        // Map the API shape onto the shape this dashboard's tracker expects, so
+        // the widgets below (statistics, deadline cards) keep working unchanged.
+        const mapped = (res.data.data || []).map((assignment) => ({
+          id: assignment._id,
+          title: assignment.title,
+          subject: assignment.subject,
+          dueDate: assignment.dueDate,
+          status:
+            assignment.submissionStatus === 'not-submitted'
+              ? assignment.isOverdue
+                ? 'Overdue'
+                : 'Pending'
+              : assignment.submissionStatus === 'graded'
+              ? 'Completed'
+              : 'Submitted',
+          details: assignment.description,
+          link: '/student/assignments',
+        }));
+        setAssignments(mapped);
+      } catch (err) {
+        console.error("Error fetching assignments:", err);
+      } finally {
+        setAssignmentsLoading(false);
+      }
+    };
+    fetchAssignments();
+  }, []);
+
   const savedAttendance = JSON.parse(localStorage.getItem("attendanceRecords"));
 
   // Calculate attendance data with proper fallbacks
@@ -109,44 +145,6 @@ const [selectedSubject, setSelectedSubject] = React.useState("All");
     ? ((attendanceData.monthlyReport.presentClasses / attendanceData.monthlyReport.totalClasses) * 100).toFixed(0)
     : 0;
 
- const assignments = [
-  {
-    id: 1,
-    title: "Linear Algebra Assignment",
-    subject: "Mathematics",
-    dueDate: "2026-08-05",
-     status:"Completed",
-    details: "Complete Chapters 1 to 4 and submit the worksheet.",
-    link: "#",
-  },
-  {
-    id: 2,
-    title: "Physics Lab Report",
-    subject: "Physics",
-    dueDate: "2026-08-02",
-    status: "Pending",
-    details: "Submit the optics experiment report.",
-    link: "#",
-  },
-  {
-    id: 3,
-    title: "Chemistry Assignment",
-    subject: "Chemistry",
-    dueDate: "2026-08-01",
-    status: "Pending",
-    details: "Prepare organic chemistry notes.",
-    link: "#",
-  },
-  {
-    id: 4,
-    title: "Programming Exercise",
-    subject: "Computer Science",
-    dueDate: "2026-08-08",
-    status: "Overdue",
-    details: "Complete React component exercises.",
-    link: "#",
- },
-];
 const getAssignmentStatus = (dueDate) => {
   const today = new Date();
   const due = new Date(dueDate);
@@ -433,9 +431,18 @@ const performanceData = [
 <ExamCountdownWidget exams={exams} />
      {/* Assignment Submission Deadline Tracker */}
 <div className="bg-white rounded-3xl shadow-2xl p-8 mb-10">
-  <h2 className="text-3xl font-bold text-blue-700 mb-6">
-    Assignment Submission Deadline Tracker
-  </h2>
+  <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <h2 className="text-3xl font-bold text-blue-700">
+      Assignment Submission Deadline Tracker
+    </h2>
+
+    <Link
+      to="/student/assignments"
+      className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold transition"
+    >
+      Open assignments
+    </Link>
+  </div>
 
   {/* Search & Filter */}
   <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -459,6 +466,14 @@ const performanceData = [
       ))}
     </select>
   </div>
+
+  {assignmentsLoading ? (
+    <p className="text-gray-500 text-center py-8">Loading your assignments...</p>
+  ) : filteredAssignments.length === 0 ? (
+    <p className="text-gray-500 text-center py-8">
+      No assignments match your filters right now.
+    </p>
+  ) : null}
 
   <div className="grid md:grid-cols-2 gap-6">
     {filteredAssignments.map((assignment) => {
@@ -512,12 +527,12 @@ const performanceData = [
           </span>
 
           <div className="mt-5">
-            <a
-              href={assignment.link}
+            <Link
+              to={assignment.link}
               className="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700"
             >
               View Details
-            </a>
+            </Link>
           </div>
         </div>
       );
