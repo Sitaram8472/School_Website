@@ -18,6 +18,7 @@ checkProductionSecurity();
 
 // Import routes
 const authRoutes = require("./routes/Auth");
+const cafeteriaRoutes = require('./routes/cafeteriaRoutes.js');
 const inquiryRoutes = require('./routes/inquiryRoutes.js');
 const meetingRoutes = require('./routes/meetingRoutes.js');
 const noticeRoutes = require('./routes/noticeRoutes.js');
@@ -49,6 +50,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/inquiries", inquiryRoutes);
+app.use("/api/cafeteria", cafeteriaRoutes);
 app.use("/api/meetings", meetingRoutes);
 app.use("/api/notices", noticeRoutes);
 app.use("/api/fees", feeRoutes);
