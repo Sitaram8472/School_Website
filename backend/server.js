@@ -46,6 +46,11 @@ app.use(cookieParser());
 // Static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Staff absence and substitute cover. Required and mounted together so the
+// module can be added or removed as one piece.
+const substitutionRoutes = require("./routes/substitutionRoutes.js");
+app.use("/api/substitutions", substitutionRoutes);
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/inquiries", inquiryRoutes);
