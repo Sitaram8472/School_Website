@@ -34,6 +34,7 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const ResendVerification = lazy(() => import("./pages/ResendVerification"));
 const VerifyEmailSent = lazy(() => import("./pages/VerifyEmailSent"));
+const SafetyDrills = lazy(() => import("./pages/SafetyDrills"));
 
 import { AuthContext } from "./context/AuthContext";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
@@ -145,6 +146,13 @@ const App = () => {
               <Route path="/contact" element={<Contact />} />
               <Route path="/calendar" element={<EventCalendar />} />
               <Route path="/prospectus" element={<DownloadProspectus />} />
+
+              {/* Drills and safety incidents - teaching staff and admins */}
+              <Route path="/safety" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <SafetyDrills />
+                </RoleProtectedRoute>
+              } />
 
               {/* Fees & payments - any signed-in user; staff see the admin panel */}
               <Route path="/fees" element={
