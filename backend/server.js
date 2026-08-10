@@ -43,6 +43,11 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+// Inter-house sports fixtures and standings. Required and mounted together so
+// the module can be added or removed as one piece.
+const sportsRoutes = require("./routes/sportsRoutes.js");
+app.use("/api/sports", sportsRoutes);
+
 // Static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
