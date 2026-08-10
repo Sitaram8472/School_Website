@@ -39,6 +39,8 @@ const VerifyEmailSent = lazy(() => import("./pages/VerifyEmailSent"));
 import { AuthContext } from "./context/AuthContext";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
 
+const StaffTraining = lazy(() => import("./pages/StaffTraining"));
+
 const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
 const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
@@ -180,6 +182,13 @@ const App = () => {
                 <ProtectedRoute>
                   <MeetingBooking />
                 </ProtectedRoute>
+              } />
+
+              {/* Staff professional development - staff and admins */}
+              <Route path="/staff/training" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
+                  <StaffTraining />
+                </RoleProtectedRoute>
               } />
   
               <Route path="/teacher/courses/:courseId/exam/new" element={
