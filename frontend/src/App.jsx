@@ -33,6 +33,7 @@ const DownloadProspectus = lazy(() => import("./pages/DownloadProspectus"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
+const ServiceHours = lazy(() => import("./pages/ServiceHours"));
 const ResendVerification = lazy(() => import("./pages/ResendVerification"));
 const VerifyEmailSent = lazy(() => import("./pages/VerifyEmailSent"));
 
@@ -163,6 +164,14 @@ const App = () => {
               } />
 
               {/* Protected Routes - Role-Based (Login Required) */}
+
+              {/* Community service hours - students log, staff verify */}
+              <Route path="/service-hours" element={
+                <ProtectedRoute>
+                  <ServiceHours />
+                </ProtectedRoute>
+              } />
+
               <Route path="/teacher" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <Teacher />

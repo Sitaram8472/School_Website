@@ -51,6 +51,11 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 const substitutionRoutes = require("./routes/substitutionRoutes.js");
 app.use("/api/substitutions", substitutionRoutes);
 
+// Community service hours and their verification. Required and mounted
+// together so the module can be added or removed as one piece.
+const serviceHoursRoutes = require("./routes/serviceHoursRoutes.js");
+app.use("/api/service-hours", serviceHoursRoutes);
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/inquiries", inquiryRoutes);
