@@ -24,6 +24,7 @@ const MeetingBooking = lazy(() => import("./pages/MeetingBooking"));
 const NotFound = lazy(() => import("./pages/Notfound"));
 const EventCalendar = lazy(() => import("./pages/EventCalendar"));
 const Scholarship = lazy(() => import("./pages/Scholarship"));
+const SyllabusTracker = lazy(() => import("./pages/SyllabusTracker"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const FeePortal = lazy(() => import("./pages/FeePortal"));
 const Student = lazy(() => import("./pages/Student"));
@@ -143,6 +144,13 @@ const App = () => {
               <Route path="/substitutions" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <SubstitutionBoard />
+                </RoleProtectedRoute>
+              } />
+
+              {/* Syllabus coverage - teaching staff and admins */}
+              <Route path="/syllabus" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <SyllabusTracker />
                 </RoleProtectedRoute>
               } />
 
