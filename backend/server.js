@@ -68,6 +68,11 @@ app.use("/api/submissions", submissionRoutes);
 app.use("/api/reports", reportRoutes);
 
 
+// Field trips and excursions. Required and mounted together so the module can
+// be added or removed as one piece.
+const fieldTripRoutes = require("./routes/fieldTripRoutes.js");
+app.use("/api/trips", fieldTripRoutes);
+
 // Database connection
 async function connectDB() {
   const mongoUrl = process.env.MONGODB_URI || process.env.MONGO_URL;

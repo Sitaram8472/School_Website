@@ -22,6 +22,7 @@ const Admissions = lazy(() => import("./pages/Admission"));
 const Contact = lazy(() => import("./pages/Contact"));
 const MeetingBooking = lazy(() => import("./pages/MeetingBooking"));
 const NotFound = lazy(() => import("./pages/Notfound"));
+const FieldTrips = lazy(() => import("./pages/FieldTrips"));
 const EventCalendar = lazy(() => import("./pages/EventCalendar"));
 const Scholarship = lazy(() => import("./pages/Scholarship"));
 const Gallery = lazy(() => import("./pages/Gallery"));
@@ -147,6 +148,14 @@ const App = () => {
               } />
 
               <Route path="/about" element={<About />} />
+
+              {/* Field trips - any signed-in family; staff also organise here */}
+              <Route path="/trips" element={
+                <ProtectedRoute>
+                  <FieldTrips />
+                </ProtectedRoute>
+              } />
+
               <Route path="/academics" element={<Academics />} />
               <Route path="/admissions" element={<Admissions />} />
               <Route path="/admissions/scholarship" element={<Scholarship />} />
