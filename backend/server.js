@@ -141,6 +141,11 @@ io.on("connection", (socket) => {
 
 app.set('io', io);
 
+// Exam re-evaluation appeals. Required and mounted together so the module can
+// be added or removed as one piece.
+const appealRoutes = require("./routes/appealRoutes.js");
+app.use("/api/appeals", appealRoutes);
+
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 }).on("error", (err) => {

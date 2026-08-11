@@ -42,6 +42,7 @@ import RoleProtectedRoute from "./components/RoleProtectedRoute";
 
 const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
 const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
+const RemarkAppeals = lazy(() => import("./pages/RemarkAppeals"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
 const SubmissionList = lazy(() => import("./pages/SubmissionList"));
 
@@ -195,6 +196,13 @@ const App = () => {
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <ExamBuilder />
                 </RoleProtectedRoute>
+              } />
+
+              {/* Exam re-evaluation appeals - students appeal, staff review */}
+              <Route path="/appeals" element={
+                <ProtectedRoute>
+                  <RemarkAppeals />
+                </ProtectedRoute>
               } />
   
               <Route path="/teacher/exam/:examId/submissions" element={
