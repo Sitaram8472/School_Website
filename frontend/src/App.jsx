@@ -63,6 +63,10 @@ const ScrollToTop = () => {
   return null;
 };
 
+// Student council elections. Declared as its own block rather than in the list
+// above, so the module can be added or removed as one piece.
+const StudentElections = lazy(() => import("./pages/StudentElections"));
+
 //  Protected Route - ONLY logged in users can access
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -113,6 +117,13 @@ const App = () => {
                 <PublicRoute>
                   <Login />
                 </PublicRoute>
+              } />
+
+              {/* Student council elections - any signed-in user; only students vote */}
+              <Route path="/elections" element={
+                <ProtectedRoute>
+                  <StudentElections />
+                </ProtectedRoute>
               } />
               <Route path="/register" element={
                 <PublicRoute>
