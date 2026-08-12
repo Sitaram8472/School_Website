@@ -76,6 +76,10 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// Academic calendar. Declared as its own block rather than in the list above,
+// so the module can be added or removed as one piece.
+const AcademicCalendar = lazy(() => import("./pages/AcademicCalendar"));
+
 // Public Route - Only for non-logged in users (Login/Register)
 const PublicRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -123,6 +127,13 @@ const App = () => {
                 <PublicRoute>
                   <Register />
                 </PublicRoute>
+              } />
+
+              {/* Academic calendar - any signed-in user; drafts are admin-only */}
+              <Route path="/academic-calendar" element={
+                <ProtectedRoute>
+                  <AcademicCalendar />
+                </ProtectedRoute>
               } />
               <Route path="/forgot-password" element={
                 <PublicRoute>
