@@ -53,6 +53,10 @@ const PageLoader = () => (
   </div>
 );
 
+// Lesson observations. Declared as its own block rather than in the list above,
+// so the module can be added or removed as one piece.
+const LessonObservations = lazy(() => import("./pages/LessonObservations"));
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -108,6 +112,13 @@ const App = () => {
                 <PublicRoute>
                   <Login />
                 </PublicRoute>
+              } />
+
+              {/* Lesson observations - teaching staff only, scores gated by status */}
+              <Route path="/observations" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
+                  <LessonObservations />
+                </RoleProtectedRoute>
               } />
               <Route path="/login/:role" element={
                 <PublicRoute>
