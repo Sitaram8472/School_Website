@@ -105,6 +105,11 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// Staff professional development and certification expiry. Required and
+// mounted together so the module can be added or removed as one piece.
+const staffTrainingRoutes = require("./routes/staffTrainingRoutes.js");
+app.use("/api/staff-training", staffTrainingRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 
