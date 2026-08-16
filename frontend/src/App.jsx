@@ -40,6 +40,9 @@ const VerifyEmailSent = lazy(() => import("./pages/VerifyEmailSent"));
 import { AuthContext } from "./context/AuthContext";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
 
+// Staff leave — entitlement, requests and approvals.
+const StaffLeave = lazy(() => import("./pages/StaffLeave"));
+
 const StaffTraining = lazy(() => import("./pages/StaffTraining"));
 
 const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
@@ -139,6 +142,13 @@ const App = () => {
               <Route path="/verify-email/:token" element={<VerifyEmail />} />
               <Route path="/resend-verification" element={<ResendVerification />} />
               <Route path="/verify-email-sent" element={<VerifyEmailSent />} />
+
+              {/* Staff leave - entitlement, requests and approvals */}
+              <Route path="/staff/leave" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
+                  <StaffLeave />
+                </RoleProtectedRoute>
+              } />
   
               {/* Public Routes (No Login Required) */}
               <Route path="/home" element={<Home />} />
