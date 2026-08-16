@@ -73,6 +73,9 @@ app.use("/api/reports", reportRoutes);
 const fieldTripRoutes = require("./routes/fieldTripRoutes.js");
 app.use("/api/trips", fieldTripRoutes);
 
+const analyticsRoutes = require('./routes/analyticsRoutes.js');
+app.use("/api/analytics", analyticsRoutes);
+
 // Database connection
 async function connectDB() {
   const mongoUrl = process.env.MONGODB_URI || process.env.MONGO_URL;
