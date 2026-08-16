@@ -73,6 +73,11 @@ app.use("/api/reports", reportRoutes);
 const fieldTripRoutes = require("./routes/fieldTripRoutes.js");
 app.use("/api/trips", fieldTripRoutes);
 
+
+// Question-paper moderation and publication clearance. Required and mounted
+// together so the module can be added or removed as one piece.
+const paperModerationRoutes = require("./routes/paperModerationRoutes.js");
+app.use("/api/paper-moderation", paperModerationRoutes);
 // Database connection
 async function connectDB() {
   const mongoUrl = process.env.MONGODB_URI || process.env.MONGO_URL;

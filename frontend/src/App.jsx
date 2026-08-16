@@ -42,6 +42,9 @@ import RoleProtectedRoute from "./components/RoleProtectedRoute";
 
 const StaffTraining = lazy(() => import("./pages/StaffTraining"));
 
+// Question-paper moderation — blueprints, findings and version clearance.
+const PaperModeration = lazy(() => import("./pages/PaperModeration"));
+
 const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
 const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
 const RemarkAppeals = lazy(() => import("./pages/RemarkAppeals"));
@@ -157,6 +160,13 @@ const App = () => {
                 <ProtectedRoute>
                   <FieldTrips />
                 </ProtectedRoute>
+              } />
+
+              {/* Question-paper moderation - authors and moderators */}
+              <Route path="/moderation" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <PaperModeration />
+                </RoleProtectedRoute>
               } />
 
               <Route path="/academics" element={<Academics />} />
