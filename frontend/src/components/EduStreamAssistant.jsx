@@ -85,7 +85,7 @@ export default function EduStreamAssistant() {
           navigateLabel: data.navigateLabel || null,
         },
       ]);
-    } catch (err) {
+    } catch {
       setMessages((prev) => [
         ...prev,
         {
