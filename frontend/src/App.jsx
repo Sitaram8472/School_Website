@@ -12,6 +12,9 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import EduStreamAssistant from "./components/EduStreamAssistant";
 
+// Careers — college applications, deadlines and confidential references.
+const CareerGuidance = lazy(() => import("./pages/CareerGuidance"));
+
 // Import Pages (Lazy Loaded)
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -191,6 +194,13 @@ const App = () => {
               <Route path="/meetings" element={
                 <ProtectedRoute>
                   <MeetingBooking />
+                </ProtectedRoute>
+              } />
+
+              {/* Careers - students apply, teachers write references, counsellors chase */}
+              <Route path="/careers" element={
+                <ProtectedRoute>
+                  <CareerGuidance />
                 </ProtectedRoute>
               } />
 

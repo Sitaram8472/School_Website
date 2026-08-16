@@ -110,6 +110,11 @@ app.get("/api/health", (req, res) => {
 const staffTrainingRoutes = require("./routes/staffTrainingRoutes.js");
 app.use("/api/staff-training", staffTrainingRoutes);
 
+// Careers, college applications and confidential references. Required and
+// mounted together so the module can be added or removed as one piece.
+const careersRoutes = require("./routes/careersRoutes.js");
+app.use("/api/careers", careersRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 
