@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import { getSocket } from "../utils/socket";
 
 // Fallback notice data in case the backend is unreachable
+// eslint-disable-next-line react-refresh/only-export-components
 export const notices = [
   {
     id: 1,

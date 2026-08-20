@@ -16,13 +16,17 @@ import EduStreamAssistant from "./components/EduStreamAssistant";
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
 const Teacher = lazy(() => import("./pages/Teacher"));
+const SubstitutionBoard = lazy(() => import("./pages/SubstitutionBoard"));
 const Academics = lazy(() => import("./pages/Academics"));
 const Admissions = lazy(() => import("./pages/Admission"));
 const Contact = lazy(() => import("./pages/Contact"));
+const MeetingBooking = lazy(() => import("./pages/MeetingBooking"));
 const NotFound = lazy(() => import("./pages/Notfound"));
+const FieldTrips = lazy(() => import("./pages/FieldTrips"));
 const EventCalendar = lazy(() => import("./pages/EventCalendar"));
 const Scholarship = lazy(() => import("./pages/Scholarship"));
 const Gallery = lazy(() => import("./pages/Gallery"));
+const FeePortal = lazy(() => import("./pages/FeePortal"));
 const Student = lazy(() => import("./pages/Student"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -36,10 +40,14 @@ const VerifyEmailSent = lazy(() => import("./pages/VerifyEmailSent"));
 import { AuthContext } from "./context/AuthContext";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
 
+const StaffTraining = lazy(() => import("./pages/StaffTraining"));
+
 const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
 const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
+const RemarkAppeals = lazy(() => import("./pages/RemarkAppeals"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
 const SubmissionList = lazy(() => import("./pages/SubmissionList"));
+const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 const Clubs = lazy(() => import("./pages/Clubs"));
 
 const PageLoader = () => (
@@ -136,7 +144,23 @@ const App = () => {
   
               {/* Public Routes (No Login Required) */}
               <Route path="/home" element={<Home />} />
+
+              {/* Substitute cover - teaching staff and admins */}
+              <Route path="/substitutions" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <SubstitutionBoard />
+                </RoleProtectedRoute>
+              } />
+
               <Route path="/about" element={<About />} />
+
+              {/* Field trips - any signed-in family; staff also organise here */}
+              <Route path="/trips" element={
+                <ProtectedRoute>
+                  <FieldTrips />
+                </ProtectedRoute>
+              } />
+
               <Route path="/academics" element={<Academics />} />
               <Route path="/admissions" element={<Admissions />} />
               <Route path="/admissions/scholarship" element={<Scholarship />} />
@@ -144,7 +168,14 @@ const App = () => {
               <Route path="/contact" element={<Contact />} />
               <Route path="/calendar" element={<EventCalendar />} />
               <Route path="/prospectus" element={<DownloadProspectus />} />
-  
+
+              {/* Fees & payments - any signed-in user; staff see the admin panel */}
+              <Route path="/fees" element={
+                <ProtectedRoute>
+                  <FeePortal />
+                </ProtectedRoute>
+              } />
+
               {/* Protected Routes - Role-Based (Login Required) */}
               <Route path="/teacher" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
@@ -157,11 +188,38 @@ const App = () => {
                   <TeacherDashboard />
                 </RoleProtectedRoute>
               } />
+
+              {/* Parent-teacher meeting booking - any signed-in family */}
+              <Route path="/meetings" element={
+                <ProtectedRoute>
+                  <MeetingBooking />
+                </ProtectedRoute>
+              } />
+
+              {/* Staff professional development - staff and admins */}
+              <Route path="/staff/training" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
+                  <StaffTraining />
+                </RoleProtectedRoute>
+              } />
+
+              <Route path="/admin/analytics" element={
+                <RoleProtectedRoute allowedRoles={["admin", "staff"]}>
+                  <AdminAnalytics />
+                </RoleProtectedRoute>
+              } />
   
               <Route path="/teacher/courses/:courseId/exam/new" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <ExamBuilder />
                 </RoleProtectedRoute>
+              } />
+
+              {/* Exam re-evaluation appeals - students appeal, staff review */}
+              <Route path="/appeals" element={
+                <ProtectedRoute>
+                  <RemarkAppeals />
+                </ProtectedRoute>
               } />
   
               <Route path="/teacher/exam/:examId/submissions" element={

@@ -12,14 +12,13 @@ import {
   
 } from "lucide-react";
 
-import { Link,useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import prospectusPdf from "../assets/prospectus/prospectus.pdf";
 import prospectusCover from "../assets/prospectus/prospectus-cover.jpg";
 
 const Admissions = () => {
   const [openFaq, setOpenFaq] = useState(null);
-  const navigate = useNavigate();
   const steps = [
     {
       title: "Online Registration",

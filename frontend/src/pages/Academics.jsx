@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useMemo, useCallback } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -286,7 +287,7 @@ const Academics = () => {
           viewport={{ once: true, margin: "-60px" }}
           variants={v.staggerContainer(MOTION.stagger.md)}
         >
-          {PHILOSOPHY_ITEMS.map((item, i) => (
+          {PHILOSOPHY_ITEMS.map((item) => (
             <motion.div
               key={item.title}
               className="text-center group"
