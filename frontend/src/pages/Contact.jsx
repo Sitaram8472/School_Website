@@ -41,7 +41,7 @@ const Contact = () => {
 
     try {
       const res = await getAIResponse(question);
-      setReply(res); // eslint-disable-next-line no-unused-vars
+      setReply(res);  
     } catch (error) {
       console.error(error);
 

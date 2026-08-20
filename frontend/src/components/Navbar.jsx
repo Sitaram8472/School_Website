@@ -29,6 +29,9 @@ const Navbar = () => {
     ...(role === "teacher" || role === "admin"
       ? [{ name: "Teacher Dashboard", path: "/teacher/dashboard" }]
       : []),
+    ...(role === "admin" || role === "staff"
+      ? [{ name: "Analytics Dashboard", path: "/admin/analytics" }]
+      : []),
   ];
 
   const handleLogout = async () => {
