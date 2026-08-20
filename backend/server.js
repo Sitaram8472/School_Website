@@ -19,7 +19,9 @@ checkProductionSecurity();
 // Import routes
 const authRoutes = require("./routes/Auth");
 const inquiryRoutes = require('./routes/inquiryRoutes.js');
+const meetingRoutes = require('./routes/meetingRoutes.js');
 const noticeRoutes = require('./routes/noticeRoutes.js');
+const feeRoutes = require('./routes/feeRoutes.js');
 const applicationRoutes = require('./routes/ApplicationRoutes.js');
 const contactRoutes = require('./routes/contactRoutes.js');
 const teacherRoutes = require('./routes/teacherRoutes.js');
@@ -45,10 +47,17 @@ app.use(cookieParser());
 // Static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Staff absence and substitute cover. Required and mounted together so the
+// module can be added or removed as one piece.
+const substitutionRoutes = require("./routes/substitutionRoutes.js");
+app.use("/api/substitutions", substitutionRoutes);
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/inquiries", inquiryRoutes);
+app.use("/api/meetings", meetingRoutes);
 app.use("/api/notices", noticeRoutes);
+app.use("/api/fees", feeRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/teacher", teacherRoutes);
@@ -60,6 +69,14 @@ app.use("/api/submissions", submissionRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/grievances", grievanceRoutes);
 
+
+// Field trips and excursions. Required and mounted together so the module can
+// be added or removed as one piece.
+const fieldTripRoutes = require("./routes/fieldTripRoutes.js");
+app.use("/api/trips", fieldTripRoutes);
+
+const analyticsRoutes = require('./routes/analyticsRoutes.js');
+app.use("/api/analytics", analyticsRoutes);
 
 // Database connection
 async function connectDB() {
@@ -92,6 +109,11 @@ app.get("/api/health", (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// Staff professional development and certification expiry. Required and
+// mounted together so the module can be added or removed as one piece.
+const staffTrainingRoutes = require("./routes/staffTrainingRoutes.js");
+app.use("/api/staff-training", staffTrainingRoutes);
 
 
 const PORT = process.env.PORT || 5000;
@@ -128,6 +150,11 @@ io.on("connection", (socket) => {
 });
 
 app.set('io', io);
+
+// Exam re-evaluation appeals. Required and mounted together so the module can
+// be added or removed as one piece.
+const appealRoutes = require("./routes/appealRoutes.js");
+app.use("/api/appeals", appealRoutes);
 
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

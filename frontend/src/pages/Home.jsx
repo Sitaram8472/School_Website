@@ -2,9 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Hero from "../components/Hero";
 import Card from "../components/Card";
-import Notices, { notices } from "../data/Notices";
-import { teachers } from "../data/Teachers";
-import { useNavigate } from "react-router-dom";
+import Notices from "../data/Notices";
 import {
   Users,
   GraduationCap,
@@ -27,7 +25,6 @@ import img8 from "../assets/campus/campus8.jpg";
 
 const Home = () => {
   const galleryImages = [img1, img2, img3, img4, img5, img6, img7, img8];
-  const navigate = useNavigate();
   return (
     <div className="animate-in fade-in duration-700 bg-[var(--bg-primary)]">
       <Hero />
