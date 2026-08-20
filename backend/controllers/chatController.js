@@ -1,6 +1,7 @@
 const { getAIResponse } = require("../config/aiProvider");
 const knowledgeBase = require("../data/knowledgeBase");
 const siteRoutes = require("../data/siteRoutes");
+const AnalyticsEvent = require("../models/AnalyticsEvent");
 
 // Build a formatted list of pages for the system prompt
 const routesList = siteRoutes
@@ -101,6 +102,11 @@ const handleChat = async (req, res) => {
     }
 
     // 6. Send structured response
+    // Log Analytics Event (AI Query)
+    if (req.user && req.user._id) {
+      await AnalyticsEvent.create({ eventType: 'AI_QUERY', userId: req.user._id }).catch(err => console.error("Analytics error:", err));
+    }
+
     return res.status(200).json({
       reply: parsed.reply || "I'm sorry, I didn't understand that. Could you rephrase?",
       navigateTo: parsed.navigateTo || null,
