@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
-import { getUserRole, hasRole } from '../utils/permissions';
+import { hasRole } from '../utils/permissions';
 import NoticePanel from '../components/teacher/NoticePanel';
 import MeetingPanel from '../components/teacher/MeetingPanel';
 import ResourcePanel from '../components/teacher/ResourcePanel';
@@ -15,7 +15,6 @@ const TeacherDashboard = () => {
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
 
-  const role = getUserRole(user);
   const displayName = user?.name || user?.user?.name;
 
   useEffect(() => {

@@ -50,6 +50,7 @@ const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
 const RemarkAppeals = lazy(() => import("./pages/RemarkAppeals"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
 const SubmissionList = lazy(() => import("./pages/SubmissionList"));
+const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[50vh] text-2xl font-semibold text-gray-500">
@@ -208,6 +209,12 @@ const App = () => {
               <Route path="/staff/training" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
                   <StaffTraining />
+                </RoleProtectedRoute>
+              } />
+
+              <Route path="/admin/analytics" element={
+                <RoleProtectedRoute allowedRoles={["admin", "staff"]}>
+                  <AdminAnalytics />
                 </RoleProtectedRoute>
               } />
   

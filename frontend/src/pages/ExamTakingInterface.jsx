@@ -14,6 +14,44 @@ const ExamTakingInterface = () => {
   
   const timerRef = useRef(null);
 
+  const handleCheatingAttempt = React.useCallback(async (message) => {
+    setWarningMessage(message);
+    setShowWarningModal(true);
+    setWarnings(prev => prev + 1);
+    
+    // Log warning to backend
+    try {
+      await api.post(`/submissions/${examId}/warning`);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [examId]);
+
+  const handleSubmit = React.useCallback(async (e, isAutoSubmitted = false) => {
+    if (e) e.preventDefault();
+    
+    const formattedAnswers = Object.keys(answers).map(qId => ({
+      questionId: qId,
+      providedAnswer: answers[qId]
+    }));
+
+    try {
+      const response = await api.post(`/submissions/${examId}/submit`, {
+        answers: formattedAnswers,
+        isAutoSubmitted,
+        cheatWarnings: warnings
+      });
+
+      if (response.data.success) {
+        alert('Exam submitted successfully!');
+        navigate('/home');
+      }
+    } catch (error) {
+      console.error('Submit error:', error);
+      alert('Failed to submit exam.');
+    }
+  }, [answers, examId, navigate, warnings]);
+
   useEffect(() => {
     // Fetch exam data
     const fetchExam = async () => {
@@ -49,7 +87,7 @@ const ExamTakingInterface = () => {
     }
     
     return () => clearInterval(timerRef.current);
-  }, [timeLeft, exam]);
+  }, [timeLeft, exam, handleSubmit]);
 
   useEffect(() => {
     // Anti-cheat: Tab switching and minimizing
@@ -79,51 +117,13 @@ const ExamTakingInterface = () => {
       window.removeEventListener("blur", handleBlur);
       document.removeEventListener("contextmenu", handleContextMenu);
     };
-  }, []);
-
-  const handleCheatingAttempt = async (message) => {
-    setWarningMessage(message);
-    setShowWarningModal(true);
-    setWarnings(prev => prev + 1);
-    
-    // Log warning to backend
-    try {
-      await api.post(`/submissions/${examId}/warning`);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  }, [handleCheatingAttempt]);
 
   const handleAnswerChange = (questionId, value) => {
     setAnswers({
       ...answers,
       [questionId]: value
     });
-  };
-
-  const handleSubmit = async (e, isAutoSubmitted = false) => {
-    if (e) e.preventDefault();
-    
-    const formattedAnswers = Object.keys(answers).map(qId => ({
-      questionId: qId,
-      providedAnswer: answers[qId]
-    }));
-
-    try {
-      const response = await api.post(`/submissions/${examId}/submit`, {
-        answers: formattedAnswers,
-        isAutoSubmitted,
-        cheatWarnings: warnings
-      });
-
-      if (response.data.success) {
-        alert('Exam submitted successfully!');
-        navigate('/home');
-      }
-    } catch (error) {
-      console.error('Submit error:', error);
-      alert('Failed to submit exam.');
-    }
   };
 
   if (!exam) return <div className="text-center mt-20">Loading exam...</div>;
