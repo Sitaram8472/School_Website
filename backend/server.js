@@ -118,6 +118,12 @@ const PORT = process.env.PORT || 5000;
 
 const server = http.createServer(app);
 
+
+// Staff recruitment: vacancies, sealed panel scoring and offers. Required and
+// mounted together so the module can be added or removed as one piece.
+const recruitmentRoutes = require("./routes/recruitmentRoutes.js");
+app.use("/api/recruitment", recruitmentRoutes);
+
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL || "http://localhost:5173",

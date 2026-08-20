@@ -9,6 +9,11 @@ import {
 
 // Import Components
 import Navbar from "./components/Navbar";
+
+// Staff recruitment. Kept as its own block so the module can be added or
+// removed without touching the lists around it.
+const Recruitment = lazy(() => import("./pages/Recruitment"));
+
 import Footer from "./components/Footer";
 import EduStreamAssistant from "./components/EduStreamAssistant";
 
@@ -221,6 +226,13 @@ const App = () => {
                 </ProtectedRoute>
               } />
   
+              {/* Recruitment - the hiring office and interview panels */}
+              <Route path="/recruitment" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
+                  <Recruitment />
+                </RoleProtectedRoute>
+              } />
+
               <Route path="/teacher/exam/:examId/submissions" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <SubmissionList />
