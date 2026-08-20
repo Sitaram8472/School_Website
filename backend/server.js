@@ -76,6 +76,11 @@ app.use("/api/trips", fieldTripRoutes);
 const analyticsRoutes = require('./routes/analyticsRoutes.js');
 app.use("/api/analytics", analyticsRoutes);
 
+// Staff payroll runs and payslips. Required and mounted together so the module
+// can be added or removed as one piece.
+const payrollRoutes = require("./routes/payrollRoutes.js");
+app.use("/api/payroll", payrollRoutes);
+
 // Database connection
 async function connectDB() {
   const mongoUrl = process.env.MONGODB_URI || process.env.MONGO_URL;

@@ -46,6 +46,11 @@ const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
 const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
 const RemarkAppeals = lazy(() => import("./pages/RemarkAppeals"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
+
+// Staff payroll. Kept as its own block so the module can be added or removed
+// without touching the list above.
+const StaffPayroll = lazy(() => import("./pages/StaffPayroll"));
+
 const SubmissionList = lazy(() => import("./pages/SubmissionList"));
 const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 
@@ -199,6 +204,13 @@ const App = () => {
               <Route path="/staff/training" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
                   <StaffTraining />
+                </RoleProtectedRoute>
+              } />
+
+              {/* Payroll - staff read their own payslips, admins run the month */}
+              <Route path="/staff/payroll" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
+                  <StaffPayroll />
                 </RoleProtectedRoute>
               } />
 
