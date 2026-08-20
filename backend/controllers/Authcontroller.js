@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const generateToken = require("../utils/generateToken");
+const AnalyticsEvent = require("../models/AnalyticsEvent");
 
 // ===== NEW: Email Cooldown System =====
 const emailCooldown = new Map(); // Store email resend timestamps
@@ -194,6 +195,9 @@ exports.login = async (req, res) => {
     // ===== NEW: Save refresh token to user =====
     user.refreshToken = refreshToken;
     await user.save();
+
+    // Log Analytics Event
+    await AnalyticsEvent.create({ eventType: 'LOGIN', userId: user._id }).catch(err => console.error("Analytics error:", err));
 
     res
       .cookie("token", token, {
