@@ -5,6 +5,7 @@ import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
 import { getUserRole } from '../utils/permissions';
 import FeeAdminPanel from '../components/fees/FeeAdminPanel';
+import RefundPanel from '../components/fees/RefundPanel';
 
 const STATUS_STYLES = {
   pending: 'bg-yellow-100 text-yellow-800',
@@ -131,6 +132,10 @@ const FeePortal = () => {
           </>
         )}
       </div>
+
+      {/* Refunds sit above the invoice list for both audiences: staff raise and
+          settle them here, families see the state of their own. */}
+      <RefundPanel />
 
       {isStaff ? (
         <FeeAdminPanel />
