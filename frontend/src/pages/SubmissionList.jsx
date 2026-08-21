@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../utils/axios';
 import { ArrowLeft, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import ItemAnalysisPanel from '../components/exams/ItemAnalysisPanel';
 
 const SubmissionList = () => {
   const { examId } = useParams();
@@ -94,6 +95,10 @@ const SubmissionList = () => {
           )}
         </div>
       </div>
+
+      {/* How the questions performed, from the same submissions listed above.
+          It reads them and writes a snapshot; it changes no marks. */}
+      <ItemAnalysisPanel examId={examId} />
     </div>
   );
 };
