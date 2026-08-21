@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useMemo } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
+import PrerequisitePanel from "../components/courses/PrerequisitePanel";
 import {
   BookOpen,
   Cpu,
@@ -575,6 +576,11 @@ const Academics = () => {
             />
           </div>
         </motion.div>
+
+        {/* What has to come first. Signed-in students see what they still
+            need; curriculum staff see and edit the graph. Nothing renders
+            for a visitor who is not signed in. */}
+        <PrerequisitePanel />
 
       </div>
     </div>
