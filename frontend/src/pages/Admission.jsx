@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 
 import prospectusPdf from "../assets/prospectus/prospectus.pdf";
 import prospectusCover from "../assets/prospectus/prospectus-cover.jpg";
+import DocumentChecklistPanel from "../components/admissions/DocumentChecklistPanel";
 
 const Admissions = () => {
   const [openFaq, setOpenFaq] = useState(null);
@@ -291,6 +292,11 @@ const Admissions = () => {
           </div>
         </div>
       </div>
+
+      {/* The admissions office's own view: which pending applications are
+          still missing a document, and which documents are present but out of
+          date. Renders nothing for a prospective parent. */}
+      <DocumentChecklistPanel />
     </div>
   );
 };
