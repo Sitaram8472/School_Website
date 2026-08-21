@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useCallback } from 'react';
 import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
 import { getUserRole } from '../utils/permissions';
+import IntegrityPanel from '../components/exams/IntegrityPanel';
 
 /**
  * Exam re-evaluation appeals.
@@ -774,6 +775,11 @@ const RemarkAppeals = () => {
           ))}
         </section>
       )}
+
+      {/* Integrity cases sit beside appeals because they are the other formal
+          exam proceeding a student has to answer, and this is the page they
+          already come to for one. Staff review theirs from the staff area. */}
+      <IntegrityPanel mode="student" />
     </div>
   );
 };
