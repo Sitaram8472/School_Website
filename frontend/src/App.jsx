@@ -92,6 +92,10 @@ const PublicRoute = ({ children }) => {
   return children;
 };
 
+// Donations and fundraising. Declared as its own block rather than in the list
+// above, so the module can be added or removed as one piece.
+const GivingCampaigns = lazy(() => import("./pages/GivingCampaigns"));
+
 const App = () => {
   return (
     <Router>
@@ -136,6 +140,13 @@ const App = () => {
                 <PublicRoute>
                   <ResetPassword />
                 </PublicRoute>
+              } />
+
+              {/* Giving - any signed-in user pledges; admins run the ledger */}
+              <Route path="/giving" element={
+                <ProtectedRoute>
+                  <GivingCampaigns />
+                </ProtectedRoute>
               } />
               <Route path="/verify-email/:token" element={<VerifyEmail />} />
               <Route path="/resend-verification" element={<ResendVerification />} />

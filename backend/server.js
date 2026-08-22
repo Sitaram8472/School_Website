@@ -154,6 +154,11 @@ app.set('io', io);
 const appealRoutes = require("./routes/appealRoutes.js");
 app.use("/api/appeals", appealRoutes);
 
+// Donations and fundraising. Required and mounted together so the module can
+// be added or removed as one piece.
+const givingRoutes = require("./routes/givingRoutes.js");
+app.use("/api/giving", givingRoutes);
+
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 }).on("error", (err) => {
