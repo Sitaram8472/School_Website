@@ -6,6 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 import { getUserRole } from '../utils/permissions';
 import FeeAdminPanel from '../components/fees/FeeAdminPanel';
 import RefundPanel from '../components/fees/RefundPanel';
+import InstalmentPlanPanel from '../components/fees/InstalmentPlanPanel';
 
 const STATUS_STYLES = {
   pending: 'bg-yellow-100 text-yellow-800',
@@ -136,6 +137,10 @@ const FeePortal = () => {
       {/* Refunds sit above the invoice list for both audiences: staff raise and
           settle them here, families see the state of their own. */}
       <RefundPanel />
+
+      {/* A plan is the answer to an invoice a family cannot pay in one go, so
+          it sits with the invoices rather than on a screen of its own. */}
+      <InstalmentPlanPanel />
 
       {isStaff ? (
         <FeeAdminPanel />
