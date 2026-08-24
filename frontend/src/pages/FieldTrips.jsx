@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useCallback } from 'react';
 import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
 import { getUserRole } from '../utils/permissions';
+import RiskAssessmentPanel from '../components/trips/RiskAssessmentPanel';
 
 /**
  * Field trips and excursions.
@@ -118,6 +119,10 @@ const FieldTrips = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const [showTripForm, setShowTripForm] = useState(false);
+
+  // Which trip's risk assessment is open. Null means none — the panel is not
+  // shown at all rather than shown empty.
+  const [riskTrip, setRiskTrip] = useState(null);
   const [tripForm, setTripForm] = useState(emptyTripForm);
 
   const flash = useCallback((message) => {
@@ -529,6 +534,13 @@ const FieldTrips = () => {
               {showTripForm ? 'Close' : 'Plan a trip'}
             </button>
 
+            {/* A trip cannot open until its assessment is approved, so the
+                assessment belongs on the screen where the trip is published
+                rather than behind a separate route. */}
+            {riskTrip && (
+              <RiskAssessmentPanel tripId={riskTrip._id} tripTitle={riskTrip.title} />
+            )}
+
             {showTripForm && (
               <form onSubmit={submitTrip} className="bg-white rounded-xl shadow p-5 grid sm:grid-cols-2 gap-4">
                 {[
@@ -642,6 +654,16 @@ const FieldTrips = () => {
                           Close list
                         </button>
                       )}
+                      <button
+                        onClick={() =>
+                          setRiskTrip((current) =>
+                            current && current._id === trip._id ? null : trip
+                          )
+                        }
+                        className="text-sm border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50"
+                      >
+                        {riskTrip && riskTrip._id === trip._id ? 'Hide risk' : 'Risk assessment'}
+                      </button>
                       <button
                         onClick={() => openManifest(trip)}
                         className="text-sm border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50"

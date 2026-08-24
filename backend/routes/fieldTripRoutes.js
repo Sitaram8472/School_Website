@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fieldTripController = require('../controllers/fieldTripController');
+const tripRiskController = require('../controllers/tripRiskController');
 const { protect } = require('../middleware/Auth');
 const verifyRole = require('../middleware/verifyRole');
 
@@ -13,12 +14,37 @@ router.get('/mine', verifyRole('teacher', 'admin'), fieldTripController.getMyTri
 router.get('/my-registrations', fieldTripController.getMyRegistrations);
 router.get('/stats', verifyRole('teacher', 'admin'), fieldTripController.getStats);
 
+// --- Risk assessment --------------------------------------------------------
+// The document that has to exist before a coach leaves. Declared here, above
+// the parameterised routes, so "/risk/..." is never read as a trip id.
+// Nothing student-facing exists: an assessment names children.
+router.get('/risk/meta', verifyRole('teacher', 'admin'), tripRiskController.getRiskMeta);
+router.get('/risk/outstanding', verifyRole('admin'), tripRiskController.getOutstanding);
+router.get('/risk/queue', verifyRole('admin'), tripRiskController.getQueue);
+
+router.get('/risk/:id', verifyRole('teacher', 'admin'), tripRiskController.getAssessment);
+router.patch('/risk/:id', verifyRole('teacher', 'admin'), tripRiskController.updateAssessment);
+router.patch('/risk/:id/submit', verifyRole('teacher', 'admin'), tripRiskController.submitAssessment);
+router.patch('/risk/:id/withdraw', verifyRole('teacher', 'admin'), tripRiskController.withdrawAssessment);
+
+// Approval is refused for anyone escorting the trip, checked in the handler.
+// Holding the role is necessary but not sufficient.
+router.patch('/risk/:id/approve', verifyRole('teacher', 'admin'), tripRiskController.approveAssessment);
+router.patch('/risk/:id/reject', verifyRole('teacher', 'admin'), tripRiskController.rejectAssessment);
+
 // --- Organising (teachers and admins) ---------------------------------------
 router.post('/', verifyRole('teacher', 'admin'), fieldTripController.createTrip);
 
 // --- Browsing (any authenticated user) --------------------------------------
 router.get('/', fieldTripController.listTrips);
 router.get('/:id', fieldTripController.getTrip);
+
+// --- Per-trip risk ----------------------------------------------------------
+// "Can this trip open?" answered as a list of reasons rather than a boolean.
+router.post('/:tripId/risk', verifyRole('teacher', 'admin'), tripRiskController.createAssessment);
+router.get('/:tripId/risk', verifyRole('teacher', 'admin'), tripRiskController.getAssessmentForTrip);
+router.get('/:tripId/risk/history', verifyRole('teacher', 'admin'), tripRiskController.getAssessmentHistory);
+router.get('/:tripId/risk/readiness', verifyRole('teacher', 'admin'), tripRiskController.getReadiness);
 
 // --- Registration (any authenticated user; consent enforced in the handler) --
 router.post('/:id/register', fieldTripController.register);
