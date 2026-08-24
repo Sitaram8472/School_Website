@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
 import { getUserRole } from '../utils/permissions';
+import CoverClaimPanel from '../components/substitutions/CoverClaimPanel';
 
 /**
  * Staff absence and substitute cover.
@@ -388,6 +389,10 @@ const SubstitutionBoard = () => {
             {error}
           </div>
         )}
+
+        {/* Payment for cover sits on the page where the cover itself is, because
+            a teacher looking at what they covered is the person who wants it. */}
+        <CoverClaimPanel />
 
         <div className="flex flex-wrap gap-2 mb-6 bg-white rounded-xl p-1 shadow">
           {tabs.map((entry) => (

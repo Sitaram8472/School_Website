@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const substitutionController = require('../controllers/substitutionController');
+const claimController = require('../controllers/coverClaimController');
 const { protect } = require('../middleware/Auth');
 const verifyRole = require('../middleware/verifyRole');
 
@@ -17,6 +18,38 @@ router.get('/absences/mine', verifyRole('teacher', 'admin'), substitutionControl
 // --- The substitute's own view ----------------------------------------------
 // Declared before `/absences/:id` so "my-cover" is never read as an id.
 router.get('/my-cover', verifyRole('teacher', 'admin'), substitutionController.getMyCover);
+
+// --- Cover claims -----------------------------------------------------------
+// Payment for cover actually taught. Declared above `/absences/:id` so none of
+// these static segments is ever read as an absence id.
+const teacherOrAdmin = verifyRole('teacher', 'admin');
+const payroll = verifyRole('admin');
+
+router.get('/claims/meta', teacherOrAdmin, claimController.getClaimMeta);
+router.get('/claims/mine', teacherOrAdmin, claimController.getMyClaims);
+router.get('/claims/claimable', teacherOrAdmin, claimController.getClaimable);
+router.get('/claims/summary/mine', teacherOrAdmin, claimController.getMyMonthSummary);
+
+// The load report includes cover nobody claimed for, which is the point of it.
+router.get('/claims/load', payroll, claimController.getLoadReport);
+
+// Batches are declared before `/claims/:id` for the same reason.
+router.get('/claims/batches', payroll, claimController.getBatches);
+router.post('/claims/batches/:monthKey/lock', payroll, claimController.lockBatch);
+router.patch('/claims/batches/:monthKey/unlock', payroll, claimController.unlockBatch);
+router.patch('/claims/batches/:monthKey/pay', payroll, claimController.payBatch);
+
+router.post('/claims', teacherOrAdmin, claimController.createClaim);
+router.get('/claims', payroll, claimController.getClaims);
+
+// Ownership is decided in the handler so a teacher can open their own.
+router.get('/claims/:id', teacherOrAdmin, claimController.getClaim);
+
+// Self-approval is refused in the handler. Holding the admin role is
+// necessary but not sufficient.
+router.patch('/claims/:id/approve', payroll, claimController.approveClaim);
+router.patch('/claims/:id/reject', payroll, claimController.rejectClaim);
+router.patch('/claims/:id/cancel', teacherOrAdmin, claimController.cancelClaim);
 
 // --- The cover board --------------------------------------------------------
 router.get('/board', verifyRole('admin'), substitutionController.getBoard);
