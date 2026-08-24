@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const staffTrainingController = require('../controllers/staffTrainingController');
+const cohortController = require('../controllers/trainingCohortController');
 const { protect } = require('../middleware/Auth');
 const verifyRole = require('../middleware/verifyRole');
 
@@ -11,6 +12,38 @@ router.use(verifyRole('teacher', 'staff', 'admin'));
 
 // --- Reference data ---------------------------------------------------------
 router.get('/meta', staffTrainingController.getMeta);
+
+// --- Cohorts ----------------------------------------------------------------
+// A cohort is one scheduled run of one course, with a fixed number of chairs.
+// TrainingRecord is what somebody did; this is what the school runs. Static
+// segments are declared before `/cohorts/:id`.
+router.get('/cohorts/meta', cohortController.getCohortMeta);
+router.get('/cohorts/mine', cohortController.getMyCohorts);
+router.get('/cohorts/calendar', cohortController.getCalendar);
+router.get('/cohorts', cohortController.getCohorts);
+
+// Only an admin schedules a session or changes its shape.
+router.post('/cohorts', verifyRole('admin'), cohortController.createCohort);
+
+router.get('/cohorts/:id', cohortController.getCohort);
+router.patch('/cohorts/:id', verifyRole('admin'), cohortController.updateCohort);
+router.patch('/cohorts/:id/status', verifyRole('admin'), cohortController.setStatus);
+router.patch('/cohorts/:id/cancel', verifyRole('admin'), cohortController.cancelCohort);
+
+// Any member of staff may take their own seat; enrolling somebody else is an
+// admin act and is logged as one.
+router.post('/cohorts/:id/enrol', cohortController.enrolSelf);
+router.post('/cohorts/:id/enrol/:staffId', verifyRole('admin'), cohortController.enrolOther);
+router.patch('/cohorts/:id/withdraw', cohortController.withdraw);
+router.patch('/cohorts/:id/promote', verifyRole('admin'), cohortController.promote);
+
+// The register belongs to the facilitator, checked in the handler rather than
+// by role — an admin qualifies, any other teacher does not.
+router.get('/cohorts/:id/register', cohortController.getRegister);
+router.patch('/cohorts/:id/attendance/:staffId', cohortController.markAttendance);
+
+// The report that makes `isMandatory` mean something.
+router.get('/cohorts/:id/gap', verifyRole('admin'), cohortController.getMandatoryGap);
 
 // --- A member of staff's own records ----------------------------------------
 // Declared before `/records/:id` so "mine" is never read as an id.
