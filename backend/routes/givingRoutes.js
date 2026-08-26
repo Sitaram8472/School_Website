@@ -43,4 +43,62 @@ router.patch(
   givingController.waiveInstalment
 );
 
+// --- Employer matching -------------------------------------------------------
+// Mounted under /matching rather than at the top level because a match is
+// something that happens to a gift, not a thing in its own right. The whole
+// prefix is a static segment, so none of it can be read as a campaign or
+// pledge id by the routes above.
+const matchingGiftController = require('../controllers/matchingGiftController');
+
+router.get('/matching/meta', matchingGiftController.getMatchingMeta);
+
+// Programmes. The list is readable by any signed-in donor — they have to pick
+// their employer from it — but it is narrowed to active programmes for them.
+router.post('/matching/programmes', verifyRole('admin'), matchingGiftController.createProgramme);
+router.get('/matching/programmes', matchingGiftController.listProgrammes);
+router.patch(
+  '/matching/programmes/:id',
+  verifyRole('admin'),
+  matchingGiftController.updateProgramme
+);
+router.patch(
+  '/matching/programmes/:id/status',
+  verifyRole('admin'),
+  matchingGiftController.setProgrammeStatus
+);
+
+// The ceiling, asked for before an amount is typed rather than after the
+// server rejects one.
+router.get('/matching/claimable', matchingGiftController.getClaimable);
+
+// Claims. `mine` before `:id`, so the word is never read as an identifier.
+router.get('/matching/claims/mine', matchingGiftController.getMyClaims);
+router.get('/matching/claims', verifyRole('admin'), matchingGiftController.listClaims);
+router.post('/matching/claims', matchingGiftController.createClaim);
+
+// Ownership is checked in the handler, since "mine or admin" is not a role.
+router.get('/matching/claims/:id', matchingGiftController.getClaim);
+router.patch('/matching/claims/:id/submit', matchingGiftController.submitClaim);
+router.patch('/matching/claims/:id/withdraw', matchingGiftController.withdrawClaim);
+
+// The two-person rule: whoever verifies may be neither the donor nor the
+// person who submitted, enforced in the controller and again in the model.
+router.patch('/matching/claims/:id/verify', verifyRole('admin'), matchingGiftController.verifyClaim);
+router.patch(
+  '/matching/claims/:id/decline',
+  verifyRole('admin'),
+  matchingGiftController.declineClaim
+);
+
+// Idempotent on the receipt reference in the body, and the ceiling is derived
+// again here in case other claims have spent the budget in the meantime.
+router.patch(
+  '/matching/claims/:id/receipt',
+  verifyRole('admin'),
+  matchingGiftController.recordReceipt
+);
+
+// Reported beside the campaign's own totals, never folded into them.
+router.get('/campaigns/:id/matching', matchingGiftController.getCampaignMatching);
+
 module.exports = router;
