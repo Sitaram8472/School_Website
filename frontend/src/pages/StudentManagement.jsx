@@ -1,6 +1,7 @@
 import React from "react";
 import { Download } from "lucide-react";
 import { saveAs } from "file-saver";
+import ReleasePanel from "../components/reports/ReleasePanel";
 
 const StudentManagement = () => {
   const students = [
@@ -90,6 +91,10 @@ const StudentManagement = () => {
           </table>
         </div>
       </div>
+
+      {/* Holding one student's report back belongs on the page that already
+          lists students by class. Renders for staff only. */}
+      <ReleasePanel />
     </div>
   );
 };
