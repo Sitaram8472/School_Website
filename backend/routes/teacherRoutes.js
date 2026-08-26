@@ -52,4 +52,40 @@ router.delete('/resources/:id', deleteResource);
 router.get('/attendance', getMyAttendance);
 router.post('/attendance', markAttendance);
 
+// --- Credential register -----------------------------------------------------
+// `router.use(protect, verifyRole('teacher', 'admin'))` above already fixes the
+// audience, so nothing here is reachable by a student. The multer `upload`
+// configured at the top of this file takes the scanned certificate, so no new
+// upload plumbing is introduced.
+//
+// The controller is a separate file rather than an addition to
+// teacherController.js, which has open changes against it.
+const credentials = require('../controllers/teacherCredentialController');
+
+// Static segments first, so none of them is ever read as a credential id.
+router.get('/credentials/meta', credentials.getCredentialMeta);
+router.get('/credentials/mine', credentials.getMyCredentials);
+router.get('/credentials/expiring', verifyRole('admin'), credentials.getExpiring);
+router.get('/credentials/endorsed', credentials.getEndorsedStaff);
+router.get('/credentials/point-in-time', verifyRole('admin'), credentials.getPointInTime);
+
+// The register itself carries rejection reasons across staff, so it is admin
+// only; a teacher reads their own record through /credentials/mine.
+router.get('/credentials', verifyRole('admin'), credentials.listCredentials);
+
+router.post('/credentials', upload.single('document'), credentials.createCredential);
+
+// A renewal writes a new document and supersedes the old one. It is not a PATCH
+// of the old one, because overwriting the dates is the thing that makes an
+// inspection unanswerable.
+router.post('/credentials/:id/renew', upload.single('document'), credentials.renewCredential);
+
+// Verification is admin only, and the model refuses it a second time if the
+// verifier is the person the credential belongs to.
+router.patch('/credentials/:id/verify', verifyRole('admin'), credentials.verifyCredential);
+router.patch('/credentials/:id/reject', verifyRole('admin'), credentials.rejectCredential);
+
+// Withdrawal is for something submitted in error, so the owner may do it.
+router.patch('/credentials/:id/withdraw', credentials.withdrawCredential);
+
 module.exports = router;
