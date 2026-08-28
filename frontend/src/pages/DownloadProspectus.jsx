@@ -12,6 +12,7 @@ import {
 
 import prospectusPdf from "../assets/prospectus/prospectus.pdf";
 import prospectusCover from "../assets/prospectus/prospectus-cover.jpg";
+import ProspectusRequestPanel from "../components/prospectus/ProspectusRequestPanel";
 
 const DownloadProspectus = () => {
   const highlights = [
@@ -201,6 +202,11 @@ const DownloadProspectus = () => {
             </div>
           </div>
         </section>
+
+        {/* The printed copy. The download above serves the family who is happy
+            with a PDF; this serves the one who wants the book posted, and gives
+            them a reference so "did you send it?" has an answer. */}
+        <ProspectusRequestPanel />
 
         {/* Bottom CTA */}
         <section className="text-center bg-blue-50 p-6 sm:p-12 rounded-3xl border border-blue-100">
