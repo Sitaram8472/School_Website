@@ -5,6 +5,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 import events from "../data/events";
+import AppealWindowCalendar from "../components/appeals/AppealWindowCalendar";
 
 const categories = [
   { label: "All", value: "All", icon: "📋" },
@@ -136,6 +137,12 @@ const EventCalendar = () => {
           Total Upcoming Events: {filteredEvents.length}
         </p>
       </div>
+
+      {/* Appeal deadlines. A re-evaluation window is a date a student has to
+          act by, so it belongs on the page they already come to for dates
+          rather than behind the appeals screen they only reach once they have
+          decided to appeal. The panel renders nothing for signed-out visitors. */}
+      <AppealWindowCalendar />
 
       {/* Current View Summary */}
       <div className="w-full max-w-4xl mx-auto bg-white border border-blue-100 rounded-3xl shadow-xl p-6 mb-12">
