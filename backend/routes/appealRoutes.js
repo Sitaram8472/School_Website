@@ -19,6 +19,12 @@ router.get('/appealable', appealController.getAppealable);
 router.post('/', appealController.createAppeal);
 router.patch('/:id/withdraw', appealController.withdrawAppeal);
 
+// --- Reviewer panels --------------------------------------------------------
+// Who is entitled to re-mark a paper for a given course. Mounted above `/:id`
+// so "panels" is never read as an appeal id, and required inline so this
+// sub-resource costs the file one line rather than two.
+router.use('/panels', require('./appealPanelRoutes'));
+
 // --- The reviewer's queue (staff) -------------------------------------------
 router.get('/queue', verifyRole('teacher', 'admin'), appealController.getQueue);
 router.get('/stats', verifyRole('admin'), appealController.getStats);
