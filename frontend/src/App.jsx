@@ -44,6 +44,7 @@ const StaffTraining = lazy(() => import("./pages/StaffTraining"));
 
 const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
 const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
+const AssetRegister = lazy(() => import("./pages/AssetRegister"));
 const RemarkAppeals = lazy(() => import("./pages/RemarkAppeals"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
 const SubmissionList = lazy(() => import("./pages/SubmissionList"));
@@ -109,6 +110,13 @@ const App = () => {
             <Routes>
               {/* Default route - public home */}
              <Route path="/" element={<Navigate to="/student" replace />} />
+
+              {/* Asset register - staff hold equipment, admins run the register */}
+              <Route path="/assets" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
+                  <AssetRegister />
+                </RoleProtectedRoute>
+              } />
   
               {/* Auth Routes - Public (only for non-logged in users) */}
               <Route path="/login" element={

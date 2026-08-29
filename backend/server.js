@@ -125,6 +125,11 @@ const io = new Server(server, {
   }
 });
 
+// Physical asset register. Required and mounted together so the module can
+// be added or removed as one piece.
+const assetRoutes = require("./routes/assetRoutes.js");
+app.use("/api/assets", assetRoutes);
+
 io.use((socket, next) => {
   try {
     const token = socket.handshake.auth.token;
