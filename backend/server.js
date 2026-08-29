@@ -96,6 +96,11 @@ async function connectDB() {
 
 connectDB();
 
+// Facility and room booking. Required and mounted together so the module can
+// be added or removed as one piece.
+const facilityRoutes = require("./routes/facilityRoutes.js");
+app.use("/api/facilities", facilityRoutes);
+
 // Initialize notice scheduler
 require("./scheduler/noticeScheduler");
 

@@ -28,6 +28,7 @@ const Scholarship = lazy(() => import("./pages/Scholarship"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const FeePortal = lazy(() => import("./pages/FeePortal"));
 const Student = lazy(() => import("./pages/Student"));
+const FacilityBooking = lazy(() => import("./pages/FacilityBooking"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const DownloadProspectus = lazy(() => import("./pages/DownloadProspectus"));
@@ -173,6 +174,14 @@ const App = () => {
 
               <Route path="/academics" element={<Academics />} />
               <Route path="/admissions" element={<Admissions />} />
+
+              {/* Room and facility booking - any signed-in user can look */}
+              <Route path="/facilities" element={
+                <ProtectedRoute>
+                  <FacilityBooking />
+                </ProtectedRoute>
+              } />
+
               <Route path="/admissions/scholarship" element={<Scholarship />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/contact" element={<Contact />} />
