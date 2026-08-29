@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import faculty from "../data/faculty";
 import TeacherCard from "../components/TeacherCard";
+import CredentialPanel from "../components/faculty/CredentialPanel";
 
 const FacultyDirectory = () => {
   const [selectedDepartment, setSelectedDepartment] = useState("All");
@@ -101,6 +102,12 @@ const FacultyDirectory = () => {
           </div>
         ))}
       </div>
+
+      {/* The cards above are a name and a subject string. The register says
+          whether the person is qualified to teach it and whether their
+          safeguarding is current. It renders for signed-in staff only — the
+          public directory is unchanged. */}
+      <CredentialPanel />
     </div>
   );
 };
