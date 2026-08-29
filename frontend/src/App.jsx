@@ -24,6 +24,7 @@ const MeetingBooking = lazy(() => import("./pages/MeetingBooking"));
 const NotFound = lazy(() => import("./pages/Notfound"));
 const FieldTrips = lazy(() => import("./pages/FieldTrips"));
 const EventCalendar = lazy(() => import("./pages/EventCalendar"));
+const FinancialAid = lazy(() => import("./pages/FinancialAid"));
 const Scholarship = lazy(() => import("./pages/Scholarship"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const FeePortal = lazy(() => import("./pages/FeePortal"));
@@ -174,6 +175,13 @@ const App = () => {
               <Route path="/academics" element={<Academics />} />
               <Route path="/admissions" element={<Admissions />} />
               <Route path="/admissions/scholarship" element={<Scholarship />} />
+
+              {/* Financial aid applications - any signed-in user; the committee sees the review queue */}
+              <Route path="/financial-aid" element={
+                <ProtectedRoute>
+                  <FinancialAid />
+                </ProtectedRoute>
+              } />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/calendar" element={<EventCalendar />} />
