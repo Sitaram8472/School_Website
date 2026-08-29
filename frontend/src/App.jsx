@@ -38,6 +38,11 @@ const ResendVerification = lazy(() => import("./pages/ResendVerification"));
 const VerifyEmailSent = lazy(() => import("./pages/VerifyEmailSent"));
 
 import { AuthContext } from "./context/AuthContext";
+
+// Procurement. Kept as its own block so the module can be added or removed
+// without touching the lists around it.
+const Procurement = lazy(() => import("./pages/Procurement"));
+
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
 
 const StaffTraining = lazy(() => import("./pages/StaffTraining"));
@@ -169,6 +174,13 @@ const App = () => {
                 <ProtectedRoute>
                   <FieldTrips />
                 </ProtectedRoute>
+              } />
+
+              {/* Procurement - departments raise, the office quotes, admins approve */}
+              <Route path="/procurement" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
+                  <Procurement />
+                </RoleProtectedRoute>
               } />
 
               <Route path="/academics" element={<Academics />} />

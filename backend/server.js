@@ -94,6 +94,12 @@ async function connectDB() {
   }
 }
 
+
+// Purchase requisitions, budget encumbrance and goods receipts. Required and
+// mounted together so the module can be added or removed as one piece.
+const procurementRoutes = require("./routes/procurementRoutes.js");
+app.use("/api/procurement", procurementRoutes);
+
 connectDB();
 
 // Initialize notice scheduler
