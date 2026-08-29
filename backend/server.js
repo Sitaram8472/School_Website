@@ -30,6 +30,7 @@ const courseRoutes = require('./routes/courseRoutes.js');
 const examRoutes = require('./routes/examRoutes.js');
 const submissionRoutes = require('./routes/submissionRoutes.js');
 const reportRoutes = require('./routes/reportRoutes.js');
+const assignmentRoutes = require('./routes/assignmentRoutes.js');
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ app.use("/api/substitutions", substitutionRoutes);
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/assignments", assignmentRoutes);
 app.use("/api/inquiries", inquiryRoutes);
 app.use("/api/meetings", meetingRoutes);
 app.use("/api/notices", noticeRoutes);

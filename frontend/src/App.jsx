@@ -14,6 +14,7 @@ import EduStreamAssistant from "./components/EduStreamAssistant";
 
 // Import Pages (Lazy Loaded)
 const Home = lazy(() => import("./pages/Home"));
+const StudentAssignments = lazy(() => import("./pages/StudentAssignments"));
 const About = lazy(() => import("./pages/About"));
 const Teacher = lazy(() => import("./pages/Teacher"));
 const SubstitutionBoard = lazy(() => import("./pages/SubstitutionBoard"));
@@ -239,7 +240,13 @@ const App = () => {
               } />
   
               <Route path="/student" element={<Student />} />
-  
+
+              <Route path="/student/assignments" element={
+                <ProtectedRoute>
+                  <StudentAssignments />
+                </ProtectedRoute>
+              } />
+
               <Route path="/student/exam/:examId" element={
                 <RoleProtectedRoute allowedRoles={["student"]}>
                   <ExamTakingInterface />
