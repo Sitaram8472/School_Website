@@ -147,6 +147,11 @@ io.on("connection", (socket) => {
   });
 });
 
+// Student council elections. Required and mounted together so the module can
+// be added or removed as one piece.
+const electionRoutes = require("./routes/electionRoutes.js");
+app.use("/api/elections", electionRoutes);
+
 app.set('io', io);
 
 // Exam re-evaluation appeals. Required and mounted together so the module can
