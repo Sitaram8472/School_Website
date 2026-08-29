@@ -16,6 +16,7 @@ import EduStreamAssistant from "./components/EduStreamAssistant";
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
 const Teacher = lazy(() => import("./pages/Teacher"));
+const SportsBoard = lazy(() => import("./pages/SportsBoard"));
 const SubstitutionBoard = lazy(() => import("./pages/SubstitutionBoard"));
 const Academics = lazy(() => import("./pages/Academics"));
 const Admissions = lazy(() => import("./pages/Admission"));
@@ -154,6 +155,13 @@ const App = () => {
   
               {/* Public Routes (No Login Required) */}
               <Route path="/home" element={<Home />} />
+
+              {/* Inter-house sports - any signed-in user; staff record results */}
+              <Route path="/sports" element={
+                <ProtectedRoute>
+                  <SportsBoard />
+                </ProtectedRoute>
+              } />
 
               {/* Substitute cover - teaching staff and admins */}
               <Route path="/substitutions" element={
