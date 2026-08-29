@@ -48,6 +48,7 @@ const RemarkAppeals = lazy(() => import("./pages/RemarkAppeals"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
 const SubmissionList = lazy(() => import("./pages/SubmissionList"));
 const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
+const Transport = lazy(() => import("./pages/Transport"));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[50vh] text-2xl font-semibold text-gray-500">
@@ -239,6 +240,13 @@ const App = () => {
               } />
   
               <Route path="/student" element={<Student />} />
+
+              {/* School transport - students see their own bus, the office manages routes */}
+              <Route path="/transport" element={
+                <RoleProtectedRoute allowedRoles={["student", "teacher", "staff", "admin"]}>
+                  <Transport />
+                </RoleProtectedRoute>
+              } />
   
               <Route path="/student/exam/:examId" element={
                 <RoleProtectedRoute allowedRoles={["student"]}>
