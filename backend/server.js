@@ -114,6 +114,11 @@ const staffTrainingRoutes = require("./routes/staffTrainingRoutes.js");
 app.use("/api/staff-training", staffTrainingRoutes);
 
 
+// Emergency drills and safety incidents. Required and mounted together so the
+// module can be added or removed as one piece.
+const safetyRoutes = require("./routes/safetyRoutes.js");
+app.use("/api/safety", safetyRoutes);
+
 const PORT = process.env.PORT || 5000;
 
 const server = http.createServer(app);
