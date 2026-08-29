@@ -11,6 +11,12 @@ router.use(protect);
 // --- Reference data ---------------------------------------------------------
 router.get('/meta', appealController.getMeta);
 
+// --- Appeal windows ---------------------------------------------------------
+// When a cohort may appeal a given exam, and until when. Mounted well above
+// `/:id` so "windows" is never read as an appeal id, and required inline so
+// this sub-resource costs the file one line rather than two.
+router.use('/windows', require('./appealWindowRoutes'));
+
 // --- A student's own view ---------------------------------------------------
 // Declared before `/:id` so none of these words is ever read as an id.
 router.get('/mine', appealController.getMyAppeals);
