@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../utils/axios';
+import AppealPanelManager from '../components/appeals/AppealPanelManager';
 
 const ExamBuilder = () => {
   const navigate = useNavigate();
@@ -159,6 +160,12 @@ const ExamBuilder = () => {
           Publish Exam
         </button>
       </form>
+
+      {/* The people who may re-mark this course's papers if a result here is
+          appealed. It sits with the exam because both are scoped to the same
+          course, and because the roster is worth a glance before results go
+          out rather than after somebody disputes one. */}
+      <AppealPanelManager courseId={courseId} />
     </div>
   );
 };
