@@ -165,3 +165,8 @@ server.listen(PORT, () => {
   console.log("Server error:", err.message);
   process.exit(1);
 });
+// Emergency broadcasts and acknowledgements. Required and mounted together so
+// the module can be added or removed as one piece. Express consults the router
+// stack per request, so mounting below the listener behaves as it would above.
+const broadcastRoutes = require("./routes/broadcastRoutes.js");
+app.use("/api/broadcasts", broadcastRoutes);

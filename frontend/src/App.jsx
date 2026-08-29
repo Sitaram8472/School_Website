@@ -1,4 +1,9 @@
 import React, { useContext, useEffect, Suspense, lazy } from "react";
+
+// Emergency alerts. Kept as its own block so the module can be added or removed
+// without touching the lists below.
+const EmergencyAlerts = lazy(() => import("./pages/EmergencyAlerts"));
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -248,6 +253,15 @@ const App = () => {
   
               {/* Catch-all route for 404 Page Not Found */}
               <Route path="*" element={<NotFound />} />
+
+              {/* Emergency alerts - everybody signed in reads and acknowledges
+                  their own. Route order does not affect matching in react-router
+                  v6, so this block sits clear of the lists above. */}
+              <Route path="/alerts" element={
+                <ProtectedRoute>
+                  <EmergencyAlerts />
+                </ProtectedRoute>
+              } />
             </Routes>
           </Suspense>
         </main>
