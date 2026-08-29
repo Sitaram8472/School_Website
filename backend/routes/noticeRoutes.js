@@ -20,6 +20,12 @@ router.patch('/schedule/:id', protect, checkPermission('updateOwn', 'notice'), n
 router.patch('/:id/cancel', protect, checkPermission('updateOwn', 'notice'), noticeController.cancelSchedule);
 router.patch('/cancel/:id', protect, checkPermission('updateOwn', 'notice'), noticeController.cancelSchedule);
 
+// Publication consent
+// Whether a child's image or name may appear in a school publication, and what
+// has already gone out under each permission. A static prefix declared above
+// the `/:id` routes, so none of its segments is ever read as a notice id.
+router.use('/publication-consent', require('./publicationConsentRoutes'));
+
 // Archive
 router.patch('/:id/archive', protect, checkPermission('updateOwn', 'notice'), noticeController.archiveNotice);
 router.patch('/archive/:id', protect, checkPermission('updateOwn', 'notice'), noticeController.archiveNotice);
