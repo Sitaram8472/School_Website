@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
 import { getUserRole } from '../utils/permissions';
+import MatchingGiftPanel from '../components/giving/MatchingGiftPanel';
 
 /**
  * Donations and fundraising.
@@ -907,6 +908,12 @@ const GivingCampaigns = () => {
           )}
         </section>
       )}
+
+      {/* Employer matching sits below the campaigns and the ledger, because it
+          is a claim made about a gift that already appears above it. The money
+          it brings in is reported as its own figure and is never added into a
+          campaign's received total. */}
+      <MatchingGiftPanel />
     </div>
   );
 };
