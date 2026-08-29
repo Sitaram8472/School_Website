@@ -1,4 +1,5 @@
 import React from "react";
+import ProgressionPanel from "./progression/ProgressionPanel";
 
 const StudentPerformanceTracker = ({ performanceData }) => {
   return (
@@ -60,6 +61,10 @@ const StudentPerformanceTracker = ({ performanceData }) => {
           </div>
         ))}
       </div>
+
+      {/* How the year went, and what it means for next year. The second is the
+          question the first is really being asked in aid of. */}
+      <ProgressionPanel />
     </div>
   );
 };
