@@ -99,6 +99,11 @@ connectDB();
 // Initialize notice scheduler
 require("./scheduler/noticeScheduler");
 
+// School store inventory and orders. Required and mounted together so the
+// module can be added or removed as one piece.
+const storeRoutes = require("./routes/storeRoutes.js");
+app.use("/api/store", storeRoutes);
+
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,

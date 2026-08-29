@@ -32,6 +32,7 @@ const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const DownloadProspectus = lazy(() => import("./pages/DownloadProspectus"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const SchoolStore = lazy(() => import("./pages/SchoolStore"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const ResendVerification = lazy(() => import("./pages/ResendVerification"));
@@ -175,6 +176,14 @@ const App = () => {
               <Route path="/admissions" element={<Admissions />} />
               <Route path="/admissions/scholarship" element={<Scholarship />} />
               <Route path="/gallery" element={<Gallery />} />
+
+              {/* School store - any signed-in family; admins run the counter */}
+              <Route path="/store" element={
+                <ProtectedRoute>
+                  <SchoolStore />
+                </ProtectedRoute>
+              } />
+
               <Route path="/contact" element={<Contact />} />
               <Route path="/calendar" element={<EventCalendar />} />
               <Route path="/prospectus" element={<DownloadProspectus />} />
