@@ -20,6 +20,7 @@ const SubstitutionBoard = lazy(() => import("./pages/SubstitutionBoard"));
 const Academics = lazy(() => import("./pages/Academics"));
 const Admissions = lazy(() => import("./pages/Admission"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Cafeteria = lazy(() => import("./pages/Cafeteria"));
 const MeetingBooking = lazy(() => import("./pages/MeetingBooking"));
 const NotFound = lazy(() => import("./pages/Notfound"));
 const FieldTrips = lazy(() => import("./pages/FieldTrips"));
@@ -183,6 +184,13 @@ const App = () => {
               <Route path="/fees" element={
                 <ProtectedRoute>
                   <FeePortal />
+                </ProtectedRoute>
+              } />
+
+              {/* Canteen account - any signed-in user; the counter sees the admin panel */}
+              <Route path="/cafeteria" element={
+                <ProtectedRoute>
+                  <Cafeteria />
                 </ProtectedRoute>
               } />
 
