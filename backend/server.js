@@ -19,6 +19,7 @@ checkProductionSecurity();
 // Import routes
 const authRoutes = require("./routes/Auth");
 const inquiryRoutes = require('./routes/inquiryRoutes.js');
+const alumniRoutes = require('./routes/alumniRoutes.js');
 const meetingRoutes = require('./routes/meetingRoutes.js');
 const noticeRoutes = require('./routes/noticeRoutes.js');
 const feeRoutes = require('./routes/feeRoutes.js');
@@ -55,6 +56,7 @@ app.use("/api/substitutions", substitutionRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/inquiries", inquiryRoutes);
 app.use("/api/meetings", meetingRoutes);
+app.use("/api/alumni", alumniRoutes);
 app.use("/api/notices", noticeRoutes);
 app.use("/api/fees", feeRoutes);
 app.use("/api/applications", applicationRoutes);
