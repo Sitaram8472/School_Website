@@ -3,6 +3,7 @@ import axios from 'axios';
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell
 } from 'recharts';
+import KpiTargetPanel from '../components/analytics/KpiTargetPanel';
 
 const AdminAnalytics = () => {
   const [analyticsData, setAnalyticsData] = useState(null);
@@ -175,6 +176,11 @@ const AdminAnalytics = () => {
           </div>
         </div>
       </div>
+
+      {/* Targets sit under the charts they judge. The charts say what happened;
+          without a recorded expectation beside them, every figure above is
+          being read against a remembered one. */}
+      <KpiTargetPanel />
     </div>
   );
 };
