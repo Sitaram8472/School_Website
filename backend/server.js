@@ -18,6 +18,9 @@ checkProductionSecurity();
 
 // Import routes
 const authRoutes = require("./routes/Auth");
+
+// Initialize Event Listeners
+require('./listeners/emailListeners');
 const inquiryRoutes = require('./routes/inquiryRoutes.js');
 const meetingRoutes = require('./routes/meetingRoutes.js');
 const noticeRoutes = require('./routes/noticeRoutes.js');
