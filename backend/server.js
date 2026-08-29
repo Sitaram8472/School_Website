@@ -68,6 +68,11 @@ app.use("/api/submissions", submissionRoutes);
 app.use("/api/reports", reportRoutes);
 
 
+
+// Staff leave entitlement and requests. Required and mounted together so the
+// module can be added or removed as one piece.
+const staffLeaveRoutes = require("./routes/staffLeaveRoutes.js");
+app.use("/api/staff-leave", staffLeaveRoutes);
 // Field trips and excursions. Required and mounted together so the module can
 // be added or removed as one piece.
 const fieldTripRoutes = require("./routes/fieldTripRoutes.js");
