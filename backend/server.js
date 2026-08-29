@@ -73,6 +73,11 @@ app.use("/api/reports", reportRoutes);
 const fieldTripRoutes = require("./routes/fieldTripRoutes.js");
 app.use("/api/trips", fieldTripRoutes);
 
+// Admission merit lists and seat allotment. Required and mounted together so
+// the module can be added or removed as one piece.
+const allotmentRoutes = require("./routes/allotmentRoutes.js");
+app.use("/api/allotment", allotmentRoutes);
+
 const analyticsRoutes = require('./routes/analyticsRoutes.js');
 app.use("/api/analytics", analyticsRoutes);
 

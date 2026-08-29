@@ -49,6 +49,10 @@ const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
 const SubmissionList = lazy(() => import("./pages/SubmissionList"));
 const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 
+// Admission seat allotment. Kept as its own block so the module can be added or
+// removed without touching the list above.
+const SeatAllotment = lazy(() => import("./pages/SeatAllotment"));
+
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[50vh] text-2xl font-semibold text-gray-500">
     <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-500 mr-4"></div>
@@ -163,6 +167,13 @@ const App = () => {
               } />
 
               <Route path="/about" element={<About />} />
+
+              {/* Seat allotment - families see their own offer, staff the round */}
+              <Route path="/admissions/seats" element={
+                <ProtectedRoute>
+                  <SeatAllotment />
+                </ProtectedRoute>
+              } />
 
               {/* Field trips - any signed-in family; staff also organise here */}
               <Route path="/trips" element={
