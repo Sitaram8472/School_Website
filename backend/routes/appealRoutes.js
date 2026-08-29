@@ -4,6 +4,13 @@ const appealController = require('../controllers/appealController');
 const { protect } = require('../middleware/Auth');
 const verifyRole = require('../middleware/verifyRole');
 
+// --- Published outcome statistics -------------------------------------------
+// Mounted above the blanket `protect` below on purpose: a published
+// transparency report has to be readable without a session, since a family
+// reads it before they have an account, let alone an appeal. Every route
+// inside that is not public attaches `protect` and a role guard itself.
+router.use('/statistics', require('./appealReportRoutes'));
+
 // Appeals carry a student's marks and their case for changing them. Nothing
 // here is public.
 router.use(protect);

@@ -1,5 +1,6 @@
 import React from "react";
 import { Users, BookOpen, Trophy, Globe, Award, Calendar } from "lucide-react";
+import AppealTransparencyPanel from "../components/appeals/AppealTransparencyPanel";
 
 const About = () => {
   return (
@@ -237,6 +238,12 @@ const About = () => {
             ))}
           </div>
         </div>
+
+        {/* Published appeal outcomes. A school that states its values on this
+            page should be willing to publish the figures behind one of them,
+            and a family reads them here before they ever have an appeal to
+            make. Public, so it renders for signed-out visitors too. */}
+        <AppealTransparencyPanel />
 
         {/* Core Values */}
         <div>
