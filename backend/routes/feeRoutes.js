@@ -5,6 +5,7 @@ const { protect } = require('../middleware/Auth');
 const verifyRole = require('../middleware/verifyRole');
 const feeController = require('../controllers/feeController');
 const refundController = require('../controllers/feeRefundController');
+const instalmentController = require('../controllers/feeInstalmentController');
 
 // Everything under /api/fees needs a session.
 router.use(protect);
@@ -59,6 +60,39 @@ router.patch('/refunds/:id/approve', approver, refundController.approveRefund);
 router.patch('/refunds/:id/reject', approver, refundController.rejectRefund);
 router.patch('/refunds/:id/settle', approver, refundController.settleRefund);
 router.patch('/refunds/:id/cancel', bursar, refundController.cancelRefund);
+
+// ---- Instalment plans ----
+// A plan is a schedule for paying one invoice, so it lives beside the invoices
+// and the refunds it reschedules. Staff may draft and cancel; only an admin may
+// approve, reject, waive an instalment or declare a default.
+
+// Static segments first, so "/instalment-plans/mine" is never captured by
+// "/instalment-plans/:id".
+router.get('/instalment-plans/meta', instalmentController.getPlanMeta);
+router.get('/instalment-plans/mine', instalmentController.getMyPlans);
+router.get('/instalment-plans/summary', bursar, instalmentController.getPlanSummary);
+router.get('/instalment-plans/schedulable', bursar, instalmentController.getSchedulableInvoices);
+
+router.post('/instalment-plans', bursar, instalmentController.createPlan);
+router.get('/instalment-plans', bursar, instalmentController.getPlans);
+
+// What the schedule would look like, before anything is created.
+router.get('/invoices/:id/plan-preview', bursar, instalmentController.previewPlan);
+
+// Ownership is decided in the controller so a family can open their own.
+router.get('/instalment-plans/:id', instalmentController.getPlan);
+
+router.patch('/instalment-plans/:id/approve', approver, instalmentController.approvePlan);
+router.patch('/instalment-plans/:id/reject', approver, instalmentController.rejectPlan);
+router.patch('/instalment-plans/:id/default', approver, instalmentController.defaultPlan);
+router.patch('/instalment-plans/:id/cancel', bursar, instalmentController.cancelPlan);
+
+router.post('/instalment-plans/:id/payments', bursar, instalmentController.recordPlanPayment);
+router.patch(
+  '/instalment-plans/:id/instalments/:sequence/waive',
+  approver,
+  instalmentController.waiveInstalment
+);
 
 // ---- Reporting ----
 router.get('/summary', bursar, feeController.getCollectionSummary);
