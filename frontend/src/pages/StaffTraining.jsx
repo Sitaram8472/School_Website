@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useCallback } from 'react';
 import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
 import { getUserRole } from '../utils/permissions';
+import CohortPanel from '../components/training/CohortPanel';
 
 /**
  * Staff professional development and certification.
@@ -325,6 +326,11 @@ const StaffTraining = () => {
           calculated from the issue date, never typed in.
         </p>
       </header>
+
+      {/* Sessions the school runs, as opposed to the records people keep of
+          what they went to. Above the tabs, because taking a seat is the thing
+          with a deadline on it. */}
+      <CohortPanel />
 
       <div className="flex flex-wrap gap-2 mb-6 border-b border-gray-200">
         {tabs.map((entry) => (
