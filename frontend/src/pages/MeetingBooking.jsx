@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
+import OutcomePanel from '../components/meetings/OutcomePanel';
 
 /**
  * Parent-teacher meeting booking.
@@ -197,6 +198,10 @@ const MeetingBooking = () => {
             </div>
           </div>
         </div>
+
+        {/* What was agreed in the room. A family looking for it will look here,
+            on the page where the meeting was booked, rather than anywhere else. */}
+        <OutcomePanel />
 
         <div className="flex gap-2 mb-6 bg-white rounded-xl p-1 shadow">
           {[
