@@ -46,6 +46,11 @@ app.use(cookieParser());
 // Static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Syllabus coverage tracking. Required and mounted together so the module can
+// be added or removed as one piece.
+const syllabusRoutes = require("./routes/syllabusRoutes.js");
+app.use("/api/syllabus", syllabusRoutes);
+
 // Staff absence and substitute cover. Required and mounted together so the
 // module can be added or removed as one piece.
 const substitutionRoutes = require("./routes/substitutionRoutes.js");
