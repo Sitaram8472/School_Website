@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AmendmentPanel from "./attendance/AmendmentPanel";
 
 const AttendanceManager = () => {
   const [attendance, setAttendance] = useState({
@@ -58,6 +59,10 @@ const AttendanceManager = () => {
           Save Attendance
         </button>
       </div>
+
+      {/* Taking the register and correcting it are the same job on different
+          days, so they belong on the same screen. */}
+      <AmendmentPanel />
     </div>
   );
 };

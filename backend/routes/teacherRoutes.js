@@ -41,6 +41,11 @@ router.use(protect, verifyRole('teacher', 'admin'));
 
 router.get('/stats', getDashboardStats);
 
+// --- Register amendments ----------------------------------------------------
+// Corrections to a register that has already been taken. A static prefix, so
+// none of its segments collides with the `/attendance` routes below.
+router.use('/attendance-amendments', require('./attendanceAmendmentRoutes'));
+
 router.get('/notices', getMyNotices);
 router.post('/notices', postNotice);
 router.delete('/notices/:id', deleteNotice);
