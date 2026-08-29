@@ -4,6 +4,7 @@ const Submission = require("../models/Submission");
 const Attendance = require("../models/Attendance");
 const PDFDocument = require("pdfkit");
 const mongoose = require("mongoose");
+const { memoryCache } = require("../utils/cache");
 
 exports.generateReportCard = async (req, res) => {
   try {
@@ -14,37 +15,51 @@ exports.generateReportCard = async (req, res) => {
       return res.status(403).json({ success: false, message: "Unauthorized to view this report card." });
     }
 
-    // Fetch Student Info
-    const student = await User.findById(studentId);
-    if (!student || student.role !== "student") {
-      return res.status(404).json({ success: false, message: "Student not found." });
-    }
+    // Check cache first
+    const cacheKey = `report_${studentId}`;
+    let cachedData = memoryCache.get(cacheKey);
+    let student, courses, submissions, attendances, totalClasses, presentClasses, attendancePercentage;
 
-    // Fetch Courses
-    const courses = await Course.find({ students: studentId });
-
-    // Fetch Submissions/Exams
-    const submissions = await Submission.find({ student: studentId }).populate({
-      path: "exam",
-      populate: { path: "course", select: "name" },
-    });
-
-    // Fetch Attendance
-    const attendances = await Attendance.find({ "records.studentName": student.name });
-    let totalClasses = 0;
-    let presentClasses = 0;
-
-    attendances.forEach((attendance) => {
-      const record = attendance.records.find((r) => r.studentName === student.name);
-      if (record) {
-        totalClasses++;
-        if (record.status === "Present") {
-          presentClasses++;
-        }
+    if (cachedData) {
+      ({ student, courses, submissions, attendances, totalClasses, presentClasses, attendancePercentage } = cachedData);
+    } else {
+      // Fetch Student Info
+      student = await User.findById(studentId);
+      if (!student || student.role !== "student") {
+        return res.status(404).json({ success: false, message: "Student not found." });
       }
-    });
 
-    const attendancePercentage = totalClasses > 0 ? ((presentClasses / totalClasses) * 100).toFixed(2) : "0.00";
+      // Fetch Courses
+      courses = await Course.find({ students: studentId });
+
+      // Fetch Submissions/Exams
+      submissions = await Submission.find({ student: studentId }).populate({
+        path: "exam",
+        populate: { path: "course", select: "name" },
+      });
+
+      // Fetch Attendance
+      attendances = await Attendance.find({ "records.studentName": student.name });
+      totalClasses = 0;
+      presentClasses = 0;
+
+      attendances.forEach((attendance) => {
+        const record = attendance.records.find((r) => r.studentName === student.name);
+        if (record) {
+          totalClasses++;
+          if (record.status === "Present") {
+            presentClasses++;
+          }
+        }
+      });
+
+      attendancePercentage = totalClasses > 0 ? ((presentClasses / totalClasses) * 100).toFixed(2) : "0.00";
+
+      // Cache for 5 minutes (300 seconds)
+      memoryCache.set(cacheKey, {
+        student, courses, submissions, attendances, totalClasses, presentClasses, attendancePercentage
+      }, 300);
+    }
 
     // Setup PDF
     const doc = new PDFDocument({ margin: 50 });
