@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Hero from "../components/Hero";
 import Card from "../components/Card";
 import Notices from "../data/Notices";
+import HelpCentre from "../components/knowledge/HelpCentre";
 import {
   Users,
   GraduationCap,
@@ -66,6 +67,11 @@ const Home = () => {
           ))}
         </div>
       </section>
+
+      {/* The published answers the assistant also works from. A visitor with a
+          question lands here, and putting the help centre on the same page they
+          land on is what stops it drifting away from what the chat widget says. */}
+      <HelpCentre />
 
       {/* Latest Notices */}
       <section className="py-24 bg-[var(--bg-secondary)]">
