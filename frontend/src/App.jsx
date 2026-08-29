@@ -43,6 +43,9 @@ import RoleProtectedRoute from "./components/RoleProtectedRoute";
 const StaffTraining = lazy(() => import("./pages/StaffTraining"));
 
 const TeacherDashboard = lazy(() => import("./pages/TeacherDashboard"));
+
+// Authorised pickup — who may collect a child, and the record that they did.
+const StudentPickup = lazy(() => import("./pages/StudentPickup"));
 const ExamBuilder = lazy(() => import("./pages/ExamBuilder"));
 const RemarkAppeals = lazy(() => import("./pages/RemarkAppeals"));
 const ExamTakingInterface = lazy(() => import("./pages/ExamTakingInterface"));
@@ -191,6 +194,13 @@ const App = () => {
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <Teacher />
                 </RoleProtectedRoute>
+              } />
+
+              {/* Pickup and release - gate staff, and families for their own children */}
+              <Route path="/pickup" element={
+                <ProtectedRoute>
+                  <StudentPickup />
+                </ProtectedRoute>
               } />
   
               <Route path="/teacher/dashboard" element={

@@ -108,6 +108,11 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// Authorised pickup and student release. Required and mounted together so
+// the module can be added or removed as one piece.
+const pickupRoutes = require("./routes/pickupRoutes.js");
+app.use("/api/pickup", pickupRoutes);
+
 // Staff professional development and certification expiry. Required and
 // mounted together so the module can be added or removed as one piece.
 const staffTrainingRoutes = require("./routes/staffTrainingRoutes.js");
