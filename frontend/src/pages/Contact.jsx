@@ -1,5 +1,6 @@
 import api from "../utils/axios";
 import ContactFeedbackForm from "../components/Contact";
+import CallbackPanel from "../components/inquiries/CallbackPanel";
 
 import { useState } from "react";
 import { getAIResponse } from "../services/geminiService";
@@ -392,6 +393,11 @@ const Contact = () => {
         <div className="mt-12">
           <ContactFeedbackForm />
         </div>
+
+        {/* The follow-up queue for the enquiries this page collects. It is
+            invisible to the public visitors the page exists for, and every
+            deadline in it is counted from when the family sent the form. */}
+        <CallbackPanel />
       </div>
     </div>
   );
