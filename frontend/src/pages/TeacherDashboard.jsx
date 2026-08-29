@@ -6,6 +6,7 @@ import { hasRole } from '../utils/permissions';
 import NoticePanel from '../components/teacher/NoticePanel';
 import MeetingPanel from '../components/teacher/MeetingPanel';
 import ResourcePanel from '../components/teacher/ResourcePanel';
+import SeatingPanel from '../components/teacher/SeatingPanel';
 import AttendancePanel from '../components/teacher/AttendancePanel';
 import ExamPanel from '../components/teacher/ExamPanel';
 
@@ -37,6 +38,7 @@ const TeacherDashboard = () => {
     { id: 'notices',    label: 'Notices' },
     { id: 'meetings',   label: 'Meetings' },
     { id: 'resources',  label: 'Resources' },
+    { id: 'seating',    label: 'Exam Seating' },
     { id: 'attendance', label: 'Attendance' },
     { id: 'exams',      label: 'Exams & Courses' },
   ];
@@ -98,6 +100,7 @@ const TeacherDashboard = () => {
         {activeTab === 'notices'    && <NoticePanel />}
         {activeTab === 'meetings'   && <MeetingPanel />}
         {activeTab === 'resources'  && <ResourcePanel />}
+        {activeTab === 'seating'    && <SeatingPanel />}
         {activeTab === 'attendance' && <AttendancePanel />}
         {activeTab === 'exams'      && <ExamPanel />}
       </div>
