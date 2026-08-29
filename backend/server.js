@@ -139,6 +139,11 @@ io.use((socket, next) => {
   }
 });
 
+// Lesson observation and teaching appraisal. Required and mounted together so
+// the module can be added or removed as one piece.
+const observationRoutes = require("./routes/observationRoutes.js");
+app.use("/api/observations", observationRoutes);
+
 io.on("connection", (socket) => {
   console.log(`[Socket] User connected: ${socket.user.id || socket.user._id}`);
   
