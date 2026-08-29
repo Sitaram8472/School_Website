@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import api from '../utils/axios';
 import { AuthContext } from '../context/AuthContext';
 import { getUserRole } from '../utils/permissions';
+import AvailabilityPanel from '../components/substitutions/AvailabilityPanel';
 import CoverClaimPanel from '../components/substitutions/CoverClaimPanel';
 
 /**
@@ -393,6 +394,10 @@ const SubstitutionBoard = () => {
         {/* Payment for cover sits on the page where the cover itself is, because
             a teacher looking at what they covered is the person who wants it. */}
         <CoverClaimPanel />
+
+        {/* Who can be asked, and how much, on the page where the asking happens.
+            A cap nobody sees until they are refused reads as a rejection. */}
+        <AvailabilityPanel />
 
         <div className="flex flex-wrap gap-2 mb-6 bg-white rounded-xl p-1 shadow">
           {tabs.map((entry) => (

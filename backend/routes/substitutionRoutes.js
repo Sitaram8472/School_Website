@@ -19,6 +19,11 @@ router.get('/absences/mine', verifyRole('teacher', 'admin'), substitutionControl
 // Declared before `/absences/:id` so "my-cover" is never read as an id.
 router.get('/my-cover', verifyRole('teacher', 'admin'), substitutionController.getMyCover);
 
+// --- Cover availability -----------------------------------------------------
+// Working patterns, dated exclusions and load caps. A static prefix declared
+// above `/absences/:id`, so none of its segments is read as an absence id.
+router.use('/availability', require('./coverAvailabilityRoutes'));
+
 // --- Cover claims -----------------------------------------------------------
 // Payment for cover actually taught. Declared above `/absences/:id` so none of
 // these static segments is ever read as an absence id.
