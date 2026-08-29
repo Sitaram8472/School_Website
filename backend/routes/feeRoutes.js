@@ -34,6 +34,12 @@ router.get('/invoices/:id', feeController.getInvoice);
 router.post('/invoices/:id/payments', bursar, feeController.recordPayment);
 router.patch('/invoices/:id/waive', verifyRole('admin'), feeController.waiveInvoice);
 
+// ---- Concessions ----
+// Standing entitlements — sibling, staff ward, quota — that reduce a bill
+// without editing it. A static prefix declared above `/invoices/:id`, so none
+// of its segments is ever read as an invoice id.
+router.use('/concessions', require('./feeConcessionRoutes'));
+
 // ---- Refunds ----
 // A refund is something that happens to an invoice rather than a thing in its
 // own right, so it lives under /api/fees alongside the invoices it reverses.
