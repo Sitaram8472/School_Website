@@ -149,6 +149,11 @@ io.on("connection", (socket) => {
 
 app.set('io', io);
 
+// Academic calendar: terms, exceptions and derived instructional-day counts.
+// Required and mounted together so the module can be added or removed as one piece.
+const academicCalendarRoutes = require("./routes/academicCalendarRoutes.js");
+app.use("/api/academic-calendar", academicCalendarRoutes);
+
 // Exam re-evaluation appeals. Required and mounted together so the module can
 // be added or removed as one piece.
 const appealRoutes = require("./routes/appealRoutes.js");
