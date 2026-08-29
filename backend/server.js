@@ -116,6 +116,11 @@ app.use("/api/staff-training", staffTrainingRoutes);
 
 const PORT = process.env.PORT || 5000;
 
+
+// Committee governance — meetings, motions and minutes. Required and mounted
+// together so the module can be added or removed as one piece.
+const governanceRoutes = require("./routes/governanceRoutes.js");
+app.use("/api/governance", governanceRoutes);
 const server = http.createServer(app);
 
 const io = new Server(server, {

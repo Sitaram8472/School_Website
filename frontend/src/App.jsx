@@ -7,6 +7,9 @@ import {
   Navigate,
 } from "react-router-dom";
 
+// Committee governance — quorum-gated motions and a carried-forward action register.
+const GovernanceMinutes = lazy(() => import("./pages/GovernanceMinutes"));
+
 // Import Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -222,6 +225,13 @@ const App = () => {
               <Route path="/teacher/courses/:courseId/exam/new" element={
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <ExamBuilder />
+                </RoleProtectedRoute>
+              } />
+
+              {/* Committee governance - members, chairs and secretaries */}
+              <Route path="/governance" element={
+                <RoleProtectedRoute allowedRoles={["teacher", "staff", "admin"]}>
+                  <GovernanceMinutes />
                 </RoleProtectedRoute>
               } />
 
