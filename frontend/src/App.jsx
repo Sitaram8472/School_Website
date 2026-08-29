@@ -27,6 +27,7 @@ const EventCalendar = lazy(() => import("./pages/EventCalendar"));
 const Scholarship = lazy(() => import("./pages/Scholarship"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const FeePortal = lazy(() => import("./pages/FeePortal"));
+const VisitorDesk = lazy(() => import("./pages/VisitorDesk"));
 const Student = lazy(() => import("./pages/Student"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -197,6 +198,13 @@ const App = () => {
                 <RoleProtectedRoute allowedRoles={["teacher", "admin"]}>
                   <TeacherDashboard />
                 </RoleProtectedRoute>
+              } />
+
+              {/* Gate desk - security and office run it; hosts see their own approvals */}
+              <Route path="/visitors" element={
+                <ProtectedRoute>
+                  <VisitorDesk />
+                </ProtectedRoute>
               } />
 
               {/* Parent-teacher meeting booking - any signed-in family */}
