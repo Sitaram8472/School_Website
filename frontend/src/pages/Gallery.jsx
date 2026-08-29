@@ -7,6 +7,8 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Counter from "yet-another-react-lightbox/plugins/counter";
 import "yet-another-react-lightbox/plugins/counter.css";
 
+import PublicationConsentPanel from "../components/consent/PublicationConsentPanel";
+
 import img1 from "../assets/campus/campus1.jpg";
 import img2 from "../assets/campus/campus2.jpg";
 import img3 from "../assets/campus/campus3.jpg";
@@ -52,6 +54,10 @@ const Gallery = () => {
           ))}
         </div>
       </div>
+
+      {/* The permissions that decide whether any of these photographs may be
+          here at all, on the page where they are. */}
+      <PublicationConsentPanel />
 
       <Lightbox
         open={open}
