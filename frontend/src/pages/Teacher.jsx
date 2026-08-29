@@ -6,6 +6,7 @@ import TeacherCard from "../components/TeacherCard";
 import API from "../utils/axios";
 import { hasPermission, getUserRole } from "../utils/permissions";
 import { BookOpen, Calendar, Send, Sparkles, CheckCircle2, AlertCircle } from "lucide-react";
+import IntegrityPanel from "../components/exams/IntegrityPanel";
 
 export default function Teacher() {
   const { user } = useContext(AuthContext);
@@ -198,6 +199,12 @@ export default function Teacher() {
               </div>
             </div>
             
+            {/* Exam integrity cases across every exam this member of staff can
+                see. It is a queue rather than a per-exam view because the
+                failure being fixed is cases going stale, not cases being hard
+                to find. */}
+            <IntegrityPanel mode="review" />
+
             {/* Divider */}
             <div className="w-full h-px bg-[var(--border-color)] my-16"></div>
           </div>
