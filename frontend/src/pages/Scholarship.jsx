@@ -9,6 +9,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import ConcessionPanel from "../components/fees/ConcessionPanel";
 
 function Scholarship() {
   const scholarships = [
@@ -179,6 +180,12 @@ function Scholarship() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* A scholarship is competed for; a concession is held. Families reading
+          about the first are the ones who need to see the second. */}
+      <section className="max-w-5xl mx-auto px-4 pb-16">
+        <ConcessionPanel />
       </section>
     </div>
   );
