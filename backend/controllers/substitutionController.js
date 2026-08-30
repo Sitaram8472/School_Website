@@ -681,6 +681,39 @@ exports.assignCover = async (req, res) => {
       );
     }
 
+    /**
+     * The availability gate.
+     *
+     * A weekly non-availability block, a live exclusion and a live opt-out are
+     * hard: the person is not in the building, is medically restricted, or has
+     * said no, and no reason typed into a box changes any of those. A load cap
+     * is soft — on a genuinely short morning the office has to be able to
+     * exceed it — so an admin may, by supplying `overrideReason`, which is
+     * appended to the profile where the pattern is visible next term.
+     *
+     * Checked here, in the handler that writes the assignment, rather than only
+     * in the panel. A UI that greys out a button is a suggestion.
+     */
+    const { assertAssignable } = require('./coverAvailabilityController');
+    const eligibility = await assertAssignable({
+      staffId: person._id,
+      staffName: person.name,
+      dateKey: absence.date,
+      window: { startMinute: period.startMinute, endMinute: period.endMinute },
+      actor: req.user,
+      override: req.body.overrideReason,
+      context: {
+        // This period does not count against its own reassignment.
+        excludeAbsence: absence._id,
+        excludePeriod: period._id,
+        periodLabel: period.periodLabel,
+      },
+    });
+
+    if (!eligibility.ok) {
+      return fail(res, 409, eligibility.message, { overridable: eligibility.overridable });
+    }
+
     const updated = await StaffAbsence.findOneAndUpdate(
       {
         _id: absence._id,
