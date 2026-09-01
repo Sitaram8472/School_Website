@@ -1,6 +1,7 @@
 const Notice = require("../models/Notice");
 const User = require("../models/User");
 const mongoose = require("mongoose");
+const { clearCachePattern } = require("../middleware/cacheMiddleware");
 
 // Helper to validate publication and expiration dates
 const validateNoticeDates = (publishAt, expiresAt, now = new Date()) => {
@@ -153,6 +154,8 @@ exports.createNotice = async (req, res) => {
       }
     }
 
+    clearCachePattern('/api/notices');
+
     return res.status(201).json({
       success: true,
       message: "Notice created successfully",
@@ -216,6 +219,8 @@ exports.scheduleNotice = async (req, res) => {
     notice.publishedAt = null;
     await notice.save();
 
+    clearCachePattern('/api/notices');
+
     return res.status(200).json({
       success: true,
       message: "Notice scheduled successfully",
@@ -250,6 +255,8 @@ exports.cancelSchedule = async (req, res) => {
     notice.publishAt = null;
     await notice.save();
 
+    clearCachePattern('/api/notices');
+
     return res.status(200).json({
       success: true,
       message: "Scheduled notice cancelled and saved as draft",
@@ -282,6 +289,8 @@ exports.archiveNotice = async (req, res) => {
 
     notice.status = "archived";
     await notice.save();
+
+    clearCachePattern('/api/notices');
 
     return res.status(200).json({
       success: true,
@@ -373,6 +382,8 @@ exports.updateNotice = async (req, res) => {
     }
 
     await notice.save();
+
+    clearCachePattern('/api/notices');
 
     return res.status(200).json({
       success: true,

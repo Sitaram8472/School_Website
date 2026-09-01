@@ -2,6 +2,7 @@
 const Notice = require('../models/Notice');
 const Resource = require('../models/Resource');
 const Attendance = require('../models/Attendance');
+const { clearCachePattern } = require('../middleware/cacheMiddleware');
 const path = require('path');
 const fs = require('fs');
 
@@ -132,6 +133,8 @@ const postNotice = async (req, res) => {
       }
     }
 
+    clearCachePattern('/api/notices');
+
     res.status(201).json({ success: true, message: 'Notice posted successfully!', notice });
   } catch (err) {
     handleError(res, err);
@@ -151,6 +154,8 @@ const deleteNotice = async (req, res) => {
 
     notice.deletedAt = new Date();
     await notice.save();
+
+    clearCachePattern('/api/notices');
 
     res.json({ success: true, message: 'Notice deleted successfully.' });
   } catch (err) {
@@ -172,6 +177,8 @@ const restoreNotice = async (req, res) => {
     notice.deletedAt = null;
     await notice.save();
 
+    clearCachePattern('/api/notices');
+
     res.json({ success: true, message: 'Notice restored successfully.' });
   } catch (err) {
     handleError(res, err);
@@ -189,6 +196,8 @@ const bulkDeleteNotices = async (req, res) => {
       { _id: { $in: ids }, postedBy: req.user._id },
       { deletedAt: new Date() }
     );
+
+    clearCachePattern('/api/notices');
 
     res.json({ success: true, message: `${ids.length} notices deleted.` });
   } catch (err) {
@@ -268,6 +277,8 @@ const uploadResource = async (req, res) => {
       teacherName: req.user.name,
     });
 
+    clearCachePattern('/api/resources');
+
     res.status(201).json({ success: true, message: 'Resource uploaded successfully!', resource });
   } catch (err) {
     handleError(res, err);
@@ -288,6 +299,8 @@ const deleteResource = async (req, res) => {
     resource.deletedAt = new Date();
     await resource.save();
 
+    clearCachePattern('/api/resources');
+
     res.json({ success: true, message: 'Resource deleted.' });
   } catch (err) {
     handleError(res, err);
@@ -307,6 +320,8 @@ const restoreResource = async (req, res) => {
 
     resource.deletedAt = null;
     await resource.save();
+
+    clearCachePattern('/api/resources');
 
     res.json({ success: true, message: 'Resource restored.' });
   } catch (err) {

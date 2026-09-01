@@ -81,4 +81,30 @@ const multiLevelCache = (ttl = 60) => async (req, res, next) => {
   next();
 };
 
+/**
+ * Utility to clear caches matching a specific pattern (e.g. '/api/notices')
+ */
+const clearCachePattern = async (pattern) => {
+  try {
+    // Clear memory cache
+    for (const key of memoryCache.keys()) {
+      if (key.includes(pattern)) {
+        memoryCache.delete(key);
+      }
+    }
+
+    // Clear Redis cache
+    if (redisClient && redisClient.status === 'ready') {
+      const keys = await redisClient.keys(`*${pattern}*`);
+      if (keys.length > 0) {
+        await redisClient.del(keys);
+      }
+    }
+  } catch (error) {
+    console.error('Failed to clear cache pattern:', error);
+  }
+};
+
+multiLevelCache.clearCachePattern = clearCachePattern;
+
 module.exports = multiLevelCache;
